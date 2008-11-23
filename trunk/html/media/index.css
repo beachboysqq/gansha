@@ -1,0 +1,231 @@
+*{
+padding:0px;
+margin:0px;
+}
+html{min-width:840px;}
+body{
+margin:0px;
+padding:0px;
+line-height:150%;
+font-size:14px;
+font-family:Arial, Helvetica, sans-serif,verdana;
+}
+img{border:0px;}
+table{
+border:0px;
+padding:0px;
+margin:0px;
+}
+td,tr{
+border:0px;
+padding:0px;
+}
+a.a_nounderline:link,a.a_nounderline:visited {
+	color:#333;
+	text-decoration: none;
+}
+a.a_nounderline:hover {
+	color: #B56C00;
+	text-decoration: none;
+}
+a:link,a:visited {
+	color:#333;
+	text-decoration:underline;
+}
+a:hover {
+	color: #B56C00;
+	text-decoration:underline;
+}
+a.a_red:link,a.a_red:visited {
+	font-weight:bold;
+	color: #DB6B26;
+	text-decoration:underline;
+}
+a.a_red:hover {
+	font-weight:bold;
+	color: #DB6B26;
+	text-decoration: none;
+}
+a.a_white:link,a.a_white:visited {
+	color: #FFF;
+	text-decoration:underline;
+}
+a.a_white:hover {
+	color: #FC0;
+	text-decoration: none;
+}
+ul{
+	clear:both;
+	list-style:none;
+}
+li{
+	display:inline;
+	padding:0 5px 0 5px;
+}	
+.font_12{font-size:12px;font-weight:normal;}
+.text_blod{font-size:14px;font-weight:bold;}
+.box_name{height:20px;width:120px;border:1px #999 solid;}
+.box_email{height:20px;width:200px;border:1px #999 solid;}
+.box_title{height:20px;width:260px;border:1px #999 solid;}
+.text_title{
+font-weight:bold;
+padding-left:4px;
+padding-top:4px;
+border-bottom:1px solid #CCC;
+}
+.text_right{text-align:right;}
+.text_center{text-align:center;height:28px;}
+.underline_grey{border-bottom:1px solid #CCC;}
+.underline_red{border-bottom:1px solid #D9001D;}
+/*+++++++++++++They are the main frame of this page++++++++++*/
+#top{
+height:64px;
+width:100%;
+margin-bottom:10px;
+background:url(../images/top_underline.jpg) bottom repeat-x;
+}
+#top_content,#main_1,#main_2,#footer{	
+clear:both;
+width:840px;
+background-color:#FFF;
+margin-right:auto;
+margin-left:auto;
+}	
+	#top_content{
+	}
+		#top_menu{
+		float:left;
+		padding-top:30px;
+		padding-left:30px;
+		width:290px;
+		}
+		#top_search{
+		float:right;
+		padding-top:24px;
+		}
+			#search_value{
+			height:19px;
+			border:1px solid #999;
+			}
+			#search_kind{
+			height:22px;
+			border:1px solid #999;
+			}			
+			#but_search{
+			width:58px;
+			height:22px;
+			border:0px;
+			vertical-align:bottom;
+			cursor:pointer;
+			background:url(../images/but_search.jpg) no-repeat;
+			}
+
+#main_1{
+width:830px;
+height:183px;
+padding-right:10px;
+background:url(../images/star_right.jpg) no-repeat right;
+}
+	#star_left{float:left;width:36px;}
+	#stars{
+	float:left;
+	width:762px;
+	padding-left:32px;
+	background-color:#900;
+	}
+	.star_each{
+	float:left;
+	width:380px;
+	height:183px;
+	background:url(../images/star_bg.jpg) no-repeat left;
+	}
+	.star_photo{
+	float:left;
+	height:140px;
+	width:110px;
+	overflow:hidden;
+	padding:21px 15px;
+	}
+	.star_content{
+	float:left;
+	width:192px;
+	color:#FFF;
+	padding:20px 16px 16px 16px;
+	font-size:12px;
+	}
+/*--------------------main_2-------------------*/
+#main_2{margin-top:10px;}
+#update_info{
+float:left;
+width:542px;
+padding:0px 12px 0 12px;
+margin-right:12px;
+border:1px #CCC solid;
+}
+	#ui_content{
+	width:100%;
+	margin-top:12px;
+	line-height:200%
+	}
+		#ui_content .title{}
+		.author_time{
+		width:22%;
+		color:#666;
+		font-size:12px;
+		}
+#login{
+float:left;
+width:260px;
+background:url(../images/login_title.jpg) no-repeat top;
+padding-top:25px;
+}
+	#login_body{
+	padding-top:10px;
+	line-height:200%;
+	width:258px;
+	border-left:1px solid #CCC;
+	border-right:1px solid #CCC;
+	border-bottom:1px solid #CCC;
+	}
+	#login_1{
+	width:190px;
+	margin-left:auto;
+	margin-right:auto;
+	}
+	#login_2{
+	width:170px;
+	margin-left:auto;
+	margin-right:auto;
+	}
+		#but_login{
+		height:24px;
+		width:60px;
+		border:0;
+		cursor:pointer;
+		background:url(../images/but_login.jpg) no-repeat;
+		}
+		#but_reg{
+		height:24px;
+		width:80px;
+		border:0;
+		cursor:pointer;
+		background:url(../images/but_reg.jpg) no-repeat;
+		}
+	#sloan{
+	padding-top:8px;
+	line-height:200%;}
+/*----------------------footer----------------------*/
+.cleaner {
+clear: both;
+height: 0;
+font-size: 0;
+line-height:0;
+visibility: hidden;
+content: ' ';
+}
+#footer{
+margin-top:10px;
+font-size:12px;
+color:#666;
+border-top:1px solid #CCC;
+}
