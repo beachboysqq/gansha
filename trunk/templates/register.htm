@@ -1,0 +1,69 @@
+{% extends 'base.htm' %}
+
+{% block content %}
+<div id="main_reg">
+	<div id="reg_left">
+		<p id="reg_title">新用户注册</p>
+		<div id="reg_info">
+		{% if created %}
+				恭喜您注册成功！请到<a href="http://{{ email }}" target="_blank">{{ email }}</a>收取邮件，并打开链接进行密码等个人信息的设置。
+		{% else %}
+			<form action="." method="POST">
+				<table>
+					<tr><td><label for="id_username">用户名:</label></td>
+						<td>{{ form.username }}</td>
+						<td><div style="color:#FF0000">{{ form.username.errors }}</div></td>
+					</tr>
+					<tr><td><label for="id_email">电子邮件:</label></td>
+						<td>{{ form.email }}</td>
+						<td><div style="color:#FF0000">{{ form.email.errors }}</div></td>
+					</tr>
+					<tr><td><label for="id_password1">密码:</label></td>
+						<td><input type="password"  name="password1" id="id_password1" /></td>
+						<td><div style="color:#FF0000"></div></td>
+					</tr>
+					<tr><td><label for="id_password2">重复密码:</label></td>
+						<td><input type="password" name="password2" id="id_password2" /></td>
+						<td><div style="color:#FF0000">{{ form.password2.errors }}</div></td>
+					</tr>
+				</table>
+				<table>
+					<tr>
+						<td><input name="" type="checkbox" value="" checked="checked" /></td>
+						<td>我已阅读并接受注册协议和版权声明</td>
+					</tr>
+			  </table>
+					<input name="" type="submit" id="but_reg2" value="" />
+		  </form>
+		{% endif %}
+	  </div>
+	</div>
+	<div id="reg_right">
+		<div id="intro_body">
+			<div class="intro_each">
+				<div class="intro_title"><img src="/static/images/1.gif" />&nbsp;&nbsp;在干啥？</div>
+				<div class="intro_content">记录并规划一件想做的事；
+记录并与别人分享经验；
+寻找同样再做某件事的，互相交流；
+关注好友在干啥；</div>
+			</div>
+			<div class="intro_each">
+				<div class="intro_title"><img src="/static/images/2.gif" />&nbsp;&nbsp;想干啥？</div>
+				<div class="intro_content">记录并规划一件想做的事；
+记录并与别人分享经验；
+寻找同样再做某件事的，互相交流；
+关注好友在干啥；</div>
+			</div>
+			<div class="intro_each">
+				<div class="intro_title"><img src="/static/images/3.gif" />&nbsp;&nbsp;在干啥？</div>
+				<div class="intro_content">记录并规划一件想做的事；
+记录并与别人分享经验；
+寻找同样再做某件事的，互相交流；
+关注好友在干啥；</div>
+			</div>
+		</div>
+</div>
+</div>
+{% endblock %}
+
+

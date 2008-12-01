@@ -1,0 +1,52 @@
+{% extends 'base_home.htm' %}
+
+{% block middle %}
+	<div id="navigation"><a href="../home/">首页</a>-><a href="../myinfo/">个人资料</a></div>
+    <div id="m1">
+			<div class="title1">
+				<table width="98%" border="0" cellspacing="0" cellpadding="0">
+				  <tr>
+					<td width="88%" class="text_bold">{{ username}}</td>
+					<td width="12%" class="font_12"><a href="./changepassword/">修改密码</a></td>
+				  </tr>
+				</table>
+			</div>
+			<form method="post" name="myinfo" action=".">
+			<table width="98%" border="0" cellspacing="0" cellpadding="0" id="tb_myinfo">
+			 <!--tr>
+				<td width="15%" align="right">头像：</td>
+				<td width="85%"><input name="headshot" type="file" style="height:22px;" size="30"/></td>
+			  </tr-->
+			  <tr>
+				<td width="15%" align="right">性别：</td>
+				<td width="85%">{{form.gender}}
+			  </td>
+			  </tr>
+			  <tr>
+				<td align="right"><pre>毕业学校：</pre></td>
+				<td>{{form.graduate_school}}</td>
+			  </tr>
+			  <tr>
+				<td align="right">地址：</td>
+				<td>{{form.location}}</td>
+			  </tr>
+			  <tr>
+				<td align="right">QQ：</td>
+				<td>{{form.qq}}</td>
+			  </tr>
+			  <tr>
+				<td align="right">MSN：</td>
+				<td>{{form.msn}}</td>
+			  </tr>
+			  <tr>
+				<td align="right">签名档：</td>
+				<td>{{form.signature}}</td>
+			  </tr>
+			  <tr>
+			  	<td></td>
+				<td><input name="" type="submit" class="but_submit"  value=""/></td>
+			  </tr>
+			</table>
+			</form>
+      </div>
+{% endblock %}

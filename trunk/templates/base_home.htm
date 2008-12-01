@@ -1,0 +1,38 @@
+{% extends 'base.htm' %}
+{% block topmenu %}
+	<ul>
+        <li><a href="." class="a_nounderline">个人主页</a></li>
+        <li><a href="setting.html" class="a_nounderline">设置</a></li>
+        <li><a href="message.html" class="a_nounderline">留言板</a></li>
+        <li><a href="friends/" class="a_nounderline">好友</a></li>
+	<ul>
+{% endblock %}
+
+{% block content %}
+<div id="main_home">
+	<div id="left">
+		<div id="me">
+		<img src="/static/images/temp_me.gif" id="img_headshot"/>
+		<p>{{ username }}，welcome！</p>
+		<p>成就指数：{{ achievement}}</p>
+		<p>签名档：<i>{{ signature}}</i></p>
+		<p>上次登录:{{ last_login|date:"Y-m-d" }}</p>
+		<p><a href="./myinfo/">个人资料</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="../logout/">退出登录</a></p>
+	</div>
+		<div id="action">
+		<div id="action_body">
+		  <p><img src="/static/images/dot_doing.gif" />&nbsp;&nbsp;<a href="#" class="a_nounderline">正在做事件</a></p>
+		  <p><img src="/static/images/dot_todo.gif" />&nbsp;&nbsp;<a href="#" class="a_nounderline">发布新事件</a></p>
+		  <p><img src="/static/images/dot_done.gif" />&nbsp;&nbsp;<a href="#" class="a_nounderline">已完成事件</a></p>
+		</div>
+	</div>
+	</div>
+	<div id="middle">
+		{% block middle %}{% endblock %}
+	</div>
+	<div id="right">
+		{% block right %}{% endblock %}
+	</div>
+</div>
+{% endblock %}
+

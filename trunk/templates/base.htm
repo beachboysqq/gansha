@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//Dli XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/Dli/xhtml1-transitional.dli">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+{% block confirmRefresh %}{% endblock confirmRefresh %}
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<meta name="keywords" content="SNS,干啥,实现理想">
+<title>干啥网--生活因为一目标而精彩！</title>
+<link rel="stylesheet" href="/static/style/index.css">
+<link rel="stylesheet" href="/static/style/sub.css">
+<link rel="stylesheet" href="/static/style/home.css">
+<script language="JavaScript" src="/static/style/prototype-1.6.0.3.js"></script>
+<script language="JavaScript" src="/static/style/switch.js"></script>
+</head>
+<body>
+<div id="top">
+  <div id="top_content"> <img src="/static/images/logo_index.jpg" style="float:left" />
+    <div id="top_menu">
+		{% if logined %}
+	  		{% block topmenu %}{% endblock %}
+		{% endif %}
+    </div>
+    <div id="top_search">
+      <form>
+        <input id="search_value" type="text"/>
+        <select id="search_kind">
+          <option value="1" selected="selected">用户</option>
+          <option value="2">事件</option>
+          <option>日志</option>
+        </select>
+        <input type="button" id="but_search" />
+      </form>
+    </div>
+  </div>
+</div>
+<div id="content">
+	{% block content %}{% endblock content %}
+	<div class="cleaner"></div>
+</div>
+<div id="footer">
+      <ul>
+        <li style="padding-left:146px;">开发日志</li>&nbsp;&nbsp;|
+        <li>关于</li>&nbsp;&nbsp;|
+		<li>联系方式</li>&nbsp;&nbsp;|
+        <li>帮助</li>&nbsp;&nbsp;|
+        <li>隐私声明</li>
+        <li style="padding-left:236px;">Group14&copy;2008</li>
+      </ul>
+</div>
+</body>
+</html>
