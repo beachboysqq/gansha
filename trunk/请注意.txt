@@ -1,0 +1,9 @@
+除了一些页面细节，主要修改了两点：
+
+1.已经起作用的template的后缀是htm。html的为原生态的html文件，待加工。
+采用三级模板结构（代码较以前减少70％,且结构更清晰，更易扩展:)）：
+base.htm为最顶端模板，确定了整个网站的页面框架。
+home_base.htm扩展自base.htm，确定了个人主页等大部分内容的框架。
+余下的模板只需继承home_base.htm即可，再重载{% block middle%}和{% block right %}。
+
+2.url统一在主目录下的url.py中设置了，删除了userAdmin目录的url.py。
