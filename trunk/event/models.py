@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 class Event( models.Model ):
     title=models.CharField( max_length=255 )
     description=models.TextField( blank=True )
-    isprivacy=models.NullBooleanField( default=False )
+    isprivacy=models.BooleanField( default=False )
     progress=models.FloatField()
     publish_date=models.DateField( auto_now_add=True )
     user_id=models.ForeignKey( User )

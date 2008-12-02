@@ -70,7 +70,7 @@ class EditInfoForm(forms.Form):
                         ('M', 'Male'),
                         ('F', 'Female'),
                     )
-    
+    headshot = forms.ImageField(required=False,error_messages={'invalid_image':'A invalid image!'})
     graduate_school = forms.CharField(max_length=30,required=False)
     location = forms.CharField(max_length=30,required=False)
     qq = forms.CharField(max_length =15,required=False)

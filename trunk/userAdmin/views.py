@@ -203,23 +203,31 @@ def editmyinfo(request):
     gender = basicInfo.gender
     graduate_school = basicInfo.graduate_school
     location = basicInfo.location
-
+    
     contactInfo = user.contactinfo
     qq = contactInfo.qq
     msn = contactInfo.msn
 
     if request.POST:
-        form = EditInfoForm(request.POST)
+        form = EditInfoForm(request.POST,request.FILES)
         if form.is_valid():
-            #if form.gender == "F":
-                #return HttpResponse("klsdaflj")
-            basicInfo.gender=request.POST['gender']
-            basicInfo.graduate_school =request.POST['graduate_school']
-            basicInfo.signature = request.POST['signature']
-            basicInfo.location = request.POST['location']
+            #get headshot image,and store it
+            f=request.FILES['headshot']
+            fext=f.name.split('.')[-1]
+            fname=str(user.id)+fext
+            destination = open(fname,'wb+')
+            for chunk in f.chunks():
+                destination.write(chunk)
+
+            #file=form.cleaned_data['headshot']
+            basicInfo.headshot=f.name;
+            basicInfo.gender=form.cleaned_data['gender']
+            basicInfo.graduate_school =form.cleaned_data['graduate_school']
+            basicInfo.signature = form.cleaned_data['signature']
+            basicInfo.location = form.cleaned_data['location']
             basicInfo.save()
-            contactInfo.qq=request.POST['qq']
-            contactInfo.msn=request.POST['msn']
+            contactInfo.qq=form.cleaned_data['qq']
+            contactInfo.msn=form.cleaned_data['msn']
             contactInfo.save()
             return HttpResponseRedirect('../myinfo/')
         else:

@@ -1,6 +1,7 @@
 # -*- coding: cp936 -*-
 from django.db import models
 from django import forms
+from django.db.models import ImageField 
 from django.contrib.auth.models import User
 #这里用了User表的相关信息，操作时有什么不明白，直接看原文件，在你装Django的django.contrib.auth.models目录下。
 
@@ -20,8 +21,7 @@ class UserBasicInfo(models.Model):
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES,default="M")
     username = models.OneToOneField(User)
     #gender = models.BooleanField(default=True)#性别
-    headshot = models.ImageField(upload_to='photos/%Y/%m/%d',blank=True)#头像
-    #integeral = models.IntegerField(default=10)#积分
+    headshot = models.ImageField(upload_to='headshot/%Y/%m/%d',blank=True)#头像
     achievement = models.IntegerField(default=0)#成就指数
     graduate_school = models.CharField(max_length=30,blank=True)#毕业学校
     location = models.CharField(max_length=30,blank=True)#住处

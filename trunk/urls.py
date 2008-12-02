@@ -1,8 +1,10 @@
 from django.conf.urls.defaults import *
+from django.contrib import admin
 from gansha.event.views import test
 from gansha.userAdmin.views import *
 from django.conf import settings
 
+admin.autodiscover()
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
@@ -18,6 +20,7 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     # (r'^admin/(.*)', admin.site.root),
     (r'^$',index),
+    ('^admin/(.*)', admin.site.root),
     (r'^register/$',register),
     (r'^home/$',home),
     (r'^confirm/(\w+)$',confirm),
@@ -25,7 +28,7 @@ urlpatterns = patterns('',
     (r'^home/myinfo/$', myinfo),
     (r'^home/editmyinfo/$', editmyinfo),
     (r'^home/changepassword/$', changepassword),
-    (r'^logout/$', logout),
+    (r'^home/logout/$', logout),
     #(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': 'D:/static', 'show_indexes': True}),
 )
 
