@@ -1,4 +1,3 @@
-# Django settings for gansha project.
 import os.path
 
 DEBUG = True
@@ -19,10 +18,11 @@ DATABASE_HOST = ''             # Set to empty string for localhost. Not used wit
 DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
 
 FILE_CHARSET='gb2312'
-EMAIL_HOST = 'smtp.163.com'
-EMAIL_HOST_USER = 'l0he1g'
-EMAIL_HOST_PASSWORD = '811020'
-DEFAULT_FROM_EMAIL = 'l0he1g@163.com'
+
+EMAIL_HOST = 'smtp.foxmail.com'
+EMAIL_HOST_USER = 'gansha'
+EMAIL_HOST_PASSWORD = 'gansha2008'
+DEFAULT_FROM_EMAIL = 'gansha@foxmail.com'
 EMAIL_SUBJECT_PREFIX = ''
 DEFAULT_CONTENT_TYPE = 'text/html'
 # Local time zone for this installation. Choices can be found here:
@@ -30,7 +30,7 @@ DEFAULT_CONTENT_TYPE = 'text/html'
 # although not all choices may be available on all operating systems.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'China/Beijing'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -44,12 +44,12 @@ USE_I18N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT ='D:/home/django/gansha/upload/'#os.path.join(DIRNAME, 'static/')
+MEDIA_ROOT =os.path.join(DIRNAME, 'static/upload/')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL ='http:/localhost/upload/'
+MEDIA_URL ='http:/localhost/static/upload/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
