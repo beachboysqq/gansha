@@ -200,7 +200,7 @@ font-weight:bold;
 		}
 		#submit_subevent{
 		background:#E8E8E8;
-		border:1px solid #999;
+		border:1px  dashed #CCC;
 		margin-top:8px;
 		padding-bottom:4px;
 		padding-right:8px;
@@ -300,6 +300,11 @@ font-size:12px;
 	}
 	#tb_myinfo td{
 	height:32px;
+	}
+	#myinfo_error img{
+	width:120px;
+	height:108px;
+	padding:10px 0 0 52px;
 	}
 /*-------------------------for doing.html---------------------------*/
 .img_lock{

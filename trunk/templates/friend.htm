@@ -1,0 +1,45 @@
+{% extends 'base_home.htm' %}
+{% block topmenu %}
+	<ul>
+        <li><a href="../" class="a_nounderline">个人主页</a></li>
+        <li><a href="setting.html" class="a_nounderline">设置</a></li>
+        <li><a href="message.html" class="a_nounderline">留言板</a></li>
+        <li><a href="." class="a_nounderline">好友</a></li>
+	<ul>
+{% endblock %}
+
+{% block middle %}
+      <div id="m1">
+			<div class="title1">我的好友</div>
+			<div class="tip">搜索对方用户名，快速添加其为好友。</div>
+	        {% if friend %}
+				{% for user in friends%}
+					<div class="each_friend">
+						<div class="who">
+							<a href="#"><img src="/static/images/temp_headshot.jpg" border="0" /></a>
+							<div><a href="#">{{user.friend_name.username}}</a></div>
+						</div>
+						<div class="updateinfo">
+							<ul>
+								<li>11-12  添加日志“前台开发要点”</li>
+								<li>11-12  添加日志“前台开发要点”</li>
+								<li>11-12  添加日志“前台开发要点”</li>
+							</ul>
+						</div>
+						<form id="form{{forloop.counter}}" method="post" action="../removefriend/">
+							<input type="hidden" name="uid" value="{{user.friend_name.id}}"/>
+						</form>
+						<div class="operation"><a href="#" onclick="javascript:document.getElementById('form'+{{forloop.counter}}).submit();">解除好友</a></div>
+					</div>
+				{% endfor %}
+			{%else %}
+				<li>暂时没加好友</li>
+			{%endif%}
+			
+			
+			
+      </div>
+	</div>
+	<div class="cleaner"></div>
+</div>
+{% endblock %}

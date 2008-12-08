@@ -1,0 +1,205 @@
+{% extends 'base_home.htm' %}
+
+{% block middle %}
+<div id="navigation"><a href="../home">首页</a>->正在做事件</div>
+<div id="m1">
+  <table cellpadding="0" cellspacing="0" style="margin-top:10px;">
+    <tr>
+      <td id="event_title" class="underline_grey">
+		{{event.title}}
+		<input type="hidden" value={{event.id}} id="event_id" />
+		{% if event.isprivacy %}
+		<img src="/static/images/dot_lock.gif" style="padding-left:4px;"/>
+		{% endif %}
+	  </td>
+      <td class="underline_grey"><input onclick="../addblog" type="button" id="but_addblog" /></td>
+    </tr>
+  </table>
+  <div class="tip">
+	<table cellpadding="0" cellspacing="0" border="0">
+	  <tr>
+		<td width="84%">发布时间：{{event.publish_date}}</td>
+		<td width="8%">
+		  <a href="../editevent/?event={{event.id}}"
+			 class="a_raw">编辑</a>
+		</td>
+		<td width="8%"><a href="#" class="a_raw">删除</a></td>
+	  </tr>
+	</table>
+  </div>
+  <p id="event_content">{{event.description}}</p>
+</div>
+<div id="m2">
+  <div id="switch_menu">
+    <table width="98%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td class="td_slot">&nbsp;</td>
+        <td id="event_plan_title">
+		  <a href="javascript:sw2('event_plan');"
+		  class="a_nounderline">事件规划</a>
+		</td>
+        <td class="td_slot">&nbsp;</td>
+        <td id="event_log_title">
+		  <a href="javascript:sw2('event_log');"
+		  class="a_nounderline">历史记录</a>
+		</td>
+        <td class="td_slot">&nbsp;</td>
+        <td id="event_blog_title">
+		  <a href="javascript:sw2('event_blog');"
+		  class="a_nounderline">事件日志</a>
+		</td>
+        <td class="td_slot">&nbsp;</td>
+        <td id="event_concern_title">
+		  <a href="javascript:sw2('event_concern');"
+			 class="a_nounderline">关注</a>
+		</td>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+  </div>
+  <div id="event_plan" style="display:block">
+    <table width="98%" border="0" cellspacing="0" cellpadding="0">
+	  <tbody id="tbody_se">
+      <tr>
+        <td width="7%" class="td_12px_title">完成</td>
+        <td width="53%" class="td_12px_title">子事件</td>
+        <td width="14%" class="td_12px_title">开始时间</td>
+        <td width="14%" class="td_12px_title">完成时间</td>
+        <td width="6%" class="td_12px_title">编辑</td>
+        <td width="6%" class="td_12px_title">删除</td>
+      </tr>
+	  {% for se in se_list %}
+      <tr id="tr_{{se.id}}" style="color:{%if se.isdone%}grey{%else%}{%if se.isexpired%}red{%else%}black{%endif%}{%endif%}">
+        <td class="checkbox">
+		  <input type="hidden" id="id_{{se.id}}" value="{{se.id}}" />
+		  <input type="checkbox" onclick="done_se({{se.id}})"
+		  id="checkbox_{{se.id}}"  {%if se.isdone%}checked='true'{%endif%} />
+		</td>
+        <td class="underline_grey" id="{{se.id}}_cont">{{se.content}}</td>
+        <td class="underline_grey font_10" id="{{se.id}}_sdate">
+		  {{se.start_date}}
+		</td>
+        <td class="underline_grey font_10" id="{{se.id}}_edate">
+		  {{se.end_date}}
+		</td>
+        <td class="underline_grey text_center">
+		  <a href="#" onclick="edit_se({{se.id}})">
+			<img src="/static/images/edit.jpg" />
+		  </a>
+		</td>
+        <td class="underline_grey text_center">
+		  <a href="#" onclick="del_se({{se.id}})"><img src="/static/images/del.jpg" /></a>
+		</td>
+      </tr>
+	  {% endfor %}
+	  </tbody>
+    </table>
+    <div id="submit_subevent" style="display:none;">
+      <form method="post" id="form_add_se">
+        <table width="98%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="14%" align="right">子事件：</td>
+            <td width="76%"><input type="text" class="box_long" id="id_content"/></td>
+            <td width="10%" align="right" valign="top">
+			  <a href="#" onclick="close_addse()">
+				<img src="/static/images/del.jpg" alt="关闭"/>
+			  </a>
+			</td>
+          </tr>
+          <tr>
+            <td align="right">开始时间：</td>
+            <td>
+			  <input class="Wdate" type="text" id="id_start_date" 
+				 onFocus="WdatePicker({isShowClear:false,readOnly:true})"/>
+			  <span style="padding-left:12px;">完成时间：</span>
+			  <input class="Wdate" type="text" id="id_end_date" 
+					 onFocus="WdatePicker({isShowClear:false,readOnly:true})"/>
+            </td>
+            <td>
+			  <input type="button" id="but_submit_se" onclick="add_sub_event()" value="提&nbsp;交" />
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+	<div class="add_but" id="switch_addse">
+	  <a href="#" onclick="switch_addse()">+添加子事件</a>
+	</div>
+  </div>
+  <div id="event_log" style="display:none">
+	{%if history_li%}
+	{% for hi in history_li%}
+    <p><span class="time">{{hi.date}}</span>完成:{{hi.content}}</p>
+	{%endfor%}
+	{%else%}
+	<p>该事件尚无历史记录</p>
+	{%endif%}
+  </div>
+  <div id="event_blog" style="display:none;">
+    <table width="98%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td width="69%" class="td_12px_title">标题</td>
+        <td width="19%" class="td_12px_title">发表时间</td>
+        <td width="6%" class="td_12px_title">编辑</td>
+        <td width="6%" class="td_12px_title">删除</td>
+      </tr>
+      <tr>
+        <td class="underline_grey">需求分析，项目规划</td>
+        <td class="underline_grey">09.15 10:15</td>
+        <td class="underline_grey text_center"><a href="#"><img src="/static/images/edit.jpg" border="0" /></a></td>
+        <td class="underline_grey text_center"><a href="#"><img src="/static/images/del.jpg" border="0" /></a></td>
+      </tr>
+    </table>
+  </div>
+  <div id="event_concern" style="display:none;">
+    <div class="tip">您共有3个关注的伙伴，共有4个更新。</div>
+    <div class="each_comment">
+      <div class="each_comment_title">
+        <table width="98%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="87%"><a href="#">l0he1g</a> <span class="time">(<a href="#">加油学英语</a>)</span></td>
+            <td width="13%"><a href="#">取消关注</a></td>
+          </tr>
+        </table>
+        <p><span class="time">暂无更新...</span></p>
+      </div>
+    </div>
+    <div class="each_comment">
+      <div class="each_comment_title">
+        <table width="98%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="87%"><a href="#">l0he1g</a> <span class="time">(<a href="#">加油学英语</a>)</span></td>
+            <td width="13%"><a href="#">取消关注</a></td>
+          </tr>
+        </table>
+        <p><span class="time">11-12</span>添加日志“前台开发要点”</p>
+        <p><span class="time">11-12</span>添加日志“前台开发要点”</p>
+        <p><span class="time">11-12</span>添加日志“前台开发要点”</p>
+      </div>
+    </div>
+    <div class="each_comment">
+      <div class="each_comment_title">
+        <table width="98%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="87%"><a href="#">l0he1g</a> <span class="time">(<a href="#">加油学英语</a>)</span></td>
+            <td width="13%"><a href="#">取消关注</a></td>
+          </tr>
+        </table>
+        <p><span class="time">11-12</span>添加日志“前台开发要点”</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block right %}
+<div id="friends">
+  <p class="text_title" style="font-size:14px;">谁在关注我？</p>
+  <ul>
+    <li><a href="#">flyinsky</a><span class="left_8px">[<a href="#">关注</a>]</span></li>
+    <li><a href="#">dddddflyinsky</a></li>
+    <li><a href="#">flyinskyssssss</a></li>
+    <li><a href="#">flyinsky</a><span class="left_8px">[<a href="#">关注</a>]</span></li>
+    <li><a href="#">flyinsky</a><span class="left_8px">[<a href="#">关注</a>]</span></li>
+  </ul>
+</div>
+{% endblock %}
