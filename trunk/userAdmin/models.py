@@ -19,22 +19,22 @@ class UserBasicInfo(models.Model):
                         ('F', 'Female'),
                     )
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES,default="M")
-    username = models.OneToOneField(User)
+    username = models.OneToOneField(User,parent_link=True)
     #gender = models.BooleanField(default=True)#性别
-    headshot = models.ImageField(upload_to='headshot/%Y/%m/%d',blank=True)#头像
+    headshot = models.ImageField(upload_to='headshot/',default='me.jpg',blank=True)#头像
     achievement = models.IntegerField(default=0)#成就指数
     graduate_school = models.CharField(max_length=30,blank=True)#毕业学校
     location = models.CharField(max_length=30,blank=True)#住处
     signature = models.CharField(max_length=50,blank=True)
 
     def __unicode__(self):
-        return u'%s' % self.email
+        return u'%s' % self.username
 
     class Meta:
         db_table = "UserBasicInfo"
 
 class ContactInfo(models.Model):
-    username = models.OneToOneField(User)
+    username = models.OneToOneField(User,parent_link=True)
     qq = models.CharField(max_length =15,blank=True)
     msn = models.CharField(max_length =75,blank=True)
     personal_site=models.URLField(verify_exists=True, max_length=200,blank=True) 
@@ -47,8 +47,16 @@ class UserForm(forms.ModelForm):
         model =User;
 
 class Friends(models.Model):
-    username = models.OneToOneField(User,related_name="user")
+    username = models.OneToOneField(User,related_name="user",parent_link=True)
     friend_name = models.OneToOneField(User,related_name="friend_user")
 
     class Meta:
         db_table ="Friends"
+
+class FriendRequest(models.Model):
+    request_user=models.OneToOneField(User,related_name="req_user")
+    other_user=models.OneToOneField(User,related_name="other_user")
+    message=models.CharField(max_length=90,blank=True)
+
+    class Meta:
+        db_table ="FriendRequest"

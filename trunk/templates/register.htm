@@ -1,12 +1,16 @@
 {% extends 'base.htm' %}
 
+{% block head %}
+  <link rel="stylesheet" href="/static/style/sub.css">
+ {% endblock %}
+ 
 {% block content %}
 <div id="main_reg">
 	<div id="reg_left">
 		<p id="reg_title">新用户注册</p>
 		<div id="reg_info">
 		{% if created %}
-				恭喜您注册成功！请到<a href="http://{{ email }}" target="_blank">{{ email }}</a>收取邮件，并打开链接进行密码等个人信息的设置。
+				恭喜您注册成功！请到<a href="http://{{email_url}}">{{ email }}</a>收取邮件，并打开链接进行密码等个人信息的设置。
 		{% else %}
 			<form action="." method="POST">
 				<table>

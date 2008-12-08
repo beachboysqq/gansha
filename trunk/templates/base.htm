@@ -2,32 +2,31 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 {% block confirmRefresh %}{% endblock confirmRefresh %}
-<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<meta http-equiv="Content-Type" content="text/html;charset=gb2312" />
 <meta name="keywords" content="SNS,干啥,实现理想">
-<title>干啥网--生活因为一目标而精彩！</title>
+<title>干啥网--生活因为有目标而精彩！</title>
 <link rel="stylesheet" href="/static/style/index.css">
-<link rel="stylesheet" href="/static/style/sub.css">
-<link rel="stylesheet" href="/static/style/home.css">
-<script language="JavaScript" src="/static/style/prototype-1.6.0.3.js"></script>
-<script language="JavaScript" src="/static/style/switch.js"></script>
+{% block head %}{% endblock %}
 </head>
 <body>
 <div id="top">
-  <div id="top_content"> <img src="/static/images/logo_index.jpg" style="float:left" />
+  <div id="top_content"> 
+	<a href="../home"><img src="/static/images/logo_index.jpg" style="float:left" /></a>
     <div id="top_menu">
 		{% if logined %}
 	  		{% block topmenu %}{% endblock %}
 		{% endif %}
     </div>
+
     <div id="top_search">
-      <form>
-        <input id="search_value" type="text"/>
-        <select id="search_kind">
+      <form method="get" action="http://localhost/search/">
+        <input id="search_value" name="search_value" type="text"/>
+        <select id="search_kind" name="search_kind">
           <option value="1" selected="selected">用户</option>
           <option value="2">事件</option>
-          <option>日志</option>
+          <option value="3">日志</option>
         </select>
-        <input type="button" id="but_search" />
+        <input type="submit" id="but_search" value=""/>
       </form>
     </div>
   </div>

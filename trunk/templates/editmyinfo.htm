@@ -11,16 +11,16 @@
 				  </tr>
 				</table>
 			</div>
-			<form method="post" name="myinfo" action=".">
+			<form method="post" enctype="multipart/form-data" id="myinfo" action=".">
+			<div id="myinfo_error" class="error_tip"></div>
 			<table width="98%" border="0" cellspacing="0" cellpadding="0" id="tb_myinfo">
-			 <!--tr>
+			 <tr>
 				<td width="15%" align="right">头像：</td>
-				<td width="85%"><input name="headshot" type="file" style="height:22px;" size="30"/></td>
-			  </tr-->
+				<td width="85%">{{form.headshot}}<!--<input type="file" id="headshot" style="height:22px;" onchange="get_img()"/>--></td>
+			  </tr>
 			  <tr>
 				<td width="15%" align="right">性别：</td>
-				<td width="85%">{{form.gender}}
-			  </td>
+				<td width="85%">{{form.gender}}</td>
 			  </tr>
 			  <tr>
 				<td align="right"><pre>毕业学校：</pre></td>
