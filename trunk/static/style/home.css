@@ -266,13 +266,15 @@ font-weight:bold;
 .each_friend{
 border-bottom:1px solid #CCC;
 padding-top:8px;
-height:80px;
+padding-bottom:4px;
 font-size:12px;
 }
+	.each_friend span{padding-right:8px;}
 	.who{
 	float:left;
 	width:60px;
 	}
+		.who img{width:48px;height:48px;}
 	.updateinfo{
 	float:left;
 	width:370px;
@@ -325,3 +327,21 @@ padding-bottom:8px;
 	.secret{
 	padding-right:14px;
 	background:url(../images/dot_lock.gif) no-repeat right;}
+/*-------------for findfriend.htm------------------*/
+#mes_box{
+position:absolute;
+width:220px;
+left:40%;
+top:26%;
+line-height:150%;
+font-size:12px;
+background-color:#EEE;
+padding:0px 8px 8px 8px;
+border:1px solid #999;
+}
+	#mes_box div{padding-top:8px;}
+.textarea{
+width:200px;
+font-size:12px;
+height:40px;
+}

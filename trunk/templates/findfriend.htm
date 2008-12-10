@@ -1,136 +1,51 @@
-{% extends 'base.htm' %}
-{% block topmenu %}
-	<ul>
-        <li><a href="../home" class="a_nounderline">个人主页</a></li>
-        <li><a href="setting.html" class="a_nounderline">设置</a></li>
-        <li><a href="message.html" class="a_nounderline">留言板</a></li>
-        <li><a href="friends/" class="a_nounderline">好友</a></li>
-	<ul>
-{% endblock %}
+{% extends 'base_home.htm' %}
 
-{% block content %}
-<style>
-#mes{
-position:absolute;
-height: 200px;
-width: 300px;
-left: 400px;
-top: 400px;
-border:1px solid #333;
-}
-</style>
-<script language="javascript">
-	
-	var counter;
-	function setcounter(val)
-	{
-		counter=val;
-	}
-	function concel_hide(){
-		document.getElementById('mes').style.display='none';
-	}
-	function confirm_hide(){
-		document.getElementById('mes').style.display='none';
-		submitdata(counter);
-	}
-</script>
-<div id="main_home">
-	<div id="left">
-		<div id="me">
-		<img src="/static/images/temp_me.gif" id="img_headshot"/>
-		<p>{{ username }}，welcome！</p>
-		<p>成就指数：{{ achievement}}</p>
-		<p>签名档：<i>{{ signature}}</i></p>
-		<p>上次登录:{{ last_login|date:"Y-m-d" }}</p>
-		<p><a href="./myinfo/">个人资料</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="../logout/">退出登录</a></p>
-	</div>
-		<div id="action">
-		<div id="action_body">
-		  <p><img src="/static/images/dot_doing.gif" />&nbsp;&nbsp;<a href="#" class="a_nounderline">正在做事件</a></p>
-		  <p><img src="/static/images/dot_todo.gif" />&nbsp;&nbsp;<a href="#" class="a_nounderline">发布新事件</a></p>
-		  <p><img src="/static/images/dot_done.gif" />&nbsp;&nbsp;<a href="#" class="a_nounderline">已完成事件</a></p>
-		</div>
-	</div>
-	
-	
-	</div>
-	<div id="middle">
-		{% block middle %}
-		<div id="navigation"><a href="home.html">首页</a>->好友</div>
-      <div id="m1">
-			<div class="title1">我的好友</div>
-			<div class="tip">搜索对方用户名，快速添加其为好友。</div>
-			<div id="mes"style="display:none;">
-				<table width="441" height="184" border="1">
-				  <tr>
-					<td width="105" height="52">&nbsp;</td>
-					<td width="320">发送好友申请后，对方会收到提示，经对方确认后，你们即可成为好友。</td>
-				  </tr>
-				  <tr>
-					<td>&nbsp;</td>
-					<td>添加一条个人信息（选填,45字以内）：</td>
-				  </tr>
-				  <tr>
-					<td>&nbsp;</td>
-					<td><input type="text" name="message" id="message"  maxlength="45" height="50" width="260"/></td>
-				  </tr>
-				  <tr>
-					<td>&nbsp;</td>
-					<td align="right"><input type="button" value="确认" onclick="confirm_hide()"/>&nbsp;<input type="button" value="取消" onclick="concel_hide();"/></td>
-				  </tr>
-				</table>
-			</div>				
-			{% if ret %}
-				{% for user in ret %}
-					<div class="each_friend">
-						<div class="who">
-							<a href="#"><img src="/static/images/temp_headshot.jpg" border="0" /></a>
-							<div><a href="#">{{user.username}}</a></div>
-						</div>
-						<div class="updateinfo">
-							<ul>
-								<li>11-12  性别:{% ifequal user.userbasicinfo.gender 'M'%}女{%else%}男{%endifequal%}</li>
-								<li>11-12  毕业学校:{{user.userbasicinfo.graduate_school}}</li>
-								<li>11-12  地址:{{user.userbasicinfo.location}}</li>
-							</ul>
-						</div>
-						{%ifequal user.username username%}
-							<div class="operation"><a href="#">自己</a></div>
-						{%else%}
-							
-							<div id="mes{{forloop.counter}}" style="display:none;" >
-							<form action="../addfriend/" method="post" id="form{{forloop.counter}}">
-								<input type="text" id="info{{forloop.counter}}" name="msg"/>
-								<input type="hidden" name="search_value" value="{{search_value}}" />
-								<input type="hidden" name="uid" value="{{user.id}}" />
-							</form>
-							</div>
-							<div class="operation" ><a href="#"id="txt{{forloop.counter}}" onclick="javascript:document.getElementById('mes').style.display='block';setcounter({{forloop.counter}})">加为好友</a></div>
-							<script language="javascript">
-								function submitdata(id)
-								{
-									document.getElementById('info'+id).value=document.getElementById('message').value;
-										
-									document.getElementById('form'+id).submit();
-										
-									document.getElementById('txt'+id).innerHTML="已发送请求";
-								}
-							</script>
-						{%endifequal%}
-					</div>
-				{% endfor %}
-			{% else %}
-				<p>没有用户名中包含"{{search_value}}"!</p>
-			{% endif %}
-			
-	       
-			
-		{% endblock %}
-	</div>
-	<div id="right">
-		{% block right %}{% endblock %}
-	</div>
+{% block middle %}
+<div id="m1">
+<div class="title1">搜索
+	{% ifequal search_kind "username"%}用户名
+	{%else%}
+		{% ifequal search_kind "event" %}事件
+		{%else%}日志
+		{%endifequal%}
+	{%endifequal%}:
+	{{search_value}}
 </div>
-{% endblock %}
-
-
+<div class="tip">共有{{counter}}个结果。</div>
+{% if ret %}
+{% for user in ret %}
+<div class="each_friend">
+  <div class="who"> 
+  	<a href="../?user={{user.id}}"><img src="{{user.userbasicinfo.headshot.url}}" /></a>
+    <div><a href="../?user={{user.id}}">{{user.username}}</a></div>
+  </div>
+  <div class="updateinfo">
+    <ul>
+      <li>性别:{% ifequal user.userbasicinfo.gender 'M'%}男{%else%}女{%endifequal%}</li>
+      <li>毕业学校:{{user.userbasicinfo.graduate_school|default_if_none:"不详"}}</li>
+      <li>地址:{{user.userbasicinfo.location|default_if_none:"不详"}}</li>
+    </ul>
+  </div>
+  {%ifequal user.username username%}
+  <div class="operation"><a href="#">自己</a></div>
+  {%else%}
+  <div class="operation" >
+  	<a href="#"onclick="show_box({{user.id}})" id="op_{{user.id}}">加为好友</a>
+  </div>
+  {%endifequal%} 
+  </div>
+{% endfor %}
+{% else %}
+<p>没有用户名中包含"{{search_value}}"!</p>
+{% endif %}     
+<div id="mes_box" style="display:none;">
+	<div>发送好友请求，经对方确认后，方可成为好友。
+请输入验证信息（45字以内）：</div>
+    <div><textarea id="message" class="textarea"></textarea></div>
+     <div>	
+	 	<input	type="hidden" id="to_user"/>
+	 	<input type="button" value="发送" onclick="send_request()"/>
+      	<input type="button" value="取消" onclick="$('mes_box').hide();"/>
+	</div>	
+</div>
+{% endblock %} 

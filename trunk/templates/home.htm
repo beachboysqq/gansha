@@ -38,12 +38,14 @@
 			</table>
 				</div>
 				<div id="new_event">
-					<div class="each_event">
-						<p style="font-weight:bold;">软件课程项目</p>
-						<p><span class="time">11-12</span>添加日志“前台开发要点”</p>
-						<p><span class="time">11-12</span>添加日志“前台开发要点”</p>
-						<p><span class="time">11-12</span>添加日志“前台开发要点”</p>
-					</div>
+				  <div class="each_event">
+				  {%for hi in hi_list%}
+					<p>
+					  <span class="time">{{hi.date}}</span>
+					  {{hi.content}}({{hi.event_id.title}})
+					</p>
+				  {%endfor%}
+				  </div>
 				</div>
 				<div id="new_comment" style="display:none">
 					<div class="tip">您共有3条新评论。</div>
@@ -130,7 +132,7 @@
 					</div>
 				</div>
 				<div id="new_friend" style="display:none;">
-					<div class="tip">您共有{{request_friend.count}}条好友请求，<a href="friends.html">转到好友列表</a>。</div>
+					<div class="tip">您共有{{request_friend.count}}条好友请求，<a href="../friends">转到好友列表</a>。</div>
 					{% if request_friend%}
 						{% for user in request_friend %}
 							<div class="each_comment">

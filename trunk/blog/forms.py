@@ -9,6 +9,7 @@ class BlogForm( ModelForm ):
 class CommentForm( ModelForm ):
     class Meta:
         model = Comment
+        exclude = ('author','blog_id','publish_time')
 
 class MesForm( ModelForm ):
     class Meta:

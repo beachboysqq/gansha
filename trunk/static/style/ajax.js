@@ -181,4 +181,22 @@ function edit_se( id )
     $('submit_subevent').show();
     $('switch_addse').hide();
 }
+//send request for asking add friends
+function show_box( to_id )
+{
+	$('mes_box').show();
+	$('to_user').value=to_id;
+	$('message').value='';
+}
 
+function send_request()
+{
+	var op='op_'+$F('to_user');
+    var myAjax = new Ajax.Request('../addfriend/',{
+            method:'POST',
+			parameters:{uid:$F('to_user'),message:$F('message')},
+            onSuccess:function( transport ){$(op).innerHTML='已发送好友请求';$('mes_box').hide();},
+            onFailure:function( transport ){alert( transport.status );
+            }
+        })    
+}
