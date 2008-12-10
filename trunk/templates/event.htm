@@ -12,7 +12,7 @@
 		<img src="/static/images/dot_lock.gif" style="padding-left:4px;"/>
 		{% endif %}
 	  </td>
-      <td class="underline_grey"><input onclick="../addblog" type="button" id="but_addblog" /></td>
+      <td class="underline_grey"><input onclick="window.location.replace('../addblog')" type="button" id="but_addblog" /></td>
     </tr>
   </table>
   <div class="tip">
@@ -20,7 +20,7 @@
 	  <tr>
 		<td width="84%">发布时间：{{event.publish_date}}</td>
 		<td width="8%">
-		  <a href="../editevent/?event={{event.id}}"
+		  <a href="../editevent"
 			 class="a_raw">编辑</a>
 		</td>
 		<td width="8%"><a href="#" class="a_raw">删除</a></td>
@@ -129,7 +129,7 @@
   <div id="event_log" style="display:none">
 	{%if history_li%}
 	{% for hi in history_li%}
-    <p><span class="time">{{hi.date}}</span>完成:{{hi.content}}</p>
+    <p><span class="time">{{hi.date}}</span>{{hi.content}}</p>
 	{%endfor%}
 	{%else%}
 	<p>该事件尚无历史记录</p>
@@ -138,17 +138,27 @@
   <div id="event_blog" style="display:none;">
     <table width="98%" border="0" cellspacing="0" cellpadding="0">
       <tr>
-        <td width="69%" class="td_12px_title">标题</td>
-        <td width="19%" class="td_12px_title">发表时间</td>
+        <td width="62%" class="td_12px_title">标题</td>
+        <td width="26%" class="td_12px_title">发表时间</td>
         <td width="6%" class="td_12px_title">编辑</td>
         <td width="6%" class="td_12px_title">删除</td>
       </tr>
+	  {%for blog in blog_li%}
       <tr>
-        <td class="underline_grey">需求分析，项目规划</td>
-        <td class="underline_grey">09.15 10:15</td>
-        <td class="underline_grey text_center"><a href="#"><img src="/static/images/edit.jpg" border="0" /></a></td>
-        <td class="underline_grey text_center"><a href="#"><img src="/static/images/del.jpg" border="0" /></a></td>
+        <td class="underline_grey">
+		  <a href="../blog/?blog={{blog.id}}">{{blog.title}}</a>
+		</td>
+        <td class="underline_grey">
+		  {{blog.publish_time}}
+		</td>
+        <td class="underline_grey text_center">
+		  <a href="../editblog/?blog={{blog.id}}"><img src="/static/images/edit.jpg" border="0" /></a>
+		</td>
+        <td class="underline_grey text_center">
+		  <a href="../delblog/?blog={{blog.id}}"><img src="/static/images/del.jpg" border="0"/></a>
+		</td>
       </tr>
+	  {%endfor%}
     </table>
   </div>
   <div id="event_concern" style="display:none;">

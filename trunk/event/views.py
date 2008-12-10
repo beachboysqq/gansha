@@ -5,7 +5,8 @@ from django.contrib.auth.models import User
 from gansha.settings import MEDIA_ROOT,MEDIA_URL
 from django.http import HttpResponseRedirect,HttpResponse
 from gansha.event.forms import EventForm,Sub_eventForm
-from gansha.event.models import Event,Sub_event,History
+from gansha.event.models import *
+from gansha.blog.models import Blog
 from django.http import Http404
 from django.template import Context
 
@@ -53,7 +54,6 @@ def edit_event( request ):
         form = EventForm( request.POST )
         if form.is_valid():
             event = Event( id=request.session['eid'] )
-            del request.session['eid']
             event.title = form.cleaned_data['title']
             str = form.cleaned_data['description']
             #...need a way to realize \r\n with next line
@@ -65,8 +65,8 @@ def edit_event( request ):
         else:
               return HttpResponse('POST not ivalid')
     ##user just enter this page to edit a event
-    elif request.GET.has_key('event'):
-        eid = request.GET.get('event')
+    else:
+        eid = request.session['eid']
         event = Event.objects.get( id=eid )
         form = EventForm( instance=event )
         request.session['eid'] = eid
@@ -78,8 +78,6 @@ def edit_event( request ):
                      'logined':logined,
                      'eform':form})
         return render_to_response( 'newevent.htm',c )    
-    else:
-        raise Http404
 
 #display event and subevent and so on
 def event( request ):
@@ -90,14 +88,17 @@ def event( request ):
         return HttpResponse('You have not loginned,and have no right of accessing!')     
     
     try:
-        event_id = int( request.GET.get("event") )
+        event_id = request.GET.get("event")
     except KeyError:
         raise Http404
         
     event = Event.objects.get( id=event_id )
+    request.session['eid'] = event_id
     se_list = Sub_event.objects.filter( event_id=event ).order_by('start_date','end_date')
     ##get user's history operation on this event
     history_li = History.objects.filter( event_id=event_id )
+    ##get blog
+    blog_li = Blog.objects.filter( event_id=event_id )
     c = Context({"username":request.session['username'],
                  "headshot":request.session['headshot'],
                  "achievement":request.session['achievement'],
@@ -106,7 +107,8 @@ def event( request ):
                  'logined':logined,
                  'event':event,
                  'se_list':se_list,
-                 'history_li':history_li,})
+                 'history_li':history_li,
+                 'blog_li':blog_li,})
     return render_to_response( 'event.htm',c)
 
 ##add a sub event for this event by ajax way
@@ -217,7 +219,8 @@ def events_doing( request ):
                  "signature":request.session['signature'],
                  "last_login":request.session['last_login'],
                  'logined':logined,
-                 'events':events})
+                 'events':events,
+                 'kind':'doing',})
     return render_to_response( 'event_list.htm',c)
 ##show the events to do
 
@@ -239,7 +242,8 @@ def events_todo( request ):
                  "signature":request.session['signature'],
                  "last_login":request.session['last_login'],
                  'logined':logined,
-                 'events':events})
+                 'events':events,
+                 'kind':'todo'})
     return render_to_response( 'event_list.htm',c)
 ##show the events has been done
 def events_done( request ):
@@ -259,7 +263,8 @@ def events_done( request ):
                  "signature":request.session['signature'],
                  "last_login":request.session['last_login'],
                  'logined':logined,
-                 'events':events})
+                 'events':events,
+                 'kind':'done'})
     return render_to_response( 'event_list.htm',c)
 ##just for test ajax,for there is no better way to display errors with ajax
 def test( request ):

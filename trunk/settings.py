@@ -87,7 +87,9 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
+   #'django.contrib.comments',
     'django.contrib.auth',
     'gansha.userAdmin',
-    'gansha.event'
+    'gansha.event',
+    'gansha.blog'
 )

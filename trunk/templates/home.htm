@@ -9,12 +9,12 @@
 		  <td width="56%" class="m1_title">近期任务</td>
 		  <td width="16%" class="m1_title">期限</td>
 		</tr>
-		{% for event in event_list %}
+		{% for se in se_list %}
 		<tr>
-		  <td><a href="../event/?event={{event.id}}">{{event.title}}</a></td>
-		  <td>{{event.progress}}%</td>
-		  <td>需求分析，项目规划</td>
-		  <td>{{event.over_date}}</td>
+		  <td><a href="../event/?event={{se.event_id.id}}">{{se.event_id.title}}</a></td>
+		  <td>{{se.event_id.progress}}%</td>
+		  <td>{{se.content}}</td>
+		  <td>{{se.end_date}}</td>
 		</tr>
 		{% endfor %}
 	  </table>

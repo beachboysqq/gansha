@@ -1,7 +1,7 @@
 from gansha.userAdmin.models import UserForm
 from gansha.settings import MEDIA_ROOT,MEDIA_URL
-from gansha.event.models import Event
-
+from gansha.event.models import Event,Sub_event
+import datetime
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 import datetime, random, sha
@@ -124,6 +124,8 @@ def home(request):
     friends = Friends.objects.filter(username=user)
 
     event_list = Event.objects.filter( user_id=user )
+    se_list = Sub_event.objects.filter( event_id__in=event_list ).filter(
+        isdone=False ).filter( start_date__lte=datetime.date.today() )
     c = Context({"username":request.session['username'],
                  "headshot":request.session['headshot'],
                  "achievement":request.session['achievement'],
@@ -132,7 +134,7 @@ def home(request):
                  'logined':logined,
                  'request_friend':request_friend,
                  'friends':friends,
-                 'event_list':event_list,
+                 'se_list':se_list,
                  })
     return render_to_response('home.htm', c)
 

@@ -2,6 +2,7 @@ from django.conf.urls.defaults import *
 from django.contrib import admin
 from gansha.userAdmin.views import *
 from gansha.event.views import *
+from gansha.blog.views import *
 from django.conf import settings
 
 admin.autodiscover()
@@ -15,6 +16,7 @@ urlpatterns = patterns('',
     (r'^test/', test),
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     ('^admin/(.*)', admin.site.root),
+    #(r'^comments/', include('django.contrib.comments.urls')),                   
     (r'^$',index),
     (r'^register/$',register),
     (r'^search/', search),
@@ -40,6 +42,9 @@ urlpatterns = patterns('',
     (r'^doing/$',events_doing),
     (r'^todo/$',events_todo),
     (r'^done/$',events_done),
+    (r'^blog/$',blog), 
+    (r'^addblog/$',add_blog), 
+    (r'^editblog/$',edit_blog),                
     #(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': 'D:/static', 'show_indexes': True}),
 )
 
