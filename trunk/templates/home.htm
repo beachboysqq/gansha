@@ -135,15 +135,22 @@
 					<div class="tip">您共有{{request_friend.count}}条好友请求，<a href="../friends">转到好友列表</a>。</div>
 					{% if request_friend%}
 						{% for user in request_friend %}
-							<div class="each_comment">
-								<p><a href="#">{{user.request_user.username}}</a>：{{user.message}}</p>
-								<form id="form{{forloop.counter}}" method="post" action="../acceptfriend/">
-									<input type="hidden" name="uid" value="{{user.request_user.id}}"/>
-								</form>
-								<form id="fm{{forloop.counter}}" method="post" action="../deny/">
-									<input type="hidden" name="uid" value="{{user.request_user.id}}"/>
-								</form>
-								<p class="text_right"><a href="#" onclick="javascript:document.getElementById('form'+{{forloop.counter}}).submit();">加为好友</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" onclick="javascript:document.getElementById('fm'+{{forloop.counter}}).submit();">拒绝</a></p>
+							<div class="each_comment" id="request_{{user.sender.id}}">
+							  <input type="hidden" value="{{user.sender.username}}" id="uname_{{user.sender.id}}" >
+								<p>
+								  <a href="../?user={{user.sender.id}}">
+									{{user.sender.username}}
+								  </a>
+								  ：{{user.message}}
+								</p>
+								<p class="text_right">
+								  <a href="javascript:accept_friend( {{user.sender.id}} );">
+									加为好友
+								  </a>
+								  &nbsp;&nbsp;&nbsp;&nbsp;
+								  <a href="javascript:deny_friend({{user.sender.id}});">
+								  拒绝</a>
+								</p>
 							</div>
 						{%endfor%}
 					{%endif%}
@@ -157,7 +164,7 @@
 				<ul>
 				{% if friends %}
 					{% for user in friends%}
-						<li><a href="#">{{user.friend_name.username}}</a></li>
+						<li><a href="../?user={{user.myfriend.id}}">{{user.myfriend.username}}</a></li>
 					{% endfor %}
 				{%else %}
 					<li>暂时没加好友</li>

@@ -165,10 +165,12 @@ font-weight:bold;
 			}
 		#event_content{
 		font-size:12px;
-		text-indent:2.0em;
 		width:94%;
 		padding-left:3%;
 		padding-top:4px;
+		}
+		#event_content p{
+		text-indent:2.0em;
 		}
 		#event_plan_title,#event_log_title,#event_concern_title,#event_blog_title{
 			border:1px solid #D9001D;
@@ -266,10 +268,16 @@ font-weight:bold;
 .each_friend{
 border-bottom:1px solid #CCC;
 padding-top:8px;
+height:80px;
+font-size:12px;
+}
+.each_friend2{
+border-bottom:1px solid #CCC;
+padding-top:8px;
 padding-bottom:4px;
 font-size:12px;
 }
-	.each_friend span{padding-right:8px;}
+	.each_friend2 span{padding-right:8px;}
 	.who{
 	float:left;
 	width:60px;

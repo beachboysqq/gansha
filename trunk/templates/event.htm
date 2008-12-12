@@ -27,7 +27,7 @@
 	  </tr>
 	</table>
   </div>
-  <p id="event_content">{{event.description}}</p>
+  <div id="event_content">{{event.description|escape|linebreaks}}</div>
 </div>
 <div id="m2">
   <div id="switch_menu">
@@ -73,7 +73,7 @@
         <td class="checkbox">
 		  <input type="hidden" id="id_{{se.id}}" value="{{se.id}}" />
 		  <input type="checkbox" onclick="done_se({{se.id}})"
-		  id="checkbox_{{se.id}}"  {%if se.isdone%}checked='true'{%endif%} />
+		  id="checkbox_{{se.id}}" {%if se.isdone%} checked='true'{%endif%} />
 		</td>
         <td class="underline_grey" id="{{se.id}}_cont">{{se.content}}</td>
         <td class="underline_grey font_10" id="{{se.id}}_sdate">
@@ -83,12 +83,12 @@
 		  {{se.end_date}}
 		</td>
         <td class="underline_grey text_center">
-		  <a href="#" onclick="edit_se({{se.id}})">
+		  <a href="javascript:edit_se({{se.id}})">
 			<img src="/static/images/edit.jpg" />
 		  </a>
 		</td>
         <td class="underline_grey text_center">
-		  <a href="#" onclick="del_se({{se.id}})"><img src="/static/images/del.jpg" /></a>
+		  <a href="javascript:del_se({{se.id}})"><img src="/static/images/del.jpg" /></a>
 		</td>
       </tr>
 	  {% endfor %}
@@ -101,7 +101,7 @@
             <td width="14%" align="right">子事件：</td>
             <td width="76%"><input type="text" class="box_long" id="id_content"/></td>
             <td width="10%" align="right" valign="top">
-			  <a href="#" onclick="close_addse()">
+			  <a href="javascript:close_addse()">
 				<img src="/static/images/del.jpg" alt="关闭"/>
 			  </a>
 			</td>
@@ -123,7 +123,7 @@
       </form>
     </div>
 	<div class="add_but" id="switch_addse">
-	  <a href="#" onclick="switch_addse()">+添加子事件</a>
+	  <a href="javascript:switch_addse()">+添加子事件</a>
 	</div>
   </div>
   <div id="event_log" style="display:none">
@@ -160,6 +160,9 @@
       </tr>
 	  {%endfor%}
     </table>
+	<div class="add_but">
+	  <a href="javascript:window.location.replace('../addblog')">+添加事件日志</a>
+	</div>
   </div>
   <div id="event_concern" style="display:none;">
     <div class="tip">您共有3个关注的伙伴，共有4个更新。</div>

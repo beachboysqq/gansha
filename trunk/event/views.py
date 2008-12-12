@@ -190,6 +190,7 @@ def done_sub_event( request ):
         hi = History()
         hi.event_id = se.event_id
         hi.content = "acomplished:"+se.content
+        hi.user_id = hi.event_id.user_id
         hi.save()
         #adjust parent event's progress
         pe =se.event_id
@@ -243,7 +244,8 @@ def events_todo( request ):
                  "last_login":request.session['last_login'],
                  'logined':logined,
                  'events':events,
-                 'kind':'todo'})
+                 'kind':
+                     'todo'})
     return render_to_response( 'event_list.htm',c)
 ##show the events has been done
 def events_done( request ):

@@ -28,6 +28,7 @@ def add_blog( request ):
         #add to history
         hi = History()
         hi.event_id = blog.event_id
+        hi.user_id = hi.event_id.user_id
         hi.content = "add blog:"+blog.title
         hi.save()
         return HttpResponseRedirect( '../blog/?blog=%d' % blog.id )
@@ -102,5 +103,5 @@ def blog( request ):
                  "last_login":request.session['last_login'],
                  'logined':logined,
                  'blog':blog,
-                   'event_id':request.session['eid'],})
+                 })
     return render_to_response( 'blog.htm',c)

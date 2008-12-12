@@ -32,9 +32,15 @@ class Sub_event( models.Model ):
 
 #just record the sub event you done,and when
 class History( models.Model ):
+    user_id = models.ForeignKey( User )
     event_id = models.ForeignKey( Event )
     date = models.DateField( auto_now=True )
     content = models.CharField( max_length=255 ) 
     def __unicode__( self ):
         return self.content
+   
+class Concern( models.Model ):
+    user_id = models.ForeignKey( User )
+    concernee = models.ForeignKey( User,related_name="concernee" )
+    event_id = models.ForeignKey( Event )
    

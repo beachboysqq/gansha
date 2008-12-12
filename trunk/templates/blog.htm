@@ -3,12 +3,12 @@
 <div id="navigation">
   <a href="../home">首页</a>->
   <a href="../doing">正在做事件</a>->
-  <a href="../event/?event={{event_id}}">学英语</a>
+  <a href="../event/?event={{blog.event_id.id}}">{{blog.event_id.title}}</a>
 </div>
 <div id="m1">
   <div class="title2">{{blog.title}}</div>
   <p id="timenote">{{blog.publish_time}}  | <a href="../editblog">编辑</a>&nbsp;&nbsp;<a href="#">删除</a></p>
-  <div  id="blog_content">{{blog.content}}</div>
+  <div  id="blog_content">{{blog.content|linebreaks}}</div>
   <table width="98%" border="0" cellspacing="0" cellpadding="0" id="comment">
     <tr>
       <td width="86%" id="comment_counter" class="dot_triright"><a href="javascript:switch_comment()" class="a_raw">共1条评论 </a></td>

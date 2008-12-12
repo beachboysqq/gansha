@@ -14,7 +14,8 @@ class Blog( models.Model ):
         return self.title
 
 class Comment( models.Model ):
-    author = models.ForeignKey( User )
+    user_id = models.ForeignKey( User )
+    author = models.ForeignKey( User,related_name="author" )
     blog_id = models.ForeignKey( Blog )
     content = models.TextField()
     publish_time = models.DateTimeField( auto_now=True )

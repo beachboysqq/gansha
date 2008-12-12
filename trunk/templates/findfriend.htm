@@ -22,15 +22,15 @@
   <div class="updateinfo">
     <ul>
       <li>性别:{% ifequal user.userbasicinfo.gender 'M'%}男{%else%}女{%endifequal%}</li>
-      <li>毕业学校:{{user.userbasicinfo.graduate_school|default_if_none:"不详"}}</li>
-      <li>地址:{{user.userbasicinfo.location|default_if_none:"不详"}}</li>
+      <li>毕业学校:{{user.userbasicinfo.graduate_school|default:"不详"}}</li>
+      <li>地址:{{user.userbasicinfo.location|default:"不详"}}</li>
     </ul>
   </div>
   {%ifequal user.username username%}
   <div class="operation"><a href="#">自己</a></div>
   {%else%}
   <div class="operation" >
-  	<a href="#"onclick="show_box({{user.id}})" id="op_{{user.id}}">加为好友</a>
+  	<a href="#" onclick="show_box({{user.id}})" id="op_{{user.id}}">加为好友</a>
   </div>
   {%endifequal%} 
   </div>

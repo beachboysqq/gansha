@@ -4,24 +4,29 @@
       <div id="m1">
 			<div class="title1">我的好友</div>
 			<div class="tip">搜索对方用户名，快速添加其为好友。</div>
-	        {% if friend %}
-				{% for user in friends%}
-					<div class="each_friend">
+	        {% if friends %}
+				{% for user,hi_li in friends %}
+					<div class="each_friend" id="fr_{{user.myfriend.id}}">
 						<div class="who">
-							<a href="#"><img src="/static/images/temp_headshot.jpg" border="0" /></a>
-							<div><a href="#">{{user.friend_name.username}}</a></div>
+						  <a href="../?user={{user.myfriend.id}}">
+							<img src="{{user.myfriend.userbasicinfo.headshot.url}}"/>
+						  </a>
+						  <div><a href="../?user={{user.myfriend.id}}">{{user.myfriend.username}}</a></div>
 						</div>
 						<div class="updateinfo">
 							<ul>
-								<li>11-12  添加日志“前台开发要点”</li>
-								<li>11-12  添加日志“前台开发要点”</li>
-								<li>11-12  添加日志“前台开发要点”</li>
+							  {% for hi in hi_li %}
+							  <li><span class="time">{{hi.date}}</span>{{hi.content}}</li>
+							  {%endfor%}
 							</ul>
 						</div>
 						<form id="form{{forloop.counter}}" method="post" action="../removefriend/">
-							<input type="hidden" name="uid" value="{{user.friend_name.id}}"/>
+							<input type="hidden" name="uid" value="{{user.myfriend.id}}"/>
 						</form>
-						<div class="operation"><a href="#" onclick="javascript:document.getElementById('form'+{{forloop.counter}}).submit();">解除好友</a></div>
+						<div class="operation">
+						  <a href="javascript:remove_friend( {{user.myfriend.id}} );">
+						  解除好友</a>
+						</div>
 					</div>
 				{% endfor %}
 			{%else %}

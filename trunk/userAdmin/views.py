@@ -1,16 +1,19 @@
+from gansha.userAdmin.models import UserProfile,UserBasicInfo,ContactInfo,Friends,FriendRequest
+from gansha.userAdmin.forms import RegistrationForm,LoginForm,EditInfoForm,ChangePasswordForm
 from gansha.userAdmin.models import UserForm
 from gansha.settings import MEDIA_ROOT,MEDIA_URL
-from gansha.event.models import Event,Sub_event
+from gansha.event.models import Event,Sub_event,History
+from gansha.blog.models import Blog
 import datetime
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
+from django.db.models import Q
 import datetime, random, sha
 from django.shortcuts import render_to_response, get_object_or_404
 from django.core.mail import send_mail
-from gansha.userAdmin.models import UserProfile,UserBasicInfo,ContactInfo,Friends,FriendRequest
-from gansha.userAdmin.forms import RegistrationForm,LoginForm,EditInfoForm,ChangePasswordForm
 from django.contrib.auth.models import User
 from django.template import Context, Template
+from django.http import Http404
 
 def register(request):
     if request.user.is_authenticated():
@@ -120,12 +123,14 @@ def home(request):
     request.session['signature'] = basicInfo.signature
     request.session['last_login'] = user.last_login
     
-    request_friend = FriendRequest.objects.filter(other_user = user)
-    friends = Friends.objects.filter(username=user)
+    request_friend = FriendRequest.objects.filter( receiver=user )
+    friends = Friends.objects.filter( user_id=user )
 
     event_list = Event.objects.filter( user_id=user )
     se_list = Sub_event.objects.filter( event_id__in=event_list ).filter(
         isdone=False ).filter( start_date__lte=datetime.date.today() )
+    hi_list = History.objects.filter( event_id__in=event_list )
+    
     c = Context({"username":request.session['username'],
                  "headshot":request.session['headshot'],
                  "achievement":request.session['achievement'],
@@ -135,6 +140,7 @@ def home(request):
                  'request_friend':request_friend,
                  'friends':friends,
                  'se_list':se_list,
+                 'hi_list':hi_list,
                  })
     return render_to_response('home.htm', c)
 
@@ -299,15 +305,25 @@ def friends(request):
     logined =True
     
     user = User.objects.get(id = id)
-    friends = Friends.objects.filter(username=user)
+    friends = Friends.objects.filter( user_id=user )
   
+    li = []
+    for friend in friends:
+        sub_li = [friend]
+        count = History.objects.filter( user_id=friend.myfriend ).count()
+        if count>3:
+            count = 3
+        sub_li.append( History.objects.filter( user_id=friend.myfriend ).order_by('date')[0:3] )
+        li.append( sub_li )
+    
     c = Context({"username":request.session['username'],
                  'headshot':request.session['headshot'],
                  "achievement":request.session['achievement'],
                  "signature":request.session['signature'],
                  "last_login":request.session['last_login'],
                  'logined':logined,
-                 'friends':friends})
+                 'friends':li,
+                 })
     return render_to_response('friend.htm', c)
 
 def removefriend(request):
@@ -322,17 +338,18 @@ def removefriend(request):
     otheruser =User.objects.get(id = uid)
  
     try:
-        friend = Friends.objects.get(username=user,friend_name=otheruser)
+        friend = Friends.objects.get( user_id=user,myfriend=otheruser )
         friend.delete()
-        friend = Friends.objects.get(username=otheruser,friend_name=user)
-        friend.delete()
+        #friend = Friends.objects.get( user_id=otheruser,myfriend=user)
+        #friend.delete()
     except:
         pass
-    return HttpResponseRedirect('../friends')
+    return HttpResponse('removed')
 
 def search(request):
     try:
         id =request.session['member_id']
+        user = User.objects.get( id=id )
     except KeyError:
         return HttpResponse('You have not login,and have no right of accessing!')
     logined =True
@@ -340,20 +357,36 @@ def search(request):
     search_value=request.GET['search_value']
     search_value=search_value.lstrip()
     search_value=search_value.rstrip()
+    search_kind = request.GET['search_kind']
+    dict = {"username":request.session['username'],
+    'headshot':request.session['headshot'],
+    "achievement":request.session['achievement'],
+    "signature":request.session['signature'],
+    "last_login":request.session['last_login'],
+    'search_value':search_value,
+    'logined':logined}
     ret=[]
-    if("1" == request.GET['search_kind']):           
-        ret=User.objects.filter(username__contains=search_value)
-        
-    c = Context({"username":request.session['username'],
-                 'headshot':request.session['headshot'],
-                 "achievement":request.session['achievement'],
-                 "signature":request.session['signature'],
-                 "last_login":request.session['last_login'],
-                 'ret':ret,
-                 'search_value':search_value,
-                 'logined':logined})
-    return render_to_response('findfriend.htm', c)
+    if("username" == search_kind ):
+        ret = User.objects.filter( username__contains=search_value )
+        dict['ret'] = ret
+        dict['counter'] = len( ret )
+        return render_to_response('findfriend.htm',Context(dict) )
+    elif("event" == search_kind ):
+        ret = Event.objects.filter( Q(title__contains=search_value)|
+                                    Q(description__contains=search_value)
+                                   ).distinct()
+        dict['ret'] = ret
+        dict['counter'] = len( ret )
+        return render_to_response( 'findevent.htm',Context(dict) )
+    else:
+        ret = Blog.objects.filter( Q(title__contains=search_value)|
+                                    Q(content__contains=search_value)
+                                   ).distinct()
+        dict['ret'] = ret
+        dict['counter'] = len( ret )
+        return render_to_response('findblog.htm',Context(dict) )
 
+##accept someone's request and become friends with he/she
 def acceptfriend(request):
     try:
         id =request.session['member_id']
@@ -365,20 +398,19 @@ def acceptfriend(request):
     uid = request.POST['uid']
     otheruser =User.objects.get(id = uid)
     try:
-        friend = Friends.objects.get(username=user,friend_name=otheruser)
+        friend = Friends.objects.get( user_id=user,myfriend=otheruser )
     except:
-        friend_add = Friends(username=user,friend_name=otheruser)
+        friend_add = Friends( user_id=user,myfriend=otheruser )
         friend_add.save()
-        friend_add = Friends(username=otheruser,friend_name=user)
+        friend_add = Friends( user_id=otheruser,myfriend=user )
         friend_add.save()
 
     try:
-        requestfriend = FriendRequest.objects.get(request_user=otheruser,other_user=user)
+        requestfriend = FriendRequest.objects.get( sender=otheruser,receiver=user )
         requestfriend.delete()
     except:
         pass
-    
-    return HttpResponseRedirect('../home')
+    return HttpResponse('done')
 
 def deny(request):
     try:
@@ -389,48 +421,33 @@ def deny(request):
     
     user = User.objects.get(id = id)
     uid = request.POST['uid']
-    otheruser =User.objects.get(id = uid)
+    otheruser =User.objects.get( id=uid )
 
     try:
-        requestfriend = FriendRequest.objects.get(request_user=otheruser,other_user=user)
+        requestfriend = FriendRequest.objects.get( sender=otheruser,receiver=user)
         requestfriend.delete()
     except:
         pass
-    
-    return HttpResponseRedirect('../home')
+    return HttpResponse('done')
 
+##after send friends request,record the request
 def addfriend(request):
     try:
         id =request.session['member_id']
+        user = User.objects.get(id = id)
     except KeyError:
         return HttpResponse('You have not login,and have no right of accessing!')
-    logined =True
-    
-    user = User.objects.get(id = id)
-    username = user.username
-    last_login = user.last_login
-    basicInfo = user.userbasicinfo
-    achievement = basicInfo.achievement
-    signature = basicInfo.signature
-
-    msg=""
-    search_value=""
-    if request.POST:
-        msg=request.POST['msg']
-        search_value=request.POST['search_value']
+   
+    if request.method == 'POST':
+        msg = request.POST['message'].strip()
         uid = request.POST['uid']
-        otheruser = User.objects.get(id = uid)
-        msg=msg.lstrip()
-        msg=msg.rstrip()
-        try:
-            friend_add = FriendRequest.objects.get(request_user=user,other_user=otheruser)
-            friend_add.message=msg
-        except:
-            friend_add = FriendRequest(request_user=user,other_user=otheruser,message=msg)
-         
-        friend_add.save()
+        receiver = User.objects.get( id=uid )
         
-    return HttpResponseRedirect('../search/?search_value=%s&search_kind=1'%search_value)
+        friend_add = FriendRequest( sender=user,receiver=receiver,message=msg)
+        friend_add.save()
+        return HttpResponse('sended')
+    else:
+        raise Http404
 
 def logout(request):
     try:

@@ -47,15 +47,15 @@ class UserForm(forms.ModelForm):
         model =User;
 
 class Friends(models.Model):
-    username = models.OneToOneField(User,related_name="user",parent_link=True)
-    friend_name = models.OneToOneField(User,related_name="friend_user")
+    user_id = models.ForeignKey(User,parent_link=True)
+    myfriend = models.ForeignKey(User,related_name="friend_user")
 
     class Meta:
         db_table ="Friends"
 
 class FriendRequest(models.Model):
-    request_user=models.OneToOneField(User,related_name="req_user")
-    other_user=models.OneToOneField(User,related_name="other_user")
+    sender = models.ForeignKey(User,related_name="sender")
+    receiver = models.ForeignKey(User,related_name="receiver")
     message=models.CharField(max_length=90,blank=True)
 
     class Meta:

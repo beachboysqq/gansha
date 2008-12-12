@@ -185,8 +185,8 @@ function edit_se( id )
 function show_box( to_id )
 {
 	$('mes_box').show();
-	$('to_user').value=to_id;
-	$('message').value='';
+	$('to_user').value = to_id;
+	$('message').value = '';
 }
 
 function send_request()
@@ -199,4 +199,39 @@ function send_request()
             onFailure:function( transport ){alert( transport.status );
             }
         })    
+}
+
+function accept_friend( uid )
+{
+	var uname=$('uname_'+uid).value;
+	var myAjax = new Ajax.Request('../acceptfriend/',{
+		method:'POST',
+		parameters:{uid:uid},
+		onSuccess:function(){$('request_'+uid).update('您已和'+uname+'成为好友。');},
+		onFailure:function( transport ){alert( transport.status );
+		}
+	})   
+}
+
+function deny_friend( uid )
+{
+	var uname=$('uname_'+uid).value;	
+	var myAjax = new Ajax.Request('../deny/',{
+		method:'POST',
+		parameters:{uid:uid},
+		onSuccess:function(){$('request_'+uid).update('您已拒绝'+uname+'的好友请求。')},
+		onFailure:function( transport ){alert( transport.status );
+		}
+	})   
+}
+
+function remove_friend( uid )
+{
+	var myAjax = new Ajax.Request('../removefriend/',{
+		method:'POST',
+		parameters:{uid:uid},
+		onSuccess:function(){$('fr_'+uid).remove()},
+		onFailure:function( transport ){alert( transport.status );
+		}
+	})   
 }
