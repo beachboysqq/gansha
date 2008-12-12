@@ -373,8 +373,11 @@ def search(request):
         return render_to_response('findfriend.htm',Context(dict) )
     elif("event" == search_kind ):
         ret = Event.objects.filter( Q(title__contains=search_value)|
-                                    Q(description__contains=search_value)
+                                    Q(description__contains=search_value)|
+                                    Q(isprivacy=False)
                                    ).distinct()
+        myevents = Event.objects.filter( user_id=user )
+        dict['myevents'] = myevents
         dict['ret'] = ret
         dict['counter'] = len( ret )
         return render_to_response( 'findevent.htm',Context(dict) )

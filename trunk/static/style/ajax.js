@@ -235,3 +235,22 @@ function remove_friend( uid )
 		}
 	})   
 }
+
+function add_to_concern( eid )
+{
+	$('mes_box').show();
+	$('recorder').value = eid;
+}
+
+function send_concern()
+{
+	var eid=$F('eid');
+	var ce_id=$F('recorder');
+	var myAjax = new Ajax.Request('../add_to_concern/',{
+		method:'POST',
+		parameters:{eid:eid,ce_id:ce_id},
+		onSuccess:function(){$('span_'+ce_id).update('[已关注]');$('mes_box').hide();},
+		onFailure:function( transport ){alert( transport.status );
+		}
+	})   
+}

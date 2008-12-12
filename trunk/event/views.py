@@ -224,8 +224,6 @@ def events_doing( request ):
                  'kind':'doing',})
     return render_to_response( 'event_list.htm',c)
 ##show the events to do
-
-##show the events doing now
 def events_todo( request ):
     try:
         user_id = request.session['member_id']
@@ -268,6 +266,17 @@ def events_done( request ):
                  'events':events,
                  'kind':'done'})
     return render_to_response( 'event_list.htm',c)
+##add a concern to a event
+def add_to_concern( request ):
+    myevent = Event.objects.get( id=request.POST['eid'] )
+    ce_event = Event.objects.get( id=request.POST['ce_id'] )
+    
+    try:
+       concern = Concern.objects.get( user_id=myevent.user_id,event_id=myevent,ce_id=ce_event)
+    except:
+        concern = Concern( user_id=myevent.user_id,event_id=myevent,ce_id=ce_event)
+        concern.save()
+    return HttpResponse("added")
 ##just for test ajax,for there is no better way to display errors with ajax
 def test( request ):
     if request.method == 'POST':

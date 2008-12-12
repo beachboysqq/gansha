@@ -16,7 +16,7 @@
 	<span>Start:{{event.start_date}}</span>
 	<span>End:{{event.end_date}}</span>
 	{%ifnotequal event.user_id.username username%}
-	<span>[<a href="../add_to_concern/?event={{event.id}}">加为关注</a>]</span>
+	<span id="span_{{event.id}}">[<a href="javascript:add_to_concern({{event.id}})">加为关注</a>]</span>
 	{% endifnotequal %}
   </div> 
 </div>
@@ -24,5 +24,20 @@
 {% else %}
 <p>没有和"{{search_value}}"相关的事件!</p>
 {% endif %}     
+<div id="mes_box" style="display:none;">
+	<div>请选择您的相关事件：</div>
+    <div>
+		<select id="eid"><!--eid为要添加到的属于自己的事件-->
+		{%if myevents%}
+		{%for event in myevents %}
+		  <option value="{{event.id}}">{{event.title}}</option>
+		{% endfor %}
+		</select>
+	 	<input	type="hidden" id="recorder"/><!--记录被关注事件-->
+	 	<input type="button" value="确认" onclick="send_concern()"/>
+		{%else%}您没有任何事件!{%endif%}
+      	<input type="button" value="取消" onclick="$('mes_box').hide();"/>
 
+	</div>	
+</div>
 {% endblock %} 

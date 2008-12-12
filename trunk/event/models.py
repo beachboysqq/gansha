@@ -41,6 +41,6 @@ class History( models.Model ):
    
 class Concern( models.Model ):
     user_id = models.ForeignKey( User )
-    concernee = models.ForeignKey( User,related_name="concernee" )
     event_id = models.ForeignKey( Event )
+    ce_id = models.ForeignKey( Event,related_name="concern_event" )
    
