@@ -133,7 +133,7 @@ margin-left:auto;
 				.each_comment,.each_message{
 				border-bottom:1px solid #CCC;
 				font-size:12px;
-				margin-bottom:8px;
+				margin-bottom:6px;
 				}
 	#main_home #right{
 	float:right;
@@ -352,3 +352,10 @@ width:200px;
 font-size:12px;
 height:40px;
 }
+/*----------------for message.htm----------------------------*/
+.each_mes{
+border-bottom:1px solid #CCC;
+font-size:12px;
+margin-bottom:0px;
+}
+#mes_produce{margin-top:10px;}

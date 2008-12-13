@@ -305,7 +305,6 @@ function submit_comment(bid)
       var myAjax = new Ajax.Request('../add_comment/',{
             method:'POST',
 			parameters:{bid:bid,
-						uid:$F('visitor_id'),
                         content:$F('write_comment'),},
             onSuccess:add_comment_to_html,
             onFailure:function( transport ){alert( transport.status );
@@ -318,6 +317,44 @@ function del_comment( cid )
             method:'POST',
 			parameters:{cid:cid},
             onSuccess:function(){$('com_'+cid).remove();},
+            onFailure:function( transport ){alert( transport.status );
+            }
+        })
+}
+
+function add_mes_to_html( transport )
+{
+	var time=transport.responseText;
+	mes_body=$('mes_body');
+	var div = new Element('div',{'class':'each_comment'});
+	mes_body.insert(div);
+	var div_top = new Element('div',{'class':'mes_info'});
+	div.insert(div_top);
+	var a=new Element('a',{'href':'../home/?user='+$F('visitor_id') }).update( $F('visitor_name') );
+	div_top.insert(a);
+	var span=new Element('span',{'class':'time'}).update(time);
+	div_top.insert(span);
+	var p=new Element('p').update($F('write_comment'));
+	div.insert(p);
+	$('write_mes').value='';
+}
+
+function submit_mes()
+{   
+      var myAjax = new Ajax.Request('../add_mes/',{
+            method:'POST',
+			parameters:{content:$F('write_mes'),},
+            onSuccess:add_mes_to_html,
+            onFailure:function( transport ){alert( transport.status );
+            }
+            })
+}
+function del_mes( mid )
+{
+    var myAjax = new Ajax.Request('../del_mes/',{
+            method:'POST',
+			parameters:{mid:mid},
+            onSuccess:function(){$('mes_'+mid).remove();},
             onFailure:function( transport ){alert( transport.status );
             }
         })

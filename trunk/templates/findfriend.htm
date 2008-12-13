@@ -2,14 +2,7 @@
 
 {% block middle %}
 <div id="m1">
-<div class="title1">搜索
-	{% ifequal search_kind "username"%}用户名
-	{%else%}
-		{% ifequal search_kind "event" %}事件
-		{%else%}日志
-		{%endifequal%}
-	{%endifequal%}:
-	{{search_value}}
+<div class="title1">搜索用户名:{{search_value}}
 </div>
 <div class="tip">共有{{counter}}个结果。</div>
 {% if ret %}

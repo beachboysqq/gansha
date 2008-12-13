@@ -3,7 +3,7 @@ from gansha.userAdmin.forms import RegistrationForm,LoginForm,EditInfoForm,Chang
 from gansha.userAdmin.models import UserForm
 from gansha.settings import MEDIA_ROOT,MEDIA_URL
 from gansha.event.models import Event,Sub_event,History
-from gansha.blog.models import Blog
+from gansha.blog.models import Blog,Comment,Mes
 import datetime
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
@@ -146,6 +146,14 @@ def home(request):
         isdone=False ).filter( start_date__lte=datetime.date.today() )
     hi_list = History.objects.filter( event_id__in=event_list )
     
+    count = Comment.objects.filter( user_id=user ).count()
+    if count>4:
+        count=4
+    count_mes = Mes.objects.filter( receiver=user ).count()
+    if count_mes > 4:
+        count_mes = 4
+    comments = Comment.objects.filter( user_id=user ).order_by('publish_time')[:count]
+    mes_li = Mes.objects.filter( receiver=user ).order_by('publish_time')[:count_mes]
     c = Context({"username":request.session['username'],
                  "headshot":request.session['headshot'],
                  "achievement":request.session['achievement'],
@@ -157,6 +165,8 @@ def home(request):
                  'se_list':se_list,
                  'hi_list':hi_list,
                  'is_admin':is_admin,
+                 'comments':comments,
+                 'mes_li':mes_li,
                  })
     return render_to_response('home.htm', c)
 

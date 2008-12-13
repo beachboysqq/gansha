@@ -20,8 +20,9 @@
 
     <div id="top_search">
 	<div id="go_home">
-		<a href="../">我的首页</a> &nbsp;&nbsp;
-		<a href="../login_out">退出</a>
+		{% if logined %}
+	  		{% block gohome %}{% endblock %}
+		{% endif %}
 	</div>
       <form method="get" action="http://localhost/search/">
         <input id="search_value" name="search_value" type="text"/>

@@ -9,12 +9,14 @@
 {% block topmenu %}
 	<ul>
         <li><a href="../home" class="a_nounderline">个人主页</a></li>
-        <li><a href="../setting" class="a_nounderline">设置</a></li>
         <li><a href="../message" class="a_nounderline">留言板</a></li>
         <li><a href="../friends" class="a_nounderline">好友</a></li>
 	<ul>
 {% endblock %}
-
+{% block gohome %}
+	<a href="../">我的首页</a> &nbsp;&nbsp;
+	<a href="../login_out">退出</a>
+{% endblock %}
 {% block content %}
 <div id="main_home">
 	<div id="left">

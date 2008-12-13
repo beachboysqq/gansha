@@ -82,20 +82,21 @@
 	{%endfor%}
   </div>
   <div id="new_message" style="display:none;">
-	<div class="tip">您共有3条新留言，<a href="message.html">转到留言板</a>。</div>
+	<div class="tip">最近{{mes_li|length}}条留言，<a href="../message">转到留言板</a>。</div>
+	{%for mes in mes_li%}
 	<div class="each_comment">
 	  <div class="each_comment_title">
 		<table width="98%" border="0" cellspacing="0" cellpadding="0">
 		  <tr>
-			<td><a href="#">l0he1g</a>
-			  <span class="time">(11.14 14:00)</span></td>
-			<td width="7%"><a href="#">回复</a></td>
-			<td width="7%"><a href="#">删除</a></td>
+			<td><a href="../home/?user={{mes.sender.id}}">{{mes.sender}}</a>
+			  <span class="time">{{mes.publish_time}}</span></td>
+			<td width="7%"><a href="javascript:del_mes({{mes.id}})">删除</a></td>
 		  </tr>
 		</table>
-		<p>关于网络认证系统的几点使用说明1．连线校园,是指访问包括研究生院在内的中科院院属各单位的网络资源，此选项不计流量费</p>
+		<p>{{mes.content}}</p>
 	  </div>
 	</div>
+	{%endfor%}
   </div>
   {%if is_admin%}
   <div id="new_friend" style="display:none;">

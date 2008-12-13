@@ -98,7 +98,7 @@ def blog( request ):
     
     is_admin = True
     blog = Blog.objects.get( id=blog_id )
-    visitor = blog.author
+    visitor = User.objects.get(id = user_id)
     if blog.author.id != user_id:
         uid = blog.author.id
         request.session['who'] = uid
@@ -111,7 +111,6 @@ def blog( request ):
         request.session['achievement'] = basicInfo.achievement
         request.session['signature'] = basicInfo.signature
         request.session['last_login'] = user.last_login 
-        visitor = user
     ##get comments
     comments = Comment.objects.filter( blog_id=blog )
     c = Context({"username":request.session['username'],
@@ -128,11 +127,10 @@ def blog( request ):
     return render_to_response( 'blog.htm',c)
 
 def add_comment( request ):
-    post_user = User.objects.get( id=request.POST['uid'] )
     post_blog = Blog.objects.get( id=request.POST['bid'] )
-    
+    user = User.objects.get( id=request.session['member_id'] )
     comment = Comment( user_id=post_blog.author,
-                       author=post_user,
+                       author=user,
                        blog_id=post_blog,
                        content=request.POST['content'])
     comment.save()
@@ -142,3 +140,47 @@ def del_comment( request ):
     comment = Comment.objects.get( id=request.POST['cid'] )
     comment.delete()
     return HttpResponse( 'deleted' )
+
+def message( request ):
+    try:
+        user_id = request.session['member_id']
+        logined = True
+    except KeyError:
+        return HttpResponse('You have not loginned,and have no right of accessing!')     
+    visitor = User.objects.get( id=user_id )
+    
+    is_admin = True
+    if request.session['who'] != user_id:
+        user_id = request.session['who']
+        is_admin = False 
+
+    user = User.objects.get( id=user_id )
+    mes_li = Mes.objects.filter( receiver=user )
+    c = Context({"username":request.session['username'],
+                 "headshot":request.session['headshot'],
+                 "achievement":request.session['achievement'],
+                 "signature":request.session['signature'],
+                 "last_login":request.session['last_login'],
+                 'mes_li':mes_li,
+                 'visitor':visitor,
+                 'logined':logined,
+                 'is_admin':is_admin,
+                 })
+    return render_to_response( 'message.htm',c)
+
+
+def add_mes( request ):
+    sender = User.objects.get( id=request.session['member_id'] )
+    receiver = User.objects.get( id=request.session['who'] )
+    
+    mes = Mes( sender=sender,
+               receiver=receiver,
+               content=request.POST['content'])
+    mes.save()
+    return HttpResponse( datetime.datetime.now().strftime("%Y-%m-%d %H:%M") )
+    
+def del_mes( request ):
+    mes = Mes.objects.get( id=request.POST['mid'] )
+    mes.delete()
+    return HttpResponse( 'deleted' )
+

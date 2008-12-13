@@ -14,11 +14,12 @@
     </tr>
   </table>
   <div id="comment_body" style="display:block;">
+  <!--两个记录员，主要是为了Dom方式增加评论时，显示用户名和其url-->
     <input type="hidden" id="visitor_id" value="{{visitor.id}}"/>
     <input type="hidden" id="visitor_name" value="{{visitor.username}}"/>
 	{% for comment in comments%}
-    <div class="each_com">
-      <div class="com_info" id="com_{{comment.id}}">
+    <div class="each_com" id="com_{{comment.id}}">
+      <div class="com_info">
         <table>
           <tr>
             <td><a href="../home/?user={{comment.author.id}}">{{comment.author}}</a> <span class="time">{{comment.publish_time}}</span></td>
