@@ -2,6 +2,7 @@ import datetime
 from django.shortcuts import render_to_response
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect,HttpResponse
+from gansha.settings import MEDIA_URL
 from gansha.blog.models import Blog,Comment,Mes
 from gansha.blog.forms import BlogForm,CommentForm,MesForm
 from gansha.event.models import Event,History
@@ -94,8 +95,22 @@ def blog( request ):
         request.session['blog_id'] = blog_id
     except KeyError:
         raise Http404
-        
+    
+    is_admin = True
     blog = Blog.objects.get( id=blog_id )
+    if blog.author.id != user_id:
+        uid = blog.author.id
+        request.session['who'] = uid
+        is_admin = False
+        ##reset user information for session
+        user = User.objects.get(id = uid)
+        basicInfo = user.userbasicinfo
+        request.session['username'] = user.username
+        request.session['headshot'] = MEDIA_URL + str(basicInfo.headshot)
+        request.session['achievement'] = basicInfo.achievement
+        request.session['signature'] = basicInfo.signature
+        request.session['last_login'] = user.last_login 
+
     c = Context({"username":request.session['username'],
                  "headshot":request.session['headshot'],
                  "achievement":request.session['achievement'],
@@ -103,5 +118,6 @@ def blog( request ):
                  "last_login":request.session['last_login'],
                  'logined':logined,
                  'blog':blog,
+                 'is_admin':is_admin,
                  })
     return render_to_response( 'blog.htm',c)

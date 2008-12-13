@@ -7,7 +7,10 @@
 </div>
 <div id="m1">
   <div class="title2">{{blog.title}}</div>
-  <p id="timenote">{{blog.publish_time}}  | <a href="../editblog">±à¼­</a>&nbsp;&nbsp;<a href="#">É¾³ý</a></p>
+  <p id="timenote">
+	{{blog.publish_time}} 
+	{%if is_admin%}| <a href="../editblog">±à¼­</a>&nbsp;&nbsp;<a href="#">É¾³ý</a>{%endif%}
+  </p>
   <div  id="blog_content">{{blog.content|linebreaks}}</div>
   <table width="98%" border="0" cellspacing="0" cellpadding="0" id="comment">
     <tr>
@@ -21,8 +24,10 @@
         <table width="98%" border="0" cellspacing="0" cellpadding="0">
           <tr>
             <td><a href="#">l0he1g</a> <span class="time">(11.14 14:00)</span></td>
+			{%if is_admin%}
             <td width="7%"><a href="#">»Ø¸´</a></td>
             <td width="7%"><a href="#">É¾³ý</a></td>
+			{%endif%}
           </tr>
         </table>
       </div>

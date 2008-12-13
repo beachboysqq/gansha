@@ -23,15 +23,22 @@
 		<p>{{ username }}，welcome！</p>
 		<p>成就指数：{{ achievement}}</p>
 		<p>签名档：{{ signature}}</p>
+		{%if is_admin%}
 		<p>上次登录:{{ last_login|date:"Y-m-d" }}</p>
-		<p><a href="../myinfo">个人资料</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="../logout">退出登录</a></p>
+		{%endif%}
+		<p>
+		  <a href="../myinfo">个人资料</a>
+		  {%if is_admin%}&nbsp;&nbsp;&nbsp;&nbsp;<a href="../logout">退出登录</a>{%endif%}
+		</p>
 	</div>
 		<div id="action">
 		<div id="action_body">
+		  {%if is_admin%}
 		  <p>
 			<img src="/static/images/dot_adde.gif" />&nbsp;&nbsp;
 			<a href="../addevent" class="a_nounderline">创建新事件</a>
 		  </p>
+		  {%endif%}
 		  <p>
 			<img  src="/static/images/dot_doing.gif" />&nbsp;&nbsp;
 			<a href="../doing" class="a_nounderline">正在做事件</a>

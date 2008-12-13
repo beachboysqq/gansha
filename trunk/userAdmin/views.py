@@ -82,11 +82,10 @@ def confirm(request, activation_key):
     #return HttpResponse('confirm success')
 
 def index(request):
-    #user has been logined,
-    #improve1:session doesn't work...
-    #improve2:after flush,the error info maitain!
+    #user come back home,wellcome:)
     if request.session.get('member_id',0):
-          return HttpResponseRedirect('home/')
+        request.session['who'] = request.session['member_id']
+        return HttpResponseRedirect('home/')
     
     if request.method == 'POST':
         form = LoginForm(request.POST)
@@ -100,7 +99,12 @@ def index(request):
                 return render_to_response('index.htm', {'form':form,'error':'User not exsit!'})
             
             if m.check_password(request.POST['password']):
+                #initialize session
                 request.session['member_id'] = m.id
+                request.session['who'] = m.id
+                if not request.POST.has_key('auto_remember'):
+                    request.session.set_expiry(0)
+                
                 return HttpResponseRedirect('home/')
             else:
                 return render_to_response('index.htm', {'form': form,'error':'Wrong password!','username':uname})
@@ -114,8 +118,19 @@ def home(request):
         logined =True
     except KeyError:
         return HttpResponse('You have not login,and have no right of accessing!')
-    
-    user = User.objects.get(id = id)
+    ##judge wheather the current visitor is the page owner or other people
+    if request.GET.has_key('user') and request.GET['user']!=id:
+        is_admin = False
+        request.session['who'] = request.GET['user']
+        uid = request.session['who']
+    elif request.session['who']!=id:
+        is_admin = False
+        uid = request.session['who']
+    else:
+        is_admin = True
+        uid = id
+        
+    user = User.objects.get(id = uid)
     basicInfo = user.userbasicinfo
     request.session['username'] = user.username
     request.session['headshot'] = MEDIA_URL + str(basicInfo.headshot)
@@ -141,6 +156,7 @@ def home(request):
                  'friends':friends,
                  'se_list':se_list,
                  'hi_list':hi_list,
+                 'is_admin':is_admin,
                  })
     return render_to_response('home.htm', c)
 
@@ -302,9 +318,11 @@ def friends(request):
         id =request.session['member_id']
     except KeyError:
         return HttpResponse('You have not login,and have no right of accessing!')
-    logined =True
+    logined = True
     
-    user = User.objects.get(id = id)
+    uid = request.session['who']
+    is_admin = (uid==id)
+    user = User.objects.get(id = uid)
     friends = Friends.objects.filter( user_id=user )
   
     li = []
@@ -323,6 +341,7 @@ def friends(request):
                  "last_login":request.session['last_login'],
                  'logined':logined,
                  'friends':li,
+                 'is_admin':is_admin,
                  })
     return render_to_response('friend.htm', c)
 
@@ -349,15 +368,27 @@ def removefriend(request):
 def search(request):
     try:
         id =request.session['member_id']
-        user = User.objects.get( id=id )
     except KeyError:
         return HttpResponse('You have not login,and have no right of accessing!')
     logined =True
       
+    ##if on other's page,go back home
+    user = User.objects.get( id=id )
+    if request.session['who'] != id:
+        request.session['who'] = id
+        ##reset user information for session
+        basicInfo = user.userbasicinfo
+        request.session['username'] = user.username
+        request.session['headshot'] = MEDIA_URL + str(basicInfo.headshot)
+        request.session['achievement'] = basicInfo.achievement
+        request.session['signature'] = basicInfo.signature
+        request.session['last_login'] = user.last_login 
+        
     search_value=request.GET['search_value']
     search_value=search_value.lstrip()
     search_value=search_value.rstrip()
     search_kind = request.GET['search_kind']
+    
     dict = {"username":request.session['username'],
     'headshot':request.session['headshot'],
     "achievement":request.session['achievement'],
@@ -367,7 +398,7 @@ def search(request):
     'logined':logined}
     ret=[]
     if("username" == search_kind ):
-        ret = User.objects.filter( username__contains=search_value )
+        ret = User.objects.filter( username__contains=search_value ).exclude(id=1)
         dict['ret'] = ret
         dict['counter'] = len( ret )
         return render_to_response('findfriend.htm',Context(dict) )

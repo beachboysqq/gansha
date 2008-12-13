@@ -16,8 +16,8 @@
 {% for user in ret %}
 <div class="each_friend">
   <div class="who"> 
-  	<a href="../?user={{user.id}}"><img src="{{user.userbasicinfo.headshot.url}}" /></a>
-    <div><a href="../?user={{user.id}}">{{user.username}}</a></div>
+  	<a href="../home/?user={{user.id}}"><img src="{{user.userbasicinfo.headshot.url}}" /></a>
+    <div><a href="../home/?user={{user.id}}">{{user.username}}</a></div>
   </div>
   <div class="updateinfo">
     <ul>

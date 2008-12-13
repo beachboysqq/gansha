@@ -26,13 +26,26 @@
 					<table width="98%" border="0" cellspacing="0" cellpadding="0">
 			  <tr>
 				<td class="td_slot">&nbsp;</td>
-				<td id="new_event_title"><a href="javascript:sw('new_event');" class="a_nounderline">事件动态</a></td>
+				<td id="new_event_title">
+				  <a href="javascript:sw('new_event');" class="a_nounderline">事件动态</a>
+				</td>
 				<td class="td_slot">&nbsp;</td>
-				<td id="new_comment_title"><a href="javascript:sw('new_comment');" class="a_nounderline">评论</a></td>
+				<td id="new_comment_title">
+				  <a href="javascript:sw('new_comment');" class="a_nounderline">评论</a>
+				</td>
 				<td class="td_slot">&nbsp;</td>
-				<td id="new_message_title"><a href="javascript:sw('new_message');" class="a_nounderline">留言</a></td>
+				<td id="new_message_title">
+				  <a href="javascript:sw('new_message');" class="a_nounderline">留言</a>
+				</td>
 				<td class="td_slot">&nbsp;</td>
-				<td id="new_friend_title"><a href="javascript:sw('new_friend');" class="a_nounderline">好友请求</a></td>
+				{%if is_admin%}
+				<td id="new_friend_title">
+				  <a href="javascript:sw('new_friend');"
+				class="a_nounderline">
+					好友请求<span class="font_12">({{request_friend.count}})</span>
+				  </a>
+				</td>
+				{%endif%}
 				<td>&nbsp;</td>
 			  </tr>
 			</table>
@@ -55,34 +68,10 @@
 							  <tr>
 								<td><a href="#">l0he1g</a>
 								<span class="time">(11.14 14:00，评论《<a href="#">如何学英语</a>》)</span></td>
+								{%if is_admin%}
 								<td width="7%"><a href="#">回复</a></td>
 								<td width="7%"><a href="#">删除</a></td>
-							  </tr>
-							</table>
-							<p>关于网络认证系统的几点使用说明1．连线校园,是指访问包括研究生院在内的中科院院属各单位的网络资源，此选项不计流量费</p>
-						</div>
-					</div>
-					<div class="each_comment">
-						<div class="each_comment_title">
-							<table width="98%" border="0" cellspacing="0" cellpadding="0">
-							  <tr>
-								<td><a href="#">l0he1g</a>
-								<span class="time">(11.14 14:00，评论《<a href="#">如何学英语</a>》)</span></td>
-								<td width="7%"><a href="#">回复</a></td>
-								<td width="7%"><a href="#">删除</a></td>
-							  </tr>
-							</table>
-							<p>关于网络认证系统的几点使用说明1．连线校园,是指访问包括研究生院在内的中科院院属各单位的网络资源，此选项不计流量费</p>
-						</div>
-					</div>
-					<div class="each_comment">
-						<div class="each_comment_title">
-							<table width="98%" border="0" cellspacing="0" cellpadding="0">
-							  <tr>
-								<td><a href="#">l0he1g</a>
-								<span class="time">(11.14 14:00，评论《<a href="#">如何学英语</a>》)</span></td>
-								<td width="7%"><a href="#">回复</a></td>
-								<td width="7%"><a href="#">删除</a></td>
+								{%endif%}
 							  </tr>
 							</table>
 							<p>关于网络认证系统的几点使用说明1．连线校园,是指访问包括研究生院在内的中科院院属各单位的网络资源，此选项不计流量费</p>
@@ -104,33 +93,8 @@
 							<p>关于网络认证系统的几点使用说明1．连线校园,是指访问包括研究生院在内的中科院院属各单位的网络资源，此选项不计流量费</p>
 						</div>
 					</div>
-					<div class="each_comment">
-						<div class="each_comment_title">
-							<table width="98%" border="0" cellspacing="0" cellpadding="0">
-							  <tr>
-								<td><a href="#">l0he1g</a>
-								<span class="time">(11.14 14:00)</span></td>
-								<td width="7%"><a href="#">回复</a></td>
-								<td width="7%"><a href="#">删除</a></td>
-							  </tr>
-							</table>
-							<p>关于网络认证系统的几点使用说明1．连线校园,是指访问包括研究生院在内的中科院院属各单位的网络资源，此选项不计流量费</p>
-						</div>
-					</div>
-					<div class="each_comment">
-						<div class="each_comment_title">
-							<table width="98%" border="0" cellspacing="0" cellpadding="0">
-							  <tr>
-								<td><a href="#">l0he1g</a>
-								<span class="time">(11.14 14:00)</span></td>
-								<td width="7%"><a href="#">回复</a></td>
-								<td width="7%"><a href="#">删除</a></td>
-							  </tr>
-							</table>
-							<p>关于网络认证系统的几点使用说明1．连线校园,是指访问包括研究生院在内的中科院院属各单位的网络资源，此选项不计流量费</p>
-						</div>
-					</div>
 				</div>
+				{%if is_admin%}
 				<div id="new_friend" style="display:none;">
 					<div class="tip">您共有{{request_friend.count}}条好友请求，<a href="../friends">转到好友列表</a>。</div>
 					{% if request_friend%}
@@ -138,7 +102,7 @@
 							<div class="each_comment" id="request_{{user.sender.id}}">
 							  <input type="hidden" value="{{user.sender.username}}" id="uname_{{user.sender.id}}" >
 								<p>
-								  <a href="../?user={{user.sender.id}}">
+								  <a href="../home/?user={{user.sender.id}}">
 									{{user.sender.username}}
 								  </a>
 								  ：{{user.message}}
@@ -154,8 +118,8 @@
 							</div>
 						{%endfor%}
 					{%endif%}
-					
 				</div>
+				{%endif%}
 			</div>
 {% endblock %}
 {% block right %}
@@ -164,7 +128,7 @@
 				<ul>
 				{% if friends %}
 					{% for user in friends%}
-						<li><a href="../?user={{user.myfriend.id}}">{{user.myfriend.username}}</a></li>
+						<li><a href="../home/?user={{user.myfriend.id}}">{{user.myfriend.username}}</a></li>
 					{% endfor %}
 				{%else %}
 					<li>暂时没加好友</li>

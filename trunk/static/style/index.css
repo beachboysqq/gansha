@@ -85,7 +85,7 @@ color:#FF0000;}
 .underline_red{border-bottom:1px solid #D9001D;}
 /*+++++++++++++They are the main frame of this page++++++++++*/
 #top{
-height:64px;
+height:66px;
 width:100%;
 margin-bottom:10px;
 background:url(../images/top_underline.jpg) bottom repeat-x;
@@ -105,7 +105,11 @@ margin-left:auto;}
 		}
 		#top_search{
 		float:right;
-		padding-top:24px;
+		}
+		#go_home{
+		text-align:right;
+		font-size:12px;
+		height:28px;
 		}
 			#search_value{
 			height:19px;

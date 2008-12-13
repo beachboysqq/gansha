@@ -15,13 +15,15 @@
   <div class="events">
     <table width="98%" border="0" cellspacing="0" cellpadding="0" class="tip">
       <tr>
-        <td width="92%" class="event_title">
+        <td class="event_title">
 		  <a href="../event/?event={{event.id}}">{{event.title}}</a>
 		  {% if event.isprivacy %}
 		  <img src="/static/images/dot_lock.gif" style="padding-left:4px;"/>
 		  {% endif %}
 		</td>
+		{%if is_admin%}
         <td width="8%"><a href="#">É¾³ý</a></td>
+		{%endif%}
       </tr>
     </table>
     <table width="98%" border="0" cellspacing="0" cellpadding="0">

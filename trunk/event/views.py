@@ -105,8 +105,22 @@ def event( request ):
         event_id = request.GET.get("event")
     except KeyError:
         raise Http404
-        
+    
+    is_admin = True
     event = Event.objects.get( id=event_id )
+    if event.user_id.id != user_id:
+        uid = event.user_id.id
+        request.session['who'] = uid
+        is_admin = False
+        ##reset user information for session
+        user = User.objects.get(id = uid)
+        basicInfo = user.userbasicinfo
+        request.session['username'] = user.username
+        request.session['headshot'] = MEDIA_URL + str(basicInfo.headshot)
+        request.session['achievement'] = basicInfo.achievement
+        request.session['signature'] = basicInfo.signature
+        request.session['last_login'] = user.last_login 
+ 
     request.session['eid'] = event_id
     se_list = Sub_event.objects.filter( event_id=event ).order_by('start_date','end_date')
     ##get user's history operation on this event
@@ -142,6 +156,7 @@ def event( request ):
                  'history_li':history_li,
                  'blog_li':blog_li,
                  'li':li,
+                 'is_admin':is_admin,
                  'ceme_events':ceme_events,})
     return render_to_response( 'event.htm',c)
 
@@ -219,6 +234,8 @@ def del_sub_event( request ):
 ##if he/she unselect the checkbox,meanings it has not been acomplished
 def done_sub_event( request ):
     se = Sub_event.objects.get( id=request.POST['id'] )
+    pe = se.event_id
+
     if request.POST['isdone']=='true':
         se.isdone = True
         hi = History()
@@ -227,11 +244,11 @@ def done_sub_event( request ):
         hi.user_id = hi.event_id.user_id
         hi.save()
         #adjust parent event's progress
-        pe =se.event_id
         pe.progress = pe.progress+100/pe.num_se
-        pe.save()
     else:
         se.isdone = False
+        pe.progress = pe.progress-100/pe.num_se
+    pe.save()
     se.save()   
     return HttpResponse( se.id )
 
@@ -243,6 +260,11 @@ def events_doing( request ):
     except KeyError:
         return HttpResponse('You have not loginned,and have no right of accessing!')     
 
+    is_admin = True
+    if request.session['who'] != user_id:
+        user_id = request.session['who']
+        is_admin = False 
+  
     user = User.objects.get( id=user_id )
     events = Event.objects.filter( user_id=user ).filter( 
         start_date__lte=datetime.date.today() ).filter(
@@ -255,7 +277,9 @@ def events_doing( request ):
                  "last_login":request.session['last_login'],
                  'logined':logined,
                  'events':events,
-                 'kind':'doing',})
+                 'kind':'doing',
+                 'is_admin':is_admin,
+                 })
     return render_to_response( 'event_list.htm',c)
 ##show the events to do
 def events_todo( request ):
@@ -264,6 +288,11 @@ def events_todo( request ):
         logined = True
     except KeyError:
         return HttpResponse('You have not loginned,and have no right of accessing!')     
+
+    is_admin = True
+    if request.session['who'] != user_id:
+        user_id = request.session['who']
+        is_admin = False 
 
     user = User.objects.get( id=user_id )
     events = Event.objects.filter( user_id=user ).filter( 
@@ -276,8 +305,9 @@ def events_todo( request ):
                  "last_login":request.session['last_login'],
                  'logined':logined,
                  'events':events,
-                 'kind':
-                     'todo'})
+                 'kind':'todo',
+                 'is_admin':is_admin,
+                 })
     return render_to_response( 'event_list.htm',c)
 ##show the events has been done
 def events_done( request ):
@@ -286,7 +316,12 @@ def events_done( request ):
         logined = True
     except KeyError:
         return HttpResponse('You have not loginned,and have no right of accessing!')     
-
+    
+    is_admin = True
+    if request.session['who'] != user_id:
+        user_id = request.session['who']
+        is_admin = False 
+  
     user = User.objects.get( id=user_id )
     events = Event.objects.filter( user_id=user ).filter( 
         progress=100 ).order_by('publish_date')
@@ -298,7 +333,9 @@ def events_done( request ):
                  "last_login":request.session['last_login'],
                  'logined':logined,
                  'events':events,
-                 'kind':'done'})
+                 'kind':'done',
+                 'is_admin':is_admin,
+                 })
     return render_to_response( 'event_list.htm',c)
 ##add a concern to a event
 def add_to_concern( request ):
