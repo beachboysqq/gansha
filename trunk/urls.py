@@ -48,6 +48,8 @@ urlpatterns = patterns('',
                        (r'^blog/$',blog), 
                        (r'^addblog/$',add_blog), 
                        (r'^editblog/$',edit_blog),                
+                       (r'^add_comment/$',add_comment),                
+                       (r'^del_comment/$',del_comment),                
                        #(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': 'D:/static', 'show_indexes': True}),
                        )
 

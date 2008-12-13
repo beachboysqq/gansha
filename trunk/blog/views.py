@@ -98,6 +98,7 @@ def blog( request ):
     
     is_admin = True
     blog = Blog.objects.get( id=blog_id )
+    visitor = blog.author
     if blog.author.id != user_id:
         uid = blog.author.id
         request.session['who'] = uid
@@ -110,7 +111,9 @@ def blog( request ):
         request.session['achievement'] = basicInfo.achievement
         request.session['signature'] = basicInfo.signature
         request.session['last_login'] = user.last_login 
-
+        visitor = user
+    ##get comments
+    comments = Comment.objects.filter( blog_id=blog )
     c = Context({"username":request.session['username'],
                  "headshot":request.session['headshot'],
                  "achievement":request.session['achievement'],
@@ -119,5 +122,23 @@ def blog( request ):
                  'logined':logined,
                  'blog':blog,
                  'is_admin':is_admin,
+                 'visitor':visitor,
+                 'comments':comments,
                  })
     return render_to_response( 'blog.htm',c)
+
+def add_comment( request ):
+    post_user = User.objects.get( id=request.POST['uid'] )
+    post_blog = Blog.objects.get( id=request.POST['bid'] )
+    
+    comment = Comment( user_id=post_blog.author,
+                       author=post_user,
+                       blog_id=post_blog,
+                       content=request.POST['content'])
+    comment.save()
+    return HttpResponse( datetime.datetime.now().strftime("%Y-%m-%d %H:%M") )
+    
+def del_comment( request ):
+    comment = Comment.objects.get( id=request.POST['cid'] )
+    comment.delete()
+    return HttpResponse( 'deleted' )

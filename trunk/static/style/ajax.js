@@ -283,4 +283,42 @@ function send_del( eid )
                                         
         })   
 }
-
+function add_comment_to_html( transport )
+{
+	var time=transport.responseText;
+	comment_body=$('comment_body');
+	var div = new Element('div',{'class':'each_com'});
+	comment_body.insert(div);
+	var div_top = new Element('div',{'class':'com_info'});
+	div.insert(div_top);
+	var a=new Element('a',{'href':'../home/?user='+$F('visitor_id') }).update( $F('visitor_name') );
+	div_top.insert(a);
+	var span=new Element('span',{'class':'time'}).update(time);
+	div_top.insert(span);
+	var p=new Element('p').update($F('write_comment'));
+	div.insert(p);
+	$('write_comment').value='';
+}
+	  
+function submit_comment(bid)
+{   
+      var myAjax = new Ajax.Request('../add_comment/',{
+            method:'POST',
+			parameters:{bid:bid,
+						uid:$F('visitor_id'),
+                        content:$F('write_comment'),},
+            onSuccess:add_comment_to_html,
+            onFailure:function( transport ){alert( transport.status );
+            }
+            })
+}
+function del_comment( cid )
+{
+    var myAjax = new Ajax.Request('../del_comment/',{
+            method:'POST',
+			parameters:{cid:cid},
+            onSuccess:function(){$('com_'+cid).remove();},
+            onFailure:function( transport ){alert( transport.status );
+            }
+        })
+}

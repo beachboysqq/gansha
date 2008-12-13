@@ -70,6 +70,11 @@ li{
 .box_email{height:20px;width:200px;border:1px #999 solid;}
 .box_title{height:20px;width:260px;border:1px #999 solid;}
 .box_long{height:20px;width:300px;border:1px #999 solid;}
+.box_comment{
+width:360px;
+height:60px;
+font-size:12px;
+}
 .text_title{
 font-weight:bold;
 padding-left:4px;

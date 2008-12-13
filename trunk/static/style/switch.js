@@ -19,5 +19,5 @@ function sw2(str){
 
 function switch_comment(){
 	$('comment_body').toggle();
-	$('comment_counter').toggleClassName('dot_tridown');
+	$('comment_counter').toggleClassName('dot_triright');
 }
