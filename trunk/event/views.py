@@ -42,6 +42,20 @@ def add_event( request ):
                  'eform':form})
     return render_to_response( 'newevent.htm',c )
 
+def del_event( request ):
+    try:
+        user_id = request.session['member_id']
+        logined = True
+    except keyError:
+        return HttpResponse('You have not loginned,and have no right of accessing!')    
+    #try:
+    eid = request.POST['eid']
+    event = Event.objects.get( id=eid )
+    event.delete()
+    #except:
+    #    pass
+    return HttpResponse("deleted")
+
 def edit_event( request ):
     try:
         user_id = request.session['member_id']
@@ -99,6 +113,24 @@ def event( request ):
     history_li = History.objects.filter( event_id=event_id )
     ##get blog
     blog_li = Blog.objects.filter( event_id=event_id )
+    ##get concern update information
+    concern_li = Concern.objects.filter( event_id=event_id )
+    ce_events = []
+    for concern in concern_li:
+        ce_events.append( concern.ce_id )
+    li = []
+    for ce_event in ce_events:
+       sub_li = [ce_event]
+       count = History.objects.filter( event_id=ce_event ).count()
+       if count>3:
+           count = 3
+       sub_li.append( History.objects.filter( event_id=ce_event ).order_by('date')[:count])
+       li.append( sub_li )
+    ##get who concern me
+    ceme_li = Concern.objects.filter( ce_id=event_id )
+    ceme_events = [] 
+    for ceme in ceme_li:
+        ceme_events.append( ceme.event_id )
     c = Context({"username":request.session['username'],
                  "headshot":request.session['headshot'],
                  "achievement":request.session['achievement'],
@@ -108,7 +140,9 @@ def event( request ):
                  'event':event,
                  'se_list':se_list,
                  'history_li':history_li,
-                 'blog_li':blog_li,})
+                 'blog_li':blog_li,
+                 'li':li,
+                 'ceme_events':ceme_events,})
     return render_to_response( 'event.htm',c)
 
 ##add a sub event for this event by ajax way
@@ -277,6 +311,15 @@ def add_to_concern( request ):
         concern = Concern( user_id=myevent.user_id,event_id=myevent,ce_id=ce_event)
         concern.save()
     return HttpResponse("added")
+##remove a concern
+def remove_concern( request ):
+    myevent = Event.objects.get( id=request.POST['eid'] )
+    ce_event = Event.objects.get( id=request.POST['ce_id'] )
+    
+    concern = Concern.objects.get( user_id=myevent.user_id,event_id=myevent,ce_id=ce_event)
+    concern.delete()
+    return HttpResponse("removed")
+
 ##just for test ajax,for there is no better way to display errors with ajax
 def test( request ):
     if request.method == 'POST':

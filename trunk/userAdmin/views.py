@@ -313,7 +313,7 @@ def friends(request):
         count = History.objects.filter( user_id=friend.myfriend ).count()
         if count>3:
             count = 3
-        sub_li.append( History.objects.filter( user_id=friend.myfriend ).order_by('date')[0:3] )
+        sub_li.append( History.objects.filter( user_id=friend.myfriend ).order_by('date')[0:count] )
         li.append( sub_li )
     
     c = Context({"username":request.session['username'],
@@ -446,7 +446,7 @@ def addfriend(request):
         uid = request.POST['uid']
         receiver = User.objects.get( id=uid )
         
-        friend_add = FriendRequest( sender=user,receiver=receiver,message=msg)
+        friend_add = FriendRequest( sender=user,receiver=receiver,message=msg )
         friend_add.save()
         return HttpResponse('sended')
     else:

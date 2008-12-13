@@ -254,3 +254,33 @@ function send_concern()
 		}
 	})   
 }
+
+function remove_concern( eid,ce_id )
+{
+	var myAjax = new Ajax.Request('../remove_concern/',{
+		method:'POST',
+		parameters:{eid:eid,ce_id:ce_id},
+		onSuccess:function(){$('ce_'+ce_id).remove();},
+		onFailure:function( transport ){alert( transport.status );
+            }
+        })   
+}
+
+function del_event()
+{
+	$('del_confirm_box').show();
+}
+
+function send_del( eid )
+{
+	var myAjax = new Ajax.Request('../del_event/',{
+		method:'POST',
+		parameters:{eid:eid},
+        onSuccess:function( transport ){window.location.replace('../home');
+            },
+        onFailure:function( transport ){alert( transport.status );
+            }
+                                        
+        })   
+}
+
