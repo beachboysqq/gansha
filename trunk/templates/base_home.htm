@@ -15,7 +15,7 @@
 {% endblock %}
 {% block gohome %}
 	<a href="../">我的首页</a> &nbsp;&nbsp;
-	<a href="../login_out">退出</a>
+	<a href="../logout">退出</a>
 {% endblock %}
 {% block content %}
 <div id="main_home">
@@ -30,7 +30,7 @@
 		{%endif%}
 		<p>
 		  <a href="../myinfo">个人资料</a>
-		  {%if is_admin%}&nbsp;&nbsp;&nbsp;&nbsp;<a href="../logout">退出登录</a>{%endif%}
+		  {%if is_admin%}&nbsp;&nbsp;&nbsp;&nbsp;<a href="../logout/">退出登录</a>{%endif%}
 		</p>
 	</div>
 		<div id="action">

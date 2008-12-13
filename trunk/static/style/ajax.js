@@ -305,7 +305,7 @@ function submit_comment(bid)
       var myAjax = new Ajax.Request('../add_comment/',{
             method:'POST',
 			parameters:{bid:bid,
-                        content:$F('write_comment'),},
+                        content:$F('write_comment')},
             onSuccess:add_comment_to_html,
             onFailure:function( transport ){alert( transport.status );
             }
@@ -334,7 +334,7 @@ function add_mes_to_html( transport )
 	div_top.insert(a);
 	var span=new Element('span',{'class':'time'}).update(time);
 	div_top.insert(span);
-	var p=new Element('p').update($F('write_comment'));
+	var p=new Element('p').update($F('write_mes'));
 	div.insert(p);
 	$('write_mes').value='';
 }

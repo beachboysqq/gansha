@@ -12,7 +12,7 @@
 </div>
   {% if events %}
   {% for event in events %}
-  <div class="events">
+  <div class="events" id="event_{{event_id}}">
     <table width="98%" border="0" cellspacing="0" cellpadding="0" class="tip">
       <tr>
         <td class="event_title">
@@ -22,7 +22,7 @@
 		  {% endif %}
 		</td>
 		{%if is_admin%}
-        <td width="8%"><a href="#">删除</a></td>
+        <td width="8%"><a href="javascript:del_event( {{event.id}})">删除</a></td>
 		{%endif%}
       </tr>
     </table>
@@ -47,4 +47,14 @@
   <p>没有该类事件。</p>
   {%endif%}
 </div>
+{%if is_admin%}
+<div id="del_confirm_box" style="display:none;">
+	<div>删除一个事件，其相关的日志和关注信息都会被删除，他人也无法
+	再获得该事件的信息，并且您的成就指数将减少10，确信要删除吗？</div>
+    <div style="padding-top:8px;">
+	 	<input type="button" value="确认" onclick="send_del({{event.id}})"/>
+      	<input type="button" value="取消" onclick="$('del_confirm_box').hide();"/>
+	</div>	
+</div>
+{%endif%}
 {% endblock %}
