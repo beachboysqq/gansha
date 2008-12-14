@@ -169,7 +169,6 @@ font-weight:bold;
 		padding-top:4px;
 		}
 		#event_content p{
-		text-indent:2.0em;
 		}
 		#event_plan_title,#event_log_title,#event_concern_title,#event_blog_title{
 			border:1px solid #D9001D;
@@ -225,7 +224,6 @@ font-size:12px;
 }
 #blog_content{font-size:12px;margin:10px;}
 #blog_content p{
-text-indent:2.0em;
 }
 #comment{
 font-size:12px;

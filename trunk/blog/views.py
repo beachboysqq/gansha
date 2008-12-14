@@ -13,6 +13,7 @@ def add_blog( request ):
     try:
         user_id = request.session['member_id']
         logined = True
+        is_admin = True
     except keyError:
         return HttpResponse('You have not loginned,and have no right of accessing!')     
 
@@ -43,6 +44,7 @@ def add_blog( request ):
                  "signature":request.session['signature'],
                  "last_login":request.session['last_login'],
                  'logined':logined,
+                 'is_admin':is_admin,
                  'form':form})
     return render_to_response( 'newblog.htm',c )
 
@@ -78,6 +80,7 @@ def edit_blog( request ):
                      "signature":request.session['signature'],
                      "last_login":request.session['last_login'],
                      'logined':logined,
+                     'is_admin':True,
                      'form':form,
                      'event_id':request.session['eid'],})
         return render_to_response( 'newblog.htm',c )    
@@ -91,7 +94,7 @@ def blog( request ):
         return HttpResponse('You have not loginned,and have no right of accessing!')     
     
     try:
-        blog_id = int( request.GET.get("blog") )
+        blog_id = request.GET.get("blog")
         request.session['blog_id'] = blog_id
     except KeyError:
         raise Http404

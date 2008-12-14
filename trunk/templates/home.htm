@@ -69,7 +69,7 @@
 		  <tr>
 			<td><a href="../home/?user={{comment.author.id}}">{{comment.author}}</a>
 			  <span class="time">
-				({{comment.publish_time}}£¬ÆÀÂÛ¡¶<a href=../blog/?blog="{{comment.blog_id.id}}">{{comment.blog_id.title}}</a>¡·)
+				({{comment.publish_time}}£¬ÆÀÂÛ¡¶<a href=../blog/?blog={{comment.blog_id.id}}>{{comment.blog_id.title}}</a>¡·)
 			</span></td>
 			{%if is_admin%}
 			<td width="7%"><a href="javascript:del_comment({{comment.id}})">É¾³ı</a></td>

@@ -138,7 +138,7 @@ def event( request ):
        count = History.objects.filter( event_id=ce_event ).count()
        if count>3:
            count = 3
-       sub_li.append( History.objects.filter( event_id=ce_event ).order_by('date')[:count])
+       sub_li.append( History.objects.filter( event_id=ce_event ).order_by('-date')[:count])
        li.append( sub_li )
     ##get who concern me
     ceme_li = Concern.objects.filter( ce_id=event_id )
