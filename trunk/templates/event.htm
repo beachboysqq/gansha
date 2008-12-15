@@ -1,5 +1,10 @@
 {% extends 'base_home.htm' %}
 
+{%block js%}
+<script language="JavaScript" src="/static/js/switch.js"></script>
+<script language="JavaScript" src="/static/js/My97DatePicker/WdatePicker.js"></script>
+{%endblock%}
+
 {% block middle %}
 <div id="navigation"><a href="../home">首页</a>->正在做事件</div>
 <div id="m1">
@@ -79,7 +84,7 @@
 		{%endif%}
       </tr>
 	  {% for se in se_list %}
-      <tr id="tr_{{se.id}}" style="color:{%if se.isdone%}grey{%else%}{%if se.isexpired%}red{%else%}black{%endif%}{%endif%}">
+      <tr id="tr_{{se.id}}" style="color:{%if se.isdone%}#666{%else%}{%if se.isexpired%}#F00{%else%}#000{%endif%}{%endif%}">
         <td class="checkbox">
 		  <input type="hidden" id="id_{{se.id}}" value="{{se.id}}" />
 		  <input type="checkbox" onclick="done_se({{se.id}})"

@@ -4,22 +4,24 @@
 <div id="m1">
 <div class="title1">ÁôÑÔ°å</div>
 <div class="tip">Äú¹²ÓĞ{{mes_li|length}}¸öÁôÑÔ¡£</div>
-<div id="mes_body">
+<table>
+  <tbody id="tbody_mes">
 	{%for mes in mes_li%}
-	<div class="each_mes" id="mes_{{mes.id}}">
-		  <div class="mes_info">
-			<table>
-			  <tr>
-				<td><a href="../home/?user={{mes.sender.id}}">{{mes.sender}}</a> <span class="time">{{mes.publish_time}}</span></td>
-				{%if is_admin%}
-				<td width="7%"><a href="javascript:del_mes({{mes.id}});">É¾³ı</a></td>
-				{%endif%} </tr>
-			</table>
-		  </div>
-		  <p>{{mes.content}}</p>
-	</div>
+	<tr class="mes_info" id="tr1_mes_{{mes.id}}">
+	  <td>
+		<a href="../home/?user={{mes.sender.id}}">{{mes.sender}}</a> 
+		<span class="time">{{mes.publish_time}}</span>
+	  </td>
+	  {%if is_admin%}
+	  <td width="7%"><a href="javascript:del_mes({{mes.id}});">É¾³ı</a></td>
+	  {%endif%} 
+	</tr>
+	<tr id="tr2_mes_{{mes.id}}">
+	  <td class="each_mes" {%if is_admin%}colspan="2"{%endif%}>{{mes.content}}</td>
+	</tr>
 	{%endfor%}
-</div>
+  </tbody>
+</table>
 <div id="mes_produce">
     <input type="hidden" id="visitor_id" value="{{visitor.id}}"/>
     <input type="hidden" id="visitor_name" value="{{visitor.username}}"/>
@@ -27,7 +29,7 @@
     <form action="." method="post">
       <textarea id="write_mes" class="box_comment"></textarea>
       <p>
-        <input type="button" value=" Ìá½»ÁôÑÔ " onclick="submit_mes()"/>
+        <input type="button" value="Ìá½»ÁôÑÔ" onclick="submit_mes()"/>
       </p>
     </form>
 </div>

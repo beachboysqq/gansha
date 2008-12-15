@@ -115,7 +115,7 @@ def blog( request ):
         request.session['signature'] = basicInfo.signature
         request.session['last_login'] = user.last_login 
     ##get comments
-    comments = Comment.objects.filter( blog_id=blog )
+    comments = Comment.objects.filter( blog_id=blog ).order_by('publish_time')
     c = Context({"username":request.session['username'],
                  "headshot":request.session['headshot'],
                  "achievement":request.session['achievement'],
@@ -158,7 +158,7 @@ def message( request ):
         is_admin = False 
 
     user = User.objects.get( id=user_id )
-    mes_li = Mes.objects.filter( receiver=user )
+    mes_li = Mes.objects.filter( receiver=user ).order_by('publish_time')
     c = Context({"username":request.session['username'],
                  "headshot":request.session['headshot'],
                  "achievement":request.session['achievement'],

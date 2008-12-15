@@ -14,6 +14,7 @@ def add_event( request ):
     try:
         user_id = request.session['member_id']
         logined = True
+        is_admin = True
     except keyError:
         return HttpResponse('You have not loginned,and have no right of accessing!')     
 
@@ -39,6 +40,7 @@ def add_event( request ):
                  "signature":request.session['signature'],
                  "last_login":request.session['last_login'],
                  'logined':logined,
+                 'is_admin':is_admin,
                  'eform':form})
     return render_to_response( 'newevent.htm',c )
 
@@ -90,6 +92,7 @@ def edit_event( request ):
                      "signature":request.session['signature'],
                      "last_login":request.session['last_login'],
                      'logined':logined,
+                     'is_admin':True,
                      'eform':form})
         return render_to_response( 'newevent.htm',c )    
 

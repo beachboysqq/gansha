@@ -38,7 +38,7 @@ def register(request):
             
             # Send an email with the confirmation link
             email_subject = 'Your new example.com account confirmation'
-            email_body = "Hello, %s, and thanks for signing up for an example.com account!\n\nTo activate your account, click this link within 48 hours:\n\nhttp://localhost/confirm/%s" % (
+            email_body = "Hello, %s, and thanks for signing up for an gansha.com account!\n\nTo activate your account, click this link within 48 hours:\n\nhttp://210.77.10.228/confirm/%s" % (
                         new_user.username,
                         new_profile.activation_key)
             send_mail(email_subject,
@@ -56,7 +56,7 @@ def register(request):
 def confirm(request, activation_key):
     if request.user.is_authenticated():
         #return render_to_response('confirm.htm', {'has_account': True})
-        return HttpResponse('member')
+        return HttpResponse('You are already logined!')
     user_profile = get_object_or_404(UserProfile,
                                      activation_key=activation_key)
     if user_profile.key_expires < datetime.datetime(1970,1,2):
@@ -78,6 +78,8 @@ def confirm(request, activation_key):
     contactInfo.save()
     
     request.session['member_id']=user_account.id#for redirect in 20 seconds
+    request.session['who'] = user_account.id
+
     return render_to_response('confirm.htm', {'success': True})
     #return HttpResponse('confirm success')
 
@@ -119,10 +121,15 @@ def home(request):
     except KeyError:
         return HttpResponse('You have not login,and have no right of accessing!')
     ##judge wheather the current visitor is the page owner or other people
-    if request.GET.has_key('user') and request.GET['user']!=id:
-        is_admin = False
-        request.session['who'] = request.GET['user']
-        uid = request.session['who']
+    if request.GET.has_key('user'):
+        if request.GET['user']==str(id):
+            is_admin = True
+            request.session['who'] = id
+            uid = id
+        else:
+            is_admin = False
+            request.session['who'] = request.GET['user']
+            uid = request.session['who']                       
     elif request.session['who']!=id:
         is_admin = False
         uid = request.session['who']
@@ -130,8 +137,11 @@ def home(request):
         is_admin = True
         uid = id
         
-    user = User.objects.get(id = uid)
-    basicInfo = user.userbasicinfo
+    try:
+        user = User.objects.get(id = uid)
+        basicInfo = user.userbasicinfo
+    except:
+        raise Http404
     request.session['username'] = user.username
     request.session['headshot'] = MEDIA_URL + str(basicInfo.headshot)
     request.session['achievement'] = basicInfo.achievement
@@ -152,8 +162,8 @@ def home(request):
     count_mes = Mes.objects.filter( receiver=user ).count()
     if count_mes > 4:
         count_mes = 4
-    comments = Comment.objects.filter( user_id=user ).order_by('publish_time')[:count]
-    mes_li = Mes.objects.filter( receiver=user ).order_by('publish_time')[:count_mes]
+    comments = Comment.objects.filter( user_id=user ).order_by('-publish_time')[:count]
+    mes_li = Mes.objects.filter( receiver=user ).order_by('-publish_time')[:count_mes]
     c = Context({"username":request.session['username'],
                  "headshot":request.session['headshot'],
                  "achievement":request.session['achievement'],
@@ -177,7 +187,9 @@ def myinfo(request):
         return HttpResponse('You have not login,and have no right of accessing!')
     logined =True
     
-    user = User.objects.get(id = id)
+    uid = request.session['who']
+    is_admin = (uid==id)
+    user = User.objects.get(id = uid)
  
     basicInfo = user.userbasicinfo
     achievement = basicInfo.achievement
@@ -200,7 +212,8 @@ def myinfo(request):
                  "graduate_school":graduate_school,
                  "location":location,
                  "qq":qq,
-                 'msn':msn})
+                 'msn':msn,
+                 'is_admin':is_admin,})
     return render_to_response('myinfo.htm', c)
 
 def editmyinfo(request):
@@ -209,7 +222,7 @@ def editmyinfo(request):
     except KeyError:
         return HttpResponse('You have not login,and have no right of accessing!')
     logined =True
-    
+    is_admin =True
     user = User.objects.get(id = id)
     username = user.username
     last_login = user.last_login
@@ -229,7 +242,7 @@ def editmyinfo(request):
         form = EditInfoForm(request.POST,request.FILES)
         if form.is_valid():
             #get headshot image,and store it
-            f = request.FILES['headshot']
+            f = request.FILES.get('headshot',None)
             if f:
                 fext=f.name.split('.')[-1]
                 fname=str(user.id)+'.'+fext
@@ -257,7 +270,8 @@ def editmyinfo(request):
                          "signature":request.session['signature'],
                          "last_login":request.session['last_login'],
                          "logined":logined,
-                         "form":form})
+                         "form":form,
+                         "is_admin":is_admin,})
             return render_to_response('editmyinfo.htm', c) 
     else:
         form =EditInfoForm({"gender":gender,
@@ -273,7 +287,8 @@ def editmyinfo(request):
                      "signature":request.session['signature'],
                      "last_login":request.session['last_login'],
                      "logined":logined,
-                     "form":form})
+                     "form":form,
+                     "is_admin":is_admin,})
         return render_to_response('editmyinfo.htm', c)
     
 def changepassword(request):
@@ -381,7 +396,7 @@ def search(request):
     except KeyError:
         return HttpResponse('You have not login,and have no right of accessing!')
     logined =True
-      
+    is_admin = True  
     ##if on other's page,go back home
     user = User.objects.get( id=id )
     if request.session['who'] != id:
@@ -405,18 +420,18 @@ def search(request):
     "signature":request.session['signature'],
     "last_login":request.session['last_login'],
     'search_value':search_value,
-    'logined':logined}
+    'logined':logined,
+    'is_admin':is_admin,}
     ret=[]
     if("username" == search_kind ):
-        ret = User.objects.filter( username__contains=search_value ).exclude(id=1)
+        ret = User.objects.filter( username__contains=search_value,is_active=1 ).exclude(id=1)
         dict['ret'] = ret
         dict['counter'] = len( ret )
         return render_to_response('findfriend.htm',Context(dict) )
     elif("event" == search_kind ):
         ret = Event.objects.filter( Q(title__contains=search_value)|
-                                    Q(description__contains=search_value)|
-                                    Q(isprivacy=False)
-                                   ).distinct()
+                                    Q(description__contains=search_value)
+                                   ).filter( isprivacy=False ).distinct()
         myevents = Event.objects.filter( user_id=user )
         dict['myevents'] = myevents
         dict['ret'] = ret
@@ -450,7 +465,7 @@ def acceptfriend(request):
         friend_add.save()
 
     try:
-        requestfriend = FriendRequest.objects.get( sender=otheruser,receiver=user )
+        requestfriend = FriendRequest.objects.filter( sender=otheruser,receiver=user )[0]
         requestfriend.delete()
     except:
         pass
@@ -468,10 +483,10 @@ def deny(request):
     otheruser =User.objects.get( id=uid )
 
     try:
-        requestfriend = FriendRequest.objects.get( sender=otheruser,receiver=user)
+        requestfriend = FriendRequest.objects.filter( sender=otheruser,receiver=user)[0]
         requestfriend.delete()
     except:
-        pass
+        return HttpResponse('done')
     return HttpResponse('done')
 
 ##after send friends request,record the request
