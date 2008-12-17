@@ -1,189 +1,375 @@
-import datetime
-from django.shortcuts import render_to_response
+# -*- coding: cp936 -*-
+from gansha.blog.models import *
+from gansha.blog.forms import *
+from django.http import HttpResponse
+from django.http import HttpResponseRedirect
+import datetime, random, sha
+from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect,HttpResponse
-from gansha.settings import MEDIA_URL
-from gansha.blog.models import Blog,Comment,Mes
-from gansha.blog.forms import BlogForm,CommentForm,MesForm
-from gansha.event.models import Event,History
-from django.http import Http404
-from django.template import Context
+from django.template import Context, Template
 
-def add_blog( request ):
+
+#显示blog，以及comment，没完成
+def blog_detail(request):
     try:
-        user_id = request.session['member_id']
-        logined = True
-        is_admin = True
-    except keyError:
-        return HttpResponse('You have not loginned,and have no right of accessing!')     
-
+        id =request.session['member_id']
+    except KeyError:
+        return HttpResponse('You have not login,and have no right of accessing!')
+    logined =True
+    user = User.objects.get(id = id)
+    username = user.username
+    last_login = user.last_login
+    basicInfo = user.userbasicinfo
+    achievement = basicInfo.achievement
+    signature = basicInfo.signature
     if request.method == 'POST':
-        #form = BlogForm( request.POST )
-       # if form.is_valid():
-        blog = Blog()
-        blog.event_id = Event.objects.get( id=request.session['eid'] )
-        blog.title = request.POST['title']
-        #...need a way to realize \r\n with next line
-        blog.content = request.POST['content']
-        blog.author = User.objects.get( id=user_id )
-        blog.save()
-        #add to history
-        hi = History()
-        hi.event_id = blog.event_id
-        hi.user_id = hi.event_id.user_id
-        hi.content = "add blog:"+blog.title
-        hi.save()
-        return HttpResponseRedirect( '../blog/?blog=%d' % blog.id )
-        #else:
-         #     return HttpResponse('POST not ivalid')
-    else:
-        form = BlogForm()
-    c = Context({"username":request.session['username'],
-                 "headshot":request.session['headshot'],
-                 "achievement":request.session['achievement'],
-                 "signature":request.session['signature'],
-                 "last_login":request.session['last_login'],
-                 'logined':logined,
-                 'is_admin':is_admin,
-                 'form':form})
-    return render_to_response( 'newblog.htm',c )
-
-def edit_blog( request ):
-    try:
-        user_id = request.session['member_id']
-        logined = True
-    except keyError:
-        return HttpResponse('You have not loginned,and have no right of accessing!')     
-
-    ##user has submitted his/her blog changes
-    if request.method == 'POST':
-        form = BlogForm( request.POST )
+        form = EditBlogForm(request.POST)
         if form.is_valid():
-            blog = Blog.objects.get( id=request.session['blog_id'] )
-            blog.title = form.cleaned_data['title']
-            #...need a way to realize \r\n with next line
-            blog.content = form.cleaned_data['content']
-            blog.author = User.objects.get( id=user_id )
-            blog.save()
-            return HttpResponseRedirect( '../blog/?blog=%d' % int(blog.id) )
+            user_id = User.objects.get(id = id)
+            #event_id = form.cleaned_data['event_info'];
+            blog_id = form.cleaned_data['blog_info']
+            #olist   = Blog.objects.filter(id = blog_id,event_id=event_id);
+            olist   = Blog.objects.filter(id = blog_id);
+            if(olist.count()>0):
+                blog=olist.all()[0]
+                title   = form.cleaned_data['title']
+                content = form.cleaned_data['content']
+                is_author=False
+                if(user==blog.user_id):
+                    is_author=True
+                com_list = Remark.objects.filter(blog_id=blog.id).order_by('id')
+                c=Context({"username":username,
+                    "headshot":basicInfo.headshot,
+                    "achievement":achievement,
+                    "signature":signature,
+                    "last_login":last_login,
+                       "blog_id":blog.id,
+                       "blog_title":blog.title,
+                       "publish_time":blog.publish_time,
+                       "is_author":is_author,
+                       "blog_content":blog.content,
+                       "comment_number":com_list.count(),
+                        "comment_list":com_list,
+                    })
+                return render_to_response('blogdetail.htm', c)
+            else:
+                return  HttpResponse('No Blog!')    
+    return  HttpResponse('Request method error!!')  
+    if request.method=="POST":
+        #读取blog.id,event.id
+        form = BlogInfo(request.POST)
+        if form.is_valid():
+            blog_id = form.cleaned_data['blog_info']
+            #post_type="old"表示现在的blog不是新的，而是已存在。
+            post_type="old"
+            olist=Blog.objects.filter(id=blog_id)
+            blog = olist.all()[0]
+            c = Context({"username":username,
+                    "headshot":basicInfo.headshot,
+                    "achievement":achievement,
+                    "signature":signature,
+                    "last_login":last_login,
+                    "post_type":post_type,
+                     "blog_id":blog.id,
+                    "default_title":blog.title,
+                    "default_content":blog.content
+                    })
+            return render_to_response('blogissue.htm', c)
         else:
-              return HttpResponse('POST not ivalid')
-    ##user just enter this page to edit a blog
+            return HttpResponse('Form unaccessable!')
     else:
-        blog_id = request.session['blog_id']
-        blog = Blog.objects.get( id=blog_id )
-        form = BlogForm( instance=blog )
-  
-        c = Context({"username":request.session['username'],
-                     "headshot":request.session['headshot'],
-                     "achievement":request.session['achievement'],
-                     "signature":request.session['signature'],
-                     "last_login":request.session['last_login'],
-                     'logined':logined,
-                     'is_admin':True,
-                     'form':form,
-                     'event_id':request.session['eid'],})
-        return render_to_response( 'newblog.htm',c )    
+        return HttpResponse('Request method error!!')
+    
+#新建一个blog
+def new_blog(request):
+    try:
+        id =request.session['member_id']
+    except KeyError:
+        return HttpResponse('You have not login,and have no right of accessing!')
+    logined =True
+    user = User.objects.get(id = id)
+    username = user.username
+    last_login = user.last_login
+    basicInfo = user.userbasicinfo
+    achievement = basicInfo.achievement
+    signature = basicInfo.signature    
+    is_author = True    
+    if request.method == 'POST':
+        form = EditBlogForm(request.POST)
+        if form.is_valid():
+            user_id = User.objects.get(id = id)
+            #event_id = form.cleaned_data['event_id'];
+            title   = form.cleaned_data['title']
+            content = form.cleaned_data['content']
+            olist   = Blog.objects.filter(title = title);
+            #title不能重复
+            if olist.count() > 0:
+                error_msg="Title redefination"
+                c = Context({"username":username,
+                    "headshot":basicInfo.headshot,
+                    "achievement":achievement,
+                    "signature":signature,
+                    "last_login":last_login,
+                     "is_author":is_author,
+                     "error_msg":error_msg
+                    })
+                return render_to_response('blogissue.htm', c)
+            blog = Blog(user_id = user_id,title = title , content = content)
+            publish_time=blog.publish_time
+            blog.save()
+            com_list=Remark.objects.filter(blog_id=blog.id).order_by('id')
+            c=Context({"username":username,
+                    "headshot":basicInfo.headshot,
+                    "achievement":achievement,
+                    "signature":signature,
+                    "last_login":last_login,
+                       "blog_id":blog.id,
+                       "blog_title":title,
+                       "publish_time":publish_time,
+                       "is_author":is_author,
+                       "blog_content":content,
+                       "comment_number":com_list.count(),
+                        "comment_list":com_list,
+                    })
+            return render_to_response('blogdetail.htm', c)
+        else:
+            #表单错误
+            c = Context({"username":username,
+                    "headshot":basicInfo.headshot,
+                    "achievement":achievement,
+                    "signature":signature,
+                    "last_login":last_login,
+                    "is_author":is_author
+                    #"publish_time":time_now
+                    })
+            return render_to_response('blogdetail.htm', c)
 
-#dispaly blog    
-def blog( request ):
+    else:
+       #request method 错误
+        c = Context({"username":username,
+                    "headshot":basicInfo.headshot,
+                    "achievement":achievement,
+                    "signature":signature,
+                    "last_login":last_login,
+                     "is_author":is_author
+                    })       
+        return render_to_response('blogissue.htm', c)
+#显示编辑blog页面
+def display_edit(request):
     try:
-        user_id = request.session['member_id']
-        logined = True
+        id =request.session['member_id']
     except KeyError:
-        return HttpResponse('You have not loginned,and have no right of accessing!')     
-    
+        return HttpResponse('You have not login,and have no right of accessing!')
+    logined =True
+    user = User.objects.get(id = id)
+    username = user.username
+    last_login = user.last_login
+    basicInfo = user.userbasicinfo
+    achievement = basicInfo.achievement
+    signature = basicInfo.signature
+    if request.method=="POST":
+        #读取blog.id,event.id
+        form = BlogInfo(request.POST)
+        if form.is_valid():
+            blog_id = form.cleaned_data['blog_info']
+            #post_type="old"表示现在的blog不是新的，而是已存在。
+            post_type="old"
+            olist=Blog.objects.filter(id=blog_id)
+            blog = olist.all()[0]
+            c = Context({"username":username,
+                    "headshot":basicInfo.headshot,
+                    "achievement":achievement,
+                    "signature":signature,
+                    "last_login":last_login,
+                    "post_type":post_type,
+                     "blog_id":blog.id,
+                    "default_title":blog.title,
+                    "default_content":blog.content
+                    })
+            return render_to_response('blogissue.htm', c)
+        else:
+            return HttpResponse('Form unaccessable!')
+    else:
+        return HttpResponse('Request method error!!')
+#处理编辑blog请求
+def edit_blog(request):
     try:
-        blog_id = request.GET.get("blog")
-        request.session['blog_id'] = blog_id
+        id =request.session['member_id']
     except KeyError:
-        raise Http404
+        return HttpResponse('You have not login,and have no right of accessing!')
+    logined =True
+    user = User.objects.get(id = id)
+    username = user.username
+    last_login = user.last_login
+    basicInfo = user.userbasicinfo
+    achievement = basicInfo.achievement
+    signature = basicInfo.signature   
+    if request.method == 'POST':
+        form = EditBlogForm(request.POST)
+        if form.is_valid():
+            user_id = User.objects.get(id = id)
+            #event_id = form.cleaned_data[''];
+            #publish_time = datetime.datetime.now()
+            blog_id = form.cleaned_data['blog_info']
+            olist   = Blog.objects.filter(id = blog_id);
+            if(olist.count()>0):
+                blog=olist.all()[0]
+                title   = form.cleaned_data['title']
+                content = form.cleaned_data['content']
+                blog.title=title
+                blog.content=content
+                publish_time=datetime.datetime.now()
+                blog.publish_time=publish_time
+                blog.save()
+                blog_id = blog.id
+                com_list = Remark.objects.filter(blog_id=blog.id).order_by('id')
+                c=Context({"username":username,
+                    "headshot":basicInfo.headshot,
+                    "achievement":achievement,
+                    "signature":signature,
+                    "last_login":last_login,
+                       "blog_id":blog_id,
+                       "blog_title":title,
+                       "publish_time":publish_time,
+                       "is_author":True,
+                       "blog_content":content,
+                       "comment_number":com_list.count(),
+                        "comment_list":com_list,
+                    })
+                return render_to_response('blogdetail.htm', c)
+            else:
+                return  HttpResponse('No Blog!')    
+    return  HttpResponse('Request method error!!')    
     
-    is_admin = True
-    blog = Blog.objects.get( id=blog_id )
-    visitor = User.objects.get(id = user_id)
-    if blog.author.id != user_id:
-        uid = blog.author.id
-        request.session['who'] = uid
-        is_admin = False
-        ##reset user information for session
-        user = User.objects.get(id = uid)
-        basicInfo = user.userbasicinfo
-        request.session['username'] = user.username
-        request.session['headshot'] = MEDIA_URL + str(basicInfo.headshot)
-        request.session['achievement'] = basicInfo.achievement
-        request.session['signature'] = basicInfo.signature
-        request.session['last_login'] = user.last_login 
-    ##get comments
-    comments = Comment.objects.filter( blog_id=blog ).order_by('publish_time')
-    c = Context({"username":request.session['username'],
-                 "headshot":request.session['headshot'],
-                 "achievement":request.session['achievement'],
-                 "signature":request.session['signature'],
-                 "last_login":request.session['last_login'],
+#删除一个blog,同时删除它的所有comment
+def delete_blog(request):
+    try:
+        id =request.session['member_id']
+    except KeyError:
+        return HttpResponse('You have not login,and have no right of accessing!')
+    if request.method=="POST":
+        form = BlogInfo(request.POST)
+        if form.is_valid():
+            blog_id = form.cleaned_data['blog_info']
+            olist   = Blog.objects.filter(id = blog_id);
+            if(olist.count()>0):
+                blog_id=olist.all()[0].id
+                olist.delete()
+                com_list=Remark.objects.filter(blog_id = blog_id)
+                com_list.delete()
+                com_list = Remark.objects.filter(blog_id=blog_id).order_by('id')
+                if com_list.count()>0:
+                    com_list.delete
+            else:
+                return  HttpResponse('No blog to delete!')
+        else:
+            return  HttpResponse('Unaccessable form!')
+    else:
+        return  HttpResponse('Request method error!') 
+    logined =True    
+    user = User.objects.get(id = id)
+    basicInfo = user.userbasicinfo
+    event_list = Event.objects.filter( user_id=user )
+    c = Context({"username":user.username,
+                 "headshot":basicInfo.headshot,
+                "achievement":basicInfo.achievement,
+                "signature":basicInfo.signature,
+                "last_login":user.last_login,
                  'logined':logined,
-                 'blog':blog,
-                 'is_admin':is_admin,
-                 'visitor':visitor,
-                 'comments':comments,
+                 'event_list':event_list,
                  })
-    return render_to_response( 'blog.htm',c)
-
-def add_comment( request ):
-    post_blog = Blog.objects.get( id=request.POST['bid'] )
-    user = User.objects.get( id=request.session['member_id'] )
-    comment = Comment( user_id=post_blog.author,
-                       author=user,
-                       blog_id=post_blog,
-                       content=request.POST['content'])
-    comment.save()
-    return HttpResponse( datetime.datetime.now().strftime("%Y-%m-%d %H:%M") )
-    
-def del_comment( request ):
-    comment = Comment.objects.get( id=request.POST['cid'] )
-    comment.delete()
-    return HttpResponse( 'deleted' )
-
-def message( request ):
+    #删除成功
+    return render_to_response('home.htm', c)
+#增加一个comment
+def add_comment(request):
     try:
-        user_id = request.session['member_id']
-        logined = True
+        id =request.session['member_id']
     except KeyError:
-        return HttpResponse('You have not loginned,and have no right of accessing!')     
-    visitor = User.objects.get( id=user_id )
-    
-    is_admin = True
-    if request.session['who'] != user_id:
-        user_id = request.session['who']
-        is_admin = False 
+        return HttpResponse('You have not login,and have no right of accessing!')
+    logined =True
+    user = User.objects.get(id = id)
+    username = user.username
+    last_login = user.last_login
+    basicInfo = user.userbasicinfo
+    achievement = basicInfo.achievement
+    signature = basicInfo.signature
+    if request.method == "POST":
+        form = EditRemarkForm(request.POST)
+        if form.is_valid():
+            blog_id = form.cleaned_data['blog_id']
+            com_content = form.cleaned_data['new_content']
+            blog_list = Blog.objects.filter(id=blog_id)
+            if blog_list.count()>0:
+                blog=blog_list.all()[0]
+                comment = Remark(blog_id=blog,content=com_content,remarker_id=user)
+                comment.save()
+                com_list = Remark.objects.filter(blog_id=blog.id).order_by('id')
+                c=Context({"username":username,
+                    "headshot":basicInfo.headshot,
+                    "achievement":achievement,
+                    "signature":signature,
+                    "last_login":last_login,
+                       "blog_id":blog_id,
+                       "blog_title":blog.title,
+                       "publish_time":blog.publish_time,
+                       "is_author":True,
+                       "blog_content":blog.content,
+                       "comment_number":com_list.count(),
+                        "comment_list":com_list,
+                    })
+                return render_to_response('blogdetail.htm', c)
+            else:
+                return HttpResponse('Unavailable Blog !!')
+        else:
+            return HttpResponse('Unavailable Form !!')
 
-    user = User.objects.get( id=user_id )
-    mes_li = Mes.objects.filter( receiver=user ).order_by('publish_time')
-    c = Context({"username":request.session['username'],
-                 "headshot":request.session['headshot'],
-                 "achievement":request.session['achievement'],
-                 "signature":request.session['signature'],
-                 "last_login":request.session['last_login'],
-                 'mes_li':mes_li,
-                 'visitor':visitor,
-                 'logined':logined,
-                 'is_admin':is_admin,
-                 })
-    return render_to_response( 'message.htm',c)
+    return HttpResponse('Request method error!!')
 
+#删除一个comment
+def delete_comment(request):
+    try:
+        id =request.session['member_id']
+    except KeyError:
+        return HttpResponse('You have not login,and have no right of accessing!')
+    logined =True
+    user = User.objects.get(id = id)
+    username = user.username
+    last_login = user.last_login
+    basicInfo = user.userbasicinfo
+    achievement = basicInfo.achievement
+    signature = basicInfo.signature
+    if request.method == "POST":
+        form = DelCommentInfo(request.POST)
+        if form.is_valid():
+            blog_id = form.cleaned_data['blog_id_info']
+            com_id = form.cleaned_data['comment_id_info']
+            com_list = Remark.objects.filter(id=com_id).order_by('id')
+            com_list.delete()
+            blog_list = Blog.objects.filter(id=blog_id)
+            if blog_list.count()>0:
+                blog=blog_list.all()[0]
+                com_list = Remark.objects.filter(blog_id=blog.id).order_by('id')
+                c=Context({"username":username,
+                    "headshot":basicInfo.headshot,
+                    "achievement":achievement,
+                    "signature":signature,
+                    "last_login":last_login,
+                       "blog_id":blog_id,
+                       "blog_title":blog.title,
+                       "publish_time":blog.publish_time,
+                       "is_author":True,
+                       "blog_content":blog.content,
+                       "comment_number":com_list.count(),
+                        "comment_list":com_list,
+                    })
+                return render_to_response('blogdetail.htm', c)
+            else:
+                return HttpResponse('Unavailable Blog !!')
+        else:
+            return HttpResponse('Unavailable Form !!')
 
-def add_mes( request ):
-    sender = User.objects.get( id=request.session['member_id'] )
-    receiver = User.objects.get( id=request.session['who'] )
+    return HttpResponse('Request method error!!')
+
     
-    mes = Mes( sender=sender,
-               receiver=receiver,
-               content=request.POST['content'])
-    mes.save()
-    return HttpResponse( datetime.datetime.now().strftime("%Y-%m-%d %H:%M") )
-    
-def del_mes( request ):
-    mes = Mes.objects.get( id=request.POST['mid'] )
-    mes.delete()
-    return HttpResponse( 'deleted' )
+        
 

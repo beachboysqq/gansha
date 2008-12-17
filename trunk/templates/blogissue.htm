@@ -1,0 +1,35 @@
+{% extends 'base_home.htm' %}
+
+{% block middle %}
+
+	<div id="navigation"><a href="../home/">首页</a>-><a href="">正在做事件</a>->{{current_event}}</div>
+    <div id="m1">
+			<div class="title1">
+				<table width="98%" border="0" cellspacing="0" cellpadding="0">
+				  <tr>
+					<td width="88%" class="text_bold">发表新日志</td>
+					<td width="12%" class="font_12">{{ username}}</td>
+				  </tr>
+				</table>
+				<form   enctype="multipart/form-data"  id="editblog" action="." method="post">
+
+					<input name="post_type" type="hidden" value={{post_type}}>
+					<input name="event_id" type="hidden" value="{{event_id}}">	
+					<input name="blog_info" type="hidden" value="{{blog_id}}">
+					<div >标题：<input  type="text" name="title" class="box_title" value="{{default_title}}"/>
+					<font size=2 color=Red font-weight:normal>{{error_msg}}</font>
+					</div>
+					<div>
+					<textarea
+					style="background-color: transparent;border-width: 1px 1px 1px ;font-family:宋体;font-size:10pt;align:left";
+					 wrap=hard; name="content"; rows=15; cols=58 value=""> 
+					{{default_content}}
+					</textarea>
+					</div>
+					<div><input name="" type="button" class="but_submit" onclick="addblog()"/></div>
+				</form>
+			</div>
+      </div>
+{% endblock %}
+
+	

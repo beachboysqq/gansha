@@ -1,0 +1,111 @@
+{% extends 'base_home.htm' %}
+
+{% block middle %}
+	<div style=display:none>
+		<form enctype="multipart/form-data"  id="comment_info" action="../del_comment/" method="post" >
+			<input name="blog_id_info" type="hidden" value={{blog_id}} />
+			<input name="event_id_info" type="hidden" value="{{event_id}}" />
+			<input name="comment_id_info" type=hidden" value="" />	
+			</form>
+	</div>
+	<div style=display:none>
+		<form enctype="multipart/form-data"  id="blog_info" action="" method="post" >
+			<input name="blog_info" type="hidden" value={{blog_id}} />
+			<input name="event_info" type="hidden" value="{{event_id}}" />
+			</form>
+	</div>
+	<div id="navigation"><a href="../">首页</a>->评论</div>
+	<div>
+		<input type="hidden" id="blog_title" value="{{blog_title}}"/>
+	<div>
+	<div id="m1">
+			<div class="title2">{{blog_title}}</div>
+			<div  id="timenote" >
+				<table width="98%" border="0" cellspacing="0" cellpadding="0">
+				<tr>
+					<p >修改于：
+					{{publish_time|date:"Y M j, H:i:s"}}| 
+					{%if is_author%}
+						<a href="javascript:edit_blog()">编辑</a>&nbsp;&nbsp;<a href="javascript:del_blog()">删除</a>
+					{% endif %}
+					</p>
+				</tr>
+			</div>	
+
+			<div class="blog_content">
+			<table style="table-layout:fixed"  width="98%" border="0" cellspacing="0" cellpadding="0" >
+			<tr align="left">
+			<td bgcolor="#f7f7f7"   style="word-break:break-all;word-wrap:break-word   ">
+			<nested:write     property='detail' filter="false"    />   
+			{{blog_content}}
+			</td>
+			</tr>
+			</div>
+	</div>
+
+{% comment %} 
+#####################################################################################<td width="14%"><a href="../newcomment/{{blog_id}}" class="a_raw">+发表评论</a> </td>
+{% endcomment %}
+	<div>
+			<div >
+				<table width="98%" border="0" cellspacing="0" cellpadding="0" id="comment">
+				 <tr align="left">
+				 <td width="86%" id="comment_counter" class="dot_triright">
+				 <a href="javascript:switch_comment()" class="a_raw">共{{comment_number}}条评论 </a>
+				 </td>				 
+			  	</tr>
+				</table>
+			</div>	
+
+			<div id="comment_body" style="display:none;">
+				{% for comment in comment_list %}
+				<div class="each_com">						
+						<div class="com_info">
+						<table width="98%" border="0" cellspacing="0" cellpadding="0">
+						  <tr>
+							<td><a href="#">发表人：{{comment.remarker_id}}</a>
+							<span class="time">|{{comment.publish_time|date:"Y M j, H:i:s"}}</span></td>
+						
+
+							<td width="7%"><a href="javascript:delete_comment({{comment.id}})">删除</a></td>
+						  </tr>
+						</table>
+						</div>
+						<p>{{comment.content}}</p>
+				</div>
+				{% endfor %}
+			</div>
+
+
+
+
+
+	<div>
+                     <div style="FILTER: HEIGHT: 15pt;font-size:10pt" face="隶书" color=#009900>
+			<b>留言板</b><p></p>
+			</div>
+			<div>
+					<form enctype="multipart/form-data"  id="my_newcomment" action="../addcomment/" method="post" >
+						<input name="blog_id" type="hidden" value={{blog_id}} />
+						<input name="event_id" type="hidden" value="{{event_id}}" />	
+						<div>
+						<textarea
+						style="background-color: transparent;border-width: 1px 1px 1px ;font-family:宋体;font-size:10pt;align:left";
+						 wrap=hard; name="new_content"; rows=5; cols=65 value=""> 
+						{{new_comment_content}}
+						</textarea>
+						</div>
+					
+						<div>
+						<input name="" type="button"  value="提交留言" onclick="addcomment()" />
+						</div>
+					</form>
+			</div>
+
+	</div>
+
+
+
+	</div>
+
+{% endblock %}
