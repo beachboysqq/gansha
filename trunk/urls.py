@@ -54,8 +54,8 @@ urlpatterns = patterns('',
                        (r'^add_mes/$',add_mes),                
                        (r'^del_mes/$',del_mes),
 
-                       (r'^blog/$','gansha.blog.views.blog_detail'),
-                       (r'^newblog/$','gansha.blog.views.new_blog'),
+
+                       (r'^newblog/(\d{1,9})/$','gansha.blog.views.new_blog'),
                        (r'^edit_blog/$','gansha.blog.views.display_edit'),
                        (r'^display/$','gansha.blog.views.blog_detail'),
                        (r'^display_blog/$','gansha.blog.views.edit_blog'),

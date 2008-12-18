@@ -26,9 +26,7 @@ def blog_detail(request):
         form = EditBlogForm(request.POST)
         if form.is_valid():
             user_id = User.objects.get(id = id)
-            #event_id = form.cleaned_data['event_info'];
             blog_id = form.cleaned_data['blog_info']
-            #olist   = Blog.objects.filter(id = blog_id,event_id=event_id);
             olist   = Blog.objects.filter(id = blog_id);
             if(olist.count()>0):
                 blog=olist.all()[0]
@@ -55,33 +53,10 @@ def blog_detail(request):
             else:
                 return  HttpResponse('No Blog!')    
     return  HttpResponse('Request method error!!')  
-    if request.method=="POST":
-        #读取blog.id,event.id
-        form = BlogInfo(request.POST)
-        if form.is_valid():
-            blog_id = form.cleaned_data['blog_info']
-            #post_type="old"表示现在的blog不是新的，而是已存在。
-            post_type="old"
-            olist=Blog.objects.filter(id=blog_id)
-            blog = olist.all()[0]
-            c = Context({"username":username,
-                    "headshot":basicInfo.headshot,
-                    "achievement":achievement,
-                    "signature":signature,
-                    "last_login":last_login,
-                    "post_type":post_type,
-                     "blog_id":blog.id,
-                    "default_title":blog.title,
-                    "default_content":blog.content
-                    })
-            return render_to_response('blogissue.htm', c)
-        else:
-            return HttpResponse('Form unaccessable!')
-    else:
-        return HttpResponse('Request method error!!')
+
     
 #新建一个blog
-def new_blog(request):
+def new_blog(request,event_id):
     try:
         id =request.session['member_id']
     except KeyError:
@@ -97,15 +72,16 @@ def new_blog(request):
     if request.method == 'POST':
         form = EditBlogForm(request.POST)
         if form.is_valid():
-            user_id = User.objects.get(id = id)
-            #event_id = form.cleaned_data['event_id'];
-            title   = form.cleaned_data['title']
-            content = form.cleaned_data['content']
-            olist   = Blog.objects.filter(title = title);
-            #title不能重复
-            if olist.count() > 0:
-                error_msg="Title redefination"
-                c = Context({"username":username,
+            event_list = Event.objects.filter(id = event_id);
+            if event_list.count()>0:
+                event_instance = event_list.all()[0]
+                title   = form.cleaned_data['title']
+                content = form.cleaned_data['content']
+                olist   = Blog.objects.filter(title = title);
+                #title不能重复
+                if olist.count() > 0:
+                    error_msg="Title redefination"
+                    c = Context({"username":username,
                     "headshot":basicInfo.headshot,
                     "achievement":achievement,
                     "signature":signature,
@@ -113,12 +89,12 @@ def new_blog(request):
                      "is_author":is_author,
                      "error_msg":error_msg
                     })
-                return render_to_response('blogissue.htm', c)
-            blog = Blog(user_id = user_id,title = title , content = content)
-            publish_time=blog.publish_time
-            blog.save()
-            com_list=Remark.objects.filter(blog_id=blog.id).order_by('id')
-            c=Context({"username":username,
+                    return render_to_response('blogissue.htm', c)
+                blog = Blog(event_id = event_instance,user_id = user,title = title , content = content)
+                publish_time=blog.publish_time
+                blog.save()
+                com_list=Remark.objects.filter(blog_id=blog.id).order_by('id')
+                c=Context({"username":username,
                     "headshot":basicInfo.headshot,
                     "achievement":achievement,
                     "signature":signature,
@@ -131,21 +107,34 @@ def new_blog(request):
                        "comment_number":com_list.count(),
                         "comment_list":com_list,
                     })
-            return render_to_response('blogdetail.htm', c)
+                return render_to_response('blogdetail.htm', c)
+            else:
+                #event 不存在
+                error_msg="Event does not exist!"
+                c = Context({"username":username,
+                    "headshot":basicInfo.headshot,
+                    "achievement":achievement,
+                    "signature":signature,
+                    "last_login":last_login,
+                     "is_author":is_author,
+                     "error_msg":error_msg
+                    })
+                return render_to_response('blogissue.htm', c)
         else:
             #表单错误
+            error_msg="Un accessable form!"
             c = Context({"username":username,
                     "headshot":basicInfo.headshot,
                     "achievement":achievement,
                     "signature":signature,
                     "last_login":last_login,
-                    "is_author":is_author
-                    #"publish_time":time_now
+                     "is_author":is_author,
+                     "error_msg":error_msg
                     })
-            return render_to_response('blogdetail.htm', c)
+            return render_to_response('blogissue.htm', c)
 
     else:
-       #request method 错误
+       #request method =GET
         c = Context({"username":username,
                     "headshot":basicInfo.headshot,
                     "achievement":achievement,

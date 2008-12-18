@@ -7,7 +7,7 @@ import datetime
 
 class Blog(models.Model):
     
-    #event_id = models.ForeignKey(Event)
+    event_id = models.ForeignKey(Event)
     title = models.CharField(max_length=100,default='Default Title')
     content = models.TextField()
     publish_time = models.DateTimeField(default=datetime.datetime.now)
