@@ -52,16 +52,7 @@ urlpatterns = patterns('',
                        (r'^del_comment/$',del_comment),                
                        (r'^message/$',message),                
                        (r'^add_mes/$',add_mes),                
-                       (r'^del_mes/$',del_mes),
-
-
-                       (r'^newblog/(\d{1,9})/$','gansha.blog.views.new_blog'),
-                       (r'^edit_blog/$','gansha.blog.views.display_edit'),
-                       (r'^display/$','gansha.blog.views.blog_detail'),
-                       (r'^display_blog/$','gansha.blog.views.edit_blog'),
-                       (r'^del_blog/$','gansha.blog.views.delete_blog'),
-                       (r'^addcomment/$','gansha.blog.views.add_comment'),
-                       (r'^del_comment/$','gansha.blog.views.delete_comment'),
+                       (r'^del_mes/$',del_mes),                
                        #(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': 'D:/static', 'show_indexes': True}),
                        )
 

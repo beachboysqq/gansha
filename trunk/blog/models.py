@@ -1,25 +1,35 @@
+# -*- coding: cp936 -*-
 from django.db import models
-from django import forms
-from django.contrib.auth.models import User
 from gansha.event.models import Event
-import datetime
+from django.contrib.auth.models import User
 
-
-class Blog(models.Model):
+class Blog( models.Model ):
+    author = models.ForeignKey( User )
+    event_id = models.ForeignKey( Event )
+    title = models.CharField( max_length=255 )
+    content = models.TextField()
+    publish_time = models.DateTimeField( auto_now=True )
     
-    event_id = models.ForeignKey(Event)
-    title = models.CharField(max_length=100,default='Default Title')
-    content = models.TextField()
-    publish_time = models.DateTimeField(default=datetime.datetime.now)
-    user_id = models.ForeignKey(User)
-    class Meta:
-        db_table ="Blog"
+    def __unicode__(self):
+        return self.title
 
-class Remark(models.Model):
-    blog_id = models.ForeignKey(Blog)
+class Comment( models.Model ):
+    user_id = models.ForeignKey( User )
+    author = models.ForeignKey( User,related_name="author" )
+    blog_id = models.ForeignKey( Blog )
     content = models.TextField()
-    publish_time = models.DateTimeField(default=datetime.datetime.now)
-    remarker_id = models.ForeignKey(User)
+    publish_time = models.DateTimeField( auto_now=True )
+    
+    def __unicode__(self):
+        return self.content
 
-    class Meta:
-        db_table ="Remark"
+#leave message
+class Mes( models.Model ):
+    sender = models.ForeignKey( User,related_name="senders" )
+    receiver = models.ForeignKey( User,related_name="rceivers" )
+    content = models.CharField( max_length=1000 ) 
+    publish_time = models.DateTimeField( auto_now=True )
+    
+    def __unicode__( self ):
+        return self.content
+   
