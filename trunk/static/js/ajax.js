@@ -1,4 +1,4 @@
-ï»¿function get_img(){
+function get_img(){
 	var path=$F('headshot');	
 	var ext=(path.substring(path.lastIndexOf(".")+1)).toLowerCase();
 
@@ -154,7 +154,7 @@ function switch_addse()
     $('id_content').value = '';
     $('id_start_date').value = '';
     $('id_end_date').value = '';
-    $('but_submit_se').value = "æ·» åŠ ";
+    $('but_submit_se').value = "Ìí ¼Ó";
     $('but_submit_se').onclick = add_sub_event;
     
     if( !flag ){
@@ -176,7 +176,7 @@ function edit_se( id )
     $('id_content').value = $(id+'_cont').innerHTML.strip();
     $('id_start_date').value = $(id+'_sdate').innerHTML.strip();
     $('id_end_date').value = $(id+'_edate').innerHTML.strip();
-    $('but_submit_se').value = "æäº¤ä¿®æ”¹";
+    $('but_submit_se').value = "Ìá½»ĞŞ¸Ä";
     $('but_submit_se').onclick = new Function("edit_sub_event("+id+")");
 
     flag = true;
@@ -198,7 +198,7 @@ function send_request()
     var myAjax = new Ajax.Request('../addfriend/',{
             method:'POST',
 			parameters:{uid:$F('to_user'),message:$F('message')},
-            onSuccess:function( transport ){$(op).innerHTML='å·²å‘é€å¥½å‹è¯·æ±‚';$('mes_box').hide();},
+            onSuccess:function( transport ){$(op).innerHTML='ÒÑ·¢ËÍºÃÓÑÇëÇó';$('mes_box').hide();},
             onFailure:function( transport ){alert( transport.status )
             }
         })    
@@ -210,7 +210,7 @@ function accept_friend( uid )
 	var myAjax = new Ajax.Request('../acceptfriend/',{
 		method:'POST',
 		parameters:{uid:uid},
-		onSuccess:function(){$('request_'+uid).update('æ‚¨å·²å’Œ'+uname+'æˆä¸ºå¥½å‹ã€‚');},
+		onSuccess:function(){$('request_'+uid).update('ÄúÒÑºÍ'+uname+'³ÉÎªºÃÓÑ¡£');},
 		onFailure:function( transport ){alert( transport.status )
 		}
 	})   
@@ -222,7 +222,7 @@ function deny_friend( uid )
 	var myAjax = new Ajax.Request('../deny/',{
 		method:'POST',
 		parameters:{uid:uid},
-		onSuccess:function(){$('request_'+uid).update('æ‚¨å·²æ‹’ç»'+uname+'çš„å¥½å‹è¯·æ±‚ã€‚')},
+		onSuccess:function(){$('request_'+uid).update('ÄúÒÑ¾Ü¾ø'+uname+'µÄºÃÓÑÇëÇó¡£')},
 		onFailure:function( transport ){alert( transport.status )
 		}
 	})   
@@ -253,7 +253,7 @@ function send_concern()
 	var myAjax = new Ajax.Request('../add_to_concern/',{
 		method:'POST',
 		parameters:{eid:eid,ce_id:ce_id},
-		onSuccess:function(){$('span_'+ce_id).update('[å·²å…³æ³¨]');$('mes_box').hide();},
+		onSuccess:function(){$('span_'+ce_id).update('[ÒÑ¹Ø×¢]');$('mes_box').hide();},
 		onFailure:function( transport ){alert( transport.status )
 		}
 	})   
@@ -367,4 +367,86 @@ function del_mes( mid )
             onFailure:function( transport ){alert( transport.status )
             }
         })
+}
+
+function addblog()
+{
+	var oform=document.getElementById("editblog")
+	if(oform.title.value=="")
+	{
+		alert("Empty title!");
+		return;
+	}
+	if(oform.content.value=="")
+	{
+		alert("Empty content!");
+		return;
+	}
+	oform.submit();
+}
+
+function edit_blog()
+{
+	var oform=document.getElementById("blog_info")
+	if(oform.blog.value=="")
+	{
+		alert("No blog id!");
+		return false;
+	}
+	if(oform.event_info.value=="")
+	{
+
+	}
+	oform.action="../editblog/";
+	oform.method="get";
+	oform.submit();
+}
+function del_blog()
+{
+	var oform=document.getElementById("blog_info")
+	if(oform.blog.value=="")
+	{
+		alert("No blog id!");
+		return false;
+	}
+	if(oform.event_info.value=="")
+	{
+
+	}
+	oform.action="../delblog/";
+	oform.submit();
+}
+function addcomment()
+{
+	var oform=document.getElementById("my_newcomment")
+	if(oform.new_content.value=="")
+	{
+		alert("Empty content!");
+		return false;
+	}
+	if(oform.blog_id.value=="")
+	{
+		alert("No blog id!");
+		return false;
+	}
+	if(oform.event_id.value=="")
+	{
+
+	}
+	oform.submit();
+}
+
+function delete_comment(com_id)
+{
+	
+	var oform=document.getElementById("blog_info")
+	if(oform.blog.value=="")
+	{
+		alert("No blog id!");
+		return false;
+	}
+
+	oform.com_id.value=com_id;
+	oform.action="../del_comment/";
+	oform.submit();
 }

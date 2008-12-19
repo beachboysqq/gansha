@@ -2,7 +2,8 @@
 
 {% block middle %}
 
-	<div id="navigation"><a href="../home/">首页</a>-><a href="">正在做事件</a>->{{current_event}}</div>
+	<div id="navigation"> <a href="../home">首页</a>-> <a href="../doing">正在做事件</a>-> <a href="../event/?event={{event.id}}">{{event.title}}</a> </div>
+
     <div id="m1">
 			<div class="title1">
 				<table width="98%" border="0" cellspacing="0" cellpadding="0">
@@ -11,20 +12,14 @@
 					<td width="12%" class="font_12">{{ username}}</td>
 				  </tr>
 				</table>
-				<form   enctype="multipart/form-data"  id="editblog" action="." method="post">
-
-					<input name="post_type" type="hidden" value={{post_type}}>
-					<input name="event_id" type="hidden" value="{{event_id}}">	
-					<input name="blog_info" type="hidden" value="{{blog_id}}">
-					<div >标题：<input  type="text" name="title" class="box_title" value="{{default_title}}"/>
+				<form  id="editblog" action="." method="post">
+					<input name="event_id" type="hidden" value="{{event.id}}">	
+					<input name="blog_info" type="hidden" value="{{blog.id}}">
+					<div >标题：<input  type="text" name="title" class="box_title" value="{{blog.title}}"/>
 					<font size=2 color=Red font-weight:normal>{{error_msg}}</font>
 					</div>
 					<div>
-					<textarea
-					style="background-color: transparent;border-width: 1px 1px 1px ;font-family:宋体;font-size:10pt;align:left";
-					 wrap=hard; name="content"; rows=15; cols=58 value=""> 
-					{{default_content}}
-					</textarea>
+					<textarea name="content";rows=60; cols=50 >{{blog.content}}</textarea>
 					</div>
 					<div><input name="" type="button" class="but_submit" onclick="addblog()"/></div>
 				</form>
