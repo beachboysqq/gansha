@@ -1,0 +1,361 @@
+.left_8px{
+padding-left:8px;
+}
+.title1,.title2{
+font-weight:bold;
+border-bottom:1px solid #CCC;
+margin-bottom:1px;
+padding-top:10px;
+}
+.title2{
+text-align:center;
+}
+a.a_raw:link,a.a_raw:visited{
+	color:#666;
+	text-decoration:underline;
+}
+a.a_raw:hover{
+	color:#666;
+	text-decoration:underline;
+}
+/*----------------for myhome.html---------------*/
+#main_home{
+clear:both;
+width:840px;
+background-color:#FFF;
+margin-right:auto;
+margin-left:auto;
+}	
+	#main_home #left{
+	float:left;
+	width:164px;
+	margin-right:20px;
+	}
+		#me{
+		width:122px;
+		font-size:12px;
+		border:1px solid #CCC;
+		padding:12px 20px 10px 20px;
+		background:url(../images/bg_me.gif) repeat;
+		}
+			#img_headshot{
+			border:1px solid #FFF;
+			width:120px;
+			height:108px;
+			}
+			#me p{
+				overflow:hidden;
+				width:120px;
+				word-wrap:break-word;
+				word-break:break-all;
+				padding-top:4px;}
+		#action{
+		width:164px;
+		margin-top:10px;
+		background:url(../images/action_title.jpg) no-repeat;
+		padding-top:24px;
+		}
+		#action_body{
+		width:142px;
+		padding:4px 10px 8px 10px;
+		border-left:1px solid #CCC;
+		border-right:1px solid #CCC;
+		border-bottom:1px solid #CCC;
+		}
+			#action_body p{padding-top:6px;}
+	#main_home #middle{
+	float:left;
+	width:482px;
+	margin-right:14px;
+	}
+		#navigation{font-size:12px;}
+		#main_home #m1{}
+		#main_home table{
+		width:100%;
+		font-size:12px;
+		}
+
+		.m1_title{
+		font-weight:bold;
+		font-size:14px;
+		border-bottom:1px solid #D9001D;
+		}
+		#m1 td{height:26px;}
+			#but_addevent{
+			width:100px;
+			height:24px;
+			margin-top:6px;
+			border:0px;
+			float:right;
+			background:url(../images/but_addevent.jpg) no-repeat;
+			cursor:pointer;
+			}
+		#main_home #m2{margin-top:30px;}
+		#switch_menu {}
+		#switch_menu td{
+		height:22px;
+		font-size:14px;
+		text-align:center;
+		border-bottom:1px solid #D9001D;
+		}
+		#m2 .td_slot{width:6px;}
+			#new_event_title,#new_concern_title,#new_comment_title,#new_message_title,#new_friend_title{
+			border:1px solid #D9001D;
+			}
+			#new_event_title{
+			width:72px;
+			}
+			#new_comment_title{width:44px;}
+			#new_message_title{width:44px;}
+			#new_friend_title{width:80px;}
+			#new_event{
+			padding-top:10px;}
+				.each_event{
+				padding-left:20px;
+				font-size:12px;
+				background: url(../images/dot_square.gif) no-repeat 10px 8px;
+				}
+				.time{
+				padding-right:24px;
+				}
+			#new_comment,#new_message,#new_friend{
+			font-size:12px;
+			}
+				.tip{
+				height:22px;
+				color:#666;
+				font-size:12px;
+				padding-left:10px;
+				background-color:#E8E8E8;
+				}
+				
+				.time{
+				color:#666;
+				padding-left:10px;
+				text-align:left;
+				}
+				.each_comment,.each_message{
+				border-bottom:1px solid #CCC;
+				font-size:12px;
+				margin-bottom:6px;
+				}
+	#main_home #right{
+	float:right;
+	}
+	#main_home #friends{
+	width:134px;
+	font-size:12px;
+	padding:0 10px 10px 10px;
+	border:1px solid #CCC;
+	}
+	#friends li{display:block;}
+/*----------------event.html---------------------------*/
+#event_title{
+padding-left:24px;
+font-size:14px;
+width:77%;
+margin-top:10px;
+background: url(../images/dot_square_big.gif) no-repeat 8px 10px;
+font-weight:bold;
+}
+			#but_addblog{
+			width:100px;
+			height:24px;
+			border:0px;
+			margin-bottom:6px;
+			background:url(../images/but_addblog.jpg) no-repeat;
+			cursor:pointer;
+			}
+		#event_content{
+		font-size:12px;
+		width:94%;
+		padding-left:3%;
+		padding-top:4px;
+		}
+		#event_content p{
+		}
+		#event_plan_title,#event_log_title,#event_concern_title,#event_blog_title{
+			border:1px solid #D9001D;
+			}
+			#event_plan_title{
+			border-bottom-color:#FFF;
+			width:72px;
+			}
+			#event_log_title{width:72px;}
+			#event_blog_title{width:72px;}
+			#event_concern_title{width:44px;}
+			.td_12px_title{
+			font-size:12px;
+			font-weight:bold;
+			background-color:#E8E8E8;
+			}
+			.checkbox{
+			vertical-align:middle;
+			text-align:center;
+			}
+			.add_but{
+			padding-top:6px;
+			text-align:right;
+			font-size:12px;
+			}
+		#event_log{
+		font-size:12px;
+		padding-top:10px;
+		}
+		#submit_subevent{
+		background:#E8E8E8;
+		border:1px  dashed #CCC;
+		margin-top:8px;
+		padding-bottom:4px;
+		padding-right:8px;
+		}
+		#submit_subevent td{
+		height:30px;}
+/*--------------------blogissue.html------------------------*/
+			.but_submit{
+			width:59px;
+			height:24px;
+			border:0px;
+			margin:10px 0 6px 16px;
+			background:url(../images/but_submit.jpg) no-repeat;
+			cursor:pointer;
+			}
+/*----------------for blogdetail.html---------------*/
+#timenote{
+color:#666;
+text-align:right;
+font-size:12px;
+}
+#blog_content{font-size:12px;margin:10px;}
+#blog_content p{
+}
+#comment{
+font-size:12px;
+color:#666;
+margin-top:30px;
+font-weight:bold;
+}
+	#comment_counter{
+	padding-left:22px;
+	}
+	.dot_triright{background: url(../images/dot_triright.gif) no-repeat 10px 8px;}
+	.dot_tridown{background: url(../images/dot_tridown.gif) no-repeat 10px 8px;}
+	#comment_body{
+	color:#333;
+	font-size:12px;}
+	#tbody_com{
+	color:#333;
+	font-size:12px;}
+	.each_com{
+	margin-bottom:2px;
+	}
+	.com_info{
+	height:24px;
+	border-top:1px solid #CCC;
+	margin-bottom:4px;
+	}
+	#main_home #relate_blog{
+	width:134px;
+	font-size:12px;
+	padding:0 10px 10px 10px;
+	border:1px solid #CCC;
+	}
+	#relate_blog ul{
+	display:inline;
+	list-style-type:square;
+	}
+	#relate_blog li{
+	display:block;
+	}
+/*---------------------for friend.html-----------------------*/
+.each_friend{
+border-bottom:1px solid #CCC;
+padding-top:2px;
+font-size:12px;
+height:60px;
+}
+.each_friend2{
+border-bottom:1px solid #CCC;
+padding-top:8px;
+padding-bottom:0px;
+font-size:12px;
+}
+	.each_friend2 span{padding-right:8px;}
+	.who{
+	float:left;
+	width:60px;
+	}
+		.who img{width:48px;height:48px;}
+	.updateinfo{
+	float:left;
+	width:370px;
+	}
+	.operation{
+	float:right;
+	}
+	#m1 ul{
+	clear:both;
+	list-style:none;
+	}
+/*----------------------------for myinfo.html------------------------------*/
+.right_op{
+width:80px;
+font-weight:normal;
+text-align:right;
+font-size:12px;
+}
+	#tb_myinfo{
+	margin-top:10px;
+	}
+	#tb_myinfo td{
+	height:32px;
+	}
+	#myinfo_error img{
+	width:120px;
+	height:108px;
+	padding:10px 0 0 52px;
+	}
+/*-------------------------for doing.html---------------------------*/
+.img_lock{
+width:10px;
+height:12px;
+padding-left:4px;
+}
+.events{
+font-size:12px;
+line-height:150%;
+border-bottom:1px solid #CCC;
+padding-bottom:4px;
+}
+	.events .event_title{
+	font-weight:bold;
+	}
+	.events table{padding-left:2%;}
+	.secret{
+	padding-right:14px;
+	background:url(../images/dot_lock.gif) no-repeat right;}
+/*-------------for findfriend.htm------------------*/
+#mes_box,#del_confirm_box{
+	position:absolute;
+	width:220px;
+	left:40%;
+	top:26%;
+	line-height:150%;
+	font-size:12px;
+	background-color:#EEE;
+	padding:0px 8px 8px 8px;
+	border:1px solid #999;
+}
+	#mes_box div{padding-top:8px;}
+.textarea{
+width:200px;
+font-size:12px;
+height:40px;
+}
+/*----------------for message.htm----------------------------*/
+.each_mes{
+border-bottom:1px solid #CCC;
+font-size:12px;
+margin-bottom:0px;
+}
+#mes_produce{margin-top:10px;}

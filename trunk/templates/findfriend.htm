@@ -1,0 +1,55 @@
+{% extends 'base_home.htm' %}
+
+{% block middle %}
+<div id="m1">
+<div class="title1">搜索用户名:{{search_value}}
+</div>
+<div class="tip">共有{{counter}}个结果。</div>
+{% if ret %}
+{% for user in ret %}
+<div class="each_friend">
+  <div class="who"> 
+  	<a href="../home/?user={{user.user.email}}"><img src="{{user.headshot}}" /></a>
+    <a href="../home/?user={{user.user.email}}">{{user.user.nickname}}</a>
+  </div>
+  <div class="updateinfo">
+    <table cellpadding=0 cellspacing=0>
+	  <tr>
+		<td style="width:49px"></td>
+		<td>性别:{% ifequal user.gender 'male'%}男{%else%}
+		  {%ifequal user.gender 'female' %}女
+		  {% else %}未知{%endifequal%}
+		  {% endifequal%}
+		</td>
+		<td>年龄:{{user.age|default:"未知"}}</td>
+	  </tr>
+	  <tr>
+		<td></td>
+		<td>职业:{{user.job|default:"未知"}}</td>
+		<td>地址:{{user.addr|default:"未知"}}</td>
+	  </tr>
+    </table>
+  </div>
+  {%ifequal user.user.nickname uname%}
+  <div class="operation"><a href="/myhome">自己</a></div>
+  {%else%}
+  <div class="operation" >
+  	<a href="#" onclick="show_box('{{user.user.email}}')" id="op_{{user.user.email}}">加为好友</a>
+  </div>
+  {%endifequal%} 
+  </div>
+{% endfor %}
+{% else %}
+<p>没有用户名中包含"{{search_value}}"!</p>
+{% endif %}     
+<div id="mes_box" style="display:none;">
+	<div>发送好友请求，经对方确认后，方可成为好友。
+请输入验证信息（45字以内）：</div>
+    <div><textarea id="message" class="textarea"></textarea></div>
+     <div>	
+	 	<input	type="hidden" id="to_user"/><!--由于userid动态，需一个记录员-->
+	 	<input type="button" value="发送" onclick="send_request()"/>
+      	<input type="button" value="取消" onclick="$('mes_box').hide();"/>
+	</div>	
+</div>
+{% endblock %} 

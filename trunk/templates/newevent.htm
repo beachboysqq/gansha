@@ -1,0 +1,33 @@
+{% extends 'base_home.htm' %}
+
+{% block middle %}
+    <div id="m1">
+	  <div class="title1">记录梦想</div>
+	  <form action="." method="POST">	
+		<table>	
+		  <tr>
+			<td>梦想：</td>
+			<td><input type="text" name="title" value='{{event.title|default:""}}' class="box_long" /></td>
+		  </tr>
+		  <tr>
+			<td>梦想描述：</td>
+			<td><textarea rows="12" cols="50" name="desc">{{event.desc|default:""}}</textarea></td>
+		  </tr>
+		  <tr>
+			<td>是否公开：</td>
+			  <td>
+			  	<select id="myevent_is_public" name="is_public">
+				  <option value="1" {% if event.is_public %}selected="selected"{%endif%}>是</option>
+				  <option value="0" {% if not event.is_public %}selected="selected"{%endif%}>否</option>
+				</select>
+			  </td>
+			</tr>
+		  <tr>
+			<td></td>
+			<td><input name="" type="submit" class="but_submit"
+					   value=""/></td>
+		  </tr>
+		</table>
+	  </form>
+    </div>
+	{% endblock %}

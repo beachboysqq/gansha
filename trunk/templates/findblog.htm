@@ -1,0 +1,24 @@
+{% extends 'base_home.htm' %}
+
+{% block middle %}
+<div id="m1">
+<div class="title1">搜索日志：{{search_value}}
+</div>
+<div class="tip">共有{{counter}}个结果。</div>
+{% if ret %}
+{% for blog in ret %}
+<div class="each_friend2">
+  <div><b><a href="../blog/?blog={{blog.key}}">{{blog.title}}</a></b></div>
+  <div>{{blog.content|truncatewords:"100"}}...</div>
+  <div style="color:#666;">
+  	<span>By：<a href="../home/?user={{blog.author.email}}">{{blog.author.nickname}}</a></span>
+	<span>Event:<a href="../event/?event={{blog.event.id}}">{{blog.event.title}}</a></span>
+	<span>Publish Time:{{blog.publish_time}}</span>
+  </div> 
+</div>
+{% endfor %}
+{% else %}
+<p>没有包含"{{search_value}}"的日志!</p>
+{% endif %}     
+
+{% endblock %} 

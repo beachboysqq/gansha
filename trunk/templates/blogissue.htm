@@ -1,0 +1,25 @@
+{% extends 'base_home.htm' %}
+{% block middle %}
+<div id="navigation">
+  <a href="../home">首页</a>->
+  <a href="../doing">正在做事件</a>->
+  <a href="../event/?event={{blog.event.key}}">{{blog.event.title}}</a>
+</div>
+
+<div id="m1">
+  <div class="title1">发表日志</div>
+  <form  id="editblog" action="." method="post">
+	<input name="bkey" type="hidden" value='{{blog.key}}'>
+	<div style="margin-top:10px;">标题：
+	  <input type="text" name="title" class="box_title" value="{{blog.title}}"/>
+	  <font size=2 color=Red font-weight:normal>{{error_msg}}</font>
+	</div>
+	<div style="margin-top:10px;">
+	  <textarea name="content" rows=40 cols=60 style="height: 300px;" >{{blog.content}}</textarea>
+	</div>
+	<div><input name="" type="submit" value="" class="but_submit"/></div>
+  </form>
+</div>
+{% endblock %}
+
+	
