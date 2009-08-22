@@ -1,0 +1,73 @@
+{% extends 'base_home.htm' %}
+{% block middle %}
+<div id="navigation"> 
+  <a href="../home">首页</a>->
+  <a href="../doing">正在做事件</a>-> 
+  <a href="../event/?event={{blog.event.key}}">{{blog.event.title}}</a> 
+</div>
+<div id="m1">
+  <div class="title2" id="name_{{blog.key}}">{{blog.title}}</div>
+  <p id="timenote"> 
+	{{blog.publish_time}} 
+    {%if is_admin%}| 
+	<a href="../editblog?blog={{blog.key}}">编辑</a>&nbsp;&nbsp;
+	<a href="javascript:del_blog('{{blog.key}}')">删除</a>
+	{%endif%}
+  </p>
+  <div id="blog_content">
+	{% autoescape off %}
+	{{blog.content}}
+	{% endautoescape %}
+  </div>
+  <table width="98%" border="0" cellspacing="0" cellpadding="0" id="comment">
+    <tr>
+      <td id="comment_counter" class="dot_tridown">
+		<a href="javascript:switch_comment()" class="a_raw">
+		  共<span id="num_comment">{{count}}</span>条评论
+		</a>
+	  </td>
+    </tr>
+  </table>
+  <div id="tbody_com" style="display:block;">
+  <!--两个记录员，主要是为了Dom方式增加评论时，显示用户名和其url-->
+    <input type="hidden" id="visitor_key" value="{{vistor.email}}"/>
+    <input type="hidden" id="visitor_name" value="{{vistor.nickname}}"/>
+	{% for comment in comments%}
+    <div class="each_com" id="com_{{comment.key}}">
+      <div class="com_info">
+        <table>
+          <tr>
+            <td>
+			  <a href="../home/?user={{comment.sender.email}}">{{comment.sender.nickname}}</a>
+			  <span class="time">{{comment.publish_time|date:"Y-m-d H:i:s"}}</span>
+			</td>
+            {%if is_admin%}
+            <td width="7%"><a href="javascript:del_comment('{{comment.key}}');">删除</a></td>
+            {%endif%}
+		  </tr>
+        </table>
+      </div>
+      <p>{{comment.content}}</p>
+    </div>
+	{%endfor%}
+  </div>
+  <div>
+    <form action="." method="post">
+      <textarea class="box_comment" id="write_comment" ></textarea>
+      <p>
+        <input type="button" value=" 提交评论 " onclick="submit_comment('{{blog.key}}')"/>
+      </p>
+    </form>
+  </div>
+</div>
+{%if is_admin%}
+<div id="del_blog_confirm_box" style="display:none;">
+  <input type="hidden" id="recorder_bkey"/><!--记录要删除日志的key-->
+  <div>您确信要删除日志<span id="del_blog_name"></span>吗？</div>
+  <div style="padding-top:8px;">
+	<input type="button" value="确认" onclick="del_blog_real2()"/>
+    <input type="button" value="取消" onclick="$('del_blog_confirm_box').hide();"/>
+  </div>	
+</div>
+{%endif%}
+{% endblock %} 

@@ -1,0 +1,270 @@
+{% extends 'base_home.htm' %}
+
+{%block js%}
+<script language="JavaScript" src="/static/js/switch.js"></script>
+<script language="JavaScript" src="/static/js/My97DatePicker/WdatePicker.js"></script>
+{%endblock%}
+
+{% block middle %}
+<div id="navigation"><a href="../home">首页</a>-><a href="../doing">正在做事件</a></div>
+<div id="m1">
+  <table cellpadding="0" cellspacing="0" style="margin-top:10px;">
+    <tr>
+      <td id="event_title" class="underline_grey">
+		{{event.title}}
+		{% if event.isprivacy %}
+		<img src="/static/images/dot_lock.gif" style="padding-left:4px;"/>
+		{% endif %}
+	  </td>
+      <td class="underline_grey" style="text-align:right;">
+		{%if is_admin%}
+		<input onclick="window.location.replace('../addblog')"
+		type="button" id="but_addblog" />
+		{%else%}
+		<span id="span_{{event.id}}">[<a href="javascript:add_to_concern({{event.id}})">加为关注</a>]</span>
+		{%endif%}
+	  </td>
+    </tr>
+  </table>
+  <div class="tip">
+	<table cellpadding="0" cellspacing="0" border="0">
+	  <tr>
+		<td>发布时间：{{event.publish_date}}</td>
+		{%if is_admin%}
+		<td width="36px">
+		  <a href="../editevent" class="a_raw">编辑</a>
+		</td>
+		<td width="36px"><a href="javascript:del_event()" class="a_raw">删除</a></td>
+		{%endif%}
+	  </tr>
+	</table>
+  </div>
+  <div id="event_content">{{event.desc|escape|linebreaks}}</div>
+</div>
+<div id="m2">
+  <div id="switch_menu">
+    <table width="98%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td class="td_slot">&nbsp;</td>
+        <td id="event_plan_title">
+		  <a href="javascript:sw2('event_plan');"
+		  class="a_nounderline">事件规划({{num_se}})</a>
+		</td>
+        <td class="td_slot">&nbsp;</td>
+        <td id="event_log_title">
+		  <a href="javascript:sw2('event_log');"
+		  class="a_nounderline">历史记录({{num_history_records}})</a>
+		</td>
+        <td class="td_slot">&nbsp;</td>
+        <td id="event_blog_title">
+		  <a href="javascript:sw2('event_blog');" class="a_nounderline">事件日志({{num_blogs}})</a>
+		</td>
+        <td class="td_slot">&nbsp;</td>
+        <td id="event_concern_title">
+		  <a href="javascript:sw2('event_concern');"
+			 class="a_nounderline">关注({{li|length}})</a>
+		</td>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+  </div>
+  <div id="event_plan" style="display:block">
+    <table width="98%" border="0" cellspacing="0" cellpadding="0">
+	  <tbody id="tbody_se">
+      <tr>
+        <td width="6%" class="td_12px_title">完成</td>
+        <td class="td_12px_title">子事件</td>
+        <td width="14%" class="td_12px_title">开始时间</td>
+        <td width="14%" class="td_12px_title">完成时间</td>
+		{%if is_admin%}
+        <td width="6%" class="td_12px_title">编辑</td>
+        <td width="6%" class="td_12px_title">删除</td>
+		{%endif%}
+      </tr>
+	  {% for se in se_list %}
+      <tr id="tr_{{se.key}}" style="color:{%if se.is_done%}#666{%else%}{%if se.isexpired%}#F00{%else%}#000{%endif%}{%endif%}">
+        <td class="checkbox">
+		  <input type="hidden" id="id_{{se.key}}" value="{{se.key}}" />
+		  <input type="checkbox" onclick="javascript:done_se('{{se.key}}')"
+		  id="checkbox_{{se.key}}" {%if se.is_done%}
+		  checked='true'{%endif%} {%if not is_admin%}disabled='true'{%endif%}/>
+		</td>
+        <td class="underline_grey" id="{{se.key}}_cont">{{se.content}}</td>
+        <td class="underline_grey font_10" id="{{se.key}}_sdate">
+		  {{se.start_date}}
+		</td>
+        <td class="underline_grey font_10" id="{{se.key}}_edate">
+		  {{se.end_date}}
+		</td>
+		{%if is_admin%}
+        <td class="underline_grey text_center">
+		  <a href="javascript:edit_se('{{se.key}}')">
+			<img src="/static/images/edit.jpg" />
+		  </a>
+		</td>
+        <td class="underline_grey text_center">
+		  <a href="javascript:del_se('{{se.key}}')">
+			<img src="/static/images/del.jpg" />
+		  </a>
+		</td>
+		{%endif%}
+      </tr>
+	  {% endfor %}
+	  </tbody>
+    </table>
+	{%if is_admin%}
+    <div id="submit_subevent" style="display:none;">
+      <form method="post" id="form_add_se">
+        <table width="98%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="16%" align="right">子事件：</td>
+            <td width="74%"><input type="text" class="box_long" id="id_content"/></td>
+            <td width="10%" align="right" valign="top">
+			  <a href="javascript:close_addse()">
+				<img src="/static/images/del.jpg" alt="关闭"/>
+			  </a>
+			</td>
+          </tr>
+          <tr>
+            <td align="right">开始时间：</td>
+            <td>
+			  <input class="Wdate" type="text" id="id_start_date" 
+				 onFocus="WdatePicker({isShowClear:false,readOnly:true})"/>
+			  <span style="padding-left:12px;">完成时间：</span>
+			  <input class="Wdate" type="text" id="id_end_date" 
+					 onFocus="WdatePicker({isShowClear:false,readOnly:true})"/>
+            </td>
+            <td>
+			  <!--记录当前编辑的子事件的key-->
+			  <input type="hidden" id="cur_edit_se" value="" />
+			  <input type="button" id="but_submit_se" onclick="add_sub_event()" value="提&nbsp;交" />
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+	<div class="add_but" id="switch_addse">
+	  <a href="javascript:switch_addse()">+添加子事件</a>
+	</div>
+	{%endif%}
+  </div>
+  <div id="event_log" style="display:none">
+	{%if history_li%}
+	{% for hi in history_li%}
+    <p><span class="time">{{hi.date}}</span>{{hi.content}}</p>
+	{%endfor%}
+	{%else%}
+	<p>该事件尚无历史记录</p>
+	{%endif%}
+  </div>
+  <div id="event_blog" style="display:none;">
+    <table width="98%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td class="td_12px_title">标题</td>
+        <td width="26%" class="td_12px_title">发表时间</td>
+		{%if is_admin%}
+        <td width="6%" class="td_12px_title">编辑</td>
+        <td width="6%" class="td_12px_title">删除</td>
+		{%endif%}
+      </tr>
+	  {%for blog in blog_li%}
+      <tr id="tr_blog_{{blog.key}}">
+        <td class="underline_grey" id="name_{{blog.key}}">
+		  <a href="../blog/?blog={{blog.key}}">{{blog.title}}</a>
+		</td>
+        <td class="underline_grey">
+		  {{blog.publish_time|date:"Y-m-d"}}
+		</td>
+		{%if is_admin%}
+        <td class="underline_grey text_center">
+		  <a href="../editblog/?blog={{blog.key}}"><img src="/static/images/edit.jpg" border="0" /></a>
+		</td>
+        <td class="underline_grey text_center">
+		  <a href="javascript:del_blog('{{blog.key}}')"><img src="/static/images/del.jpg" border="0"/></a>
+		</td>
+		{%endif%}
+      </tr>
+	  {%endfor%}
+    </table>
+	{%if is_admin%}
+	<div class="add_but">
+	  <a href="javascript:window.location.replace('../addblog')">+添加事件日志</a>
+	</div>
+	{%endif%}
+  </div>
+  <div id="event_concern" style="display:none;">
+    <div class="tip">您共有{{li|length}}个关注对象,以下是他们最近一周的更新。</div>
+	{%for concern_event,hi_li in li%}
+    <div class="each_comment" id="ce_{{concern_event.id}}">
+      <table width="98%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td>
+			<a href="../home/?user={{concern_event.user_id.id}}">{{concern_event.user_id}}</a>
+			<span class="time">(<a href="../?event={{concern_event.id}}">{{concern_event.title}}</a>)</span>
+		  </td>
+		  {%if is_admin%}
+          <td width="13%">
+			<a href="javascript:remove_concern( {{event.id}},{{concern_event.id}} )">取消关注</a>
+		  </td>
+		  {%endif%}
+        </tr>
+      </table>
+	  {% if hi_li %}
+	  {% for hi in hi_li %}
+      <p><span class="time">{{hi.date}}</span>{{hi.content}}</p>
+	  {%endfor%}
+	  {%else%}
+      <p><span class="time">暂无更新...</span></p>
+	  {%endif%}
+    </div>
+	{%endfor%}
+  </div>
+</div>
+{% endblock %}
+{% block right %}
+<div id="friends">
+  <p class="text_title" style="font-size:14px;">谁在关注我？</p>
+	{%if ceme_events%}
+  <ul>
+	{%for event in ceme_events %}
+    <li><a href="../?event={{event.id}}">{{event.user_id}}</a></li>
+	{%endfor%}
+  </ul>
+	{%else%}
+	尚无人关注
+	{%endif%}
+</div>
+<div id="mes_box" style="display:none;">
+	<div>请选择您的相关事件：</div>
+    <div>
+		<select id="eid"><!--eid为要添加到的属于自己的事件-->
+		{%if myevents%}
+		{%for event in myevents %}
+		  <option value="{{event.id}}">{{event.title}}</option>
+		{% endfor %}
+		</select>
+	 	<input	type="hidden" id="recorder"/><!--记录被关注事件-->
+	 	<input type="button" value="确认" onclick="send_concern()"/>
+		{%else%}您没有任何事件!{%endif%}
+      	<input type="button" value="取消" onclick="$('mes_box').hide();"/>
+	</div>	
+</div>
+{%if is_admin%}
+<div id="del_confirm_box" style="display:none;">
+	<div>删除一个事件，其相关的日志和关注信息都会被删除，他人也无法
+	再获得该事件的信息，并且您的成就指数将减少10，确信要删除吗？</div>
+    <div style="padding-top:8px;">
+	 	<input type="button" value="确认" onclick="send_del()"/>
+      	<input type="button" value="取消" onclick="$('del_confirm_box').hide();"/>
+	</div>	
+</div>
+<div id="del_blog_confirm_box" style="display:none;">
+  <input type="hidden" id="recorder_bkey"/><!--记录要删除日志的key-->
+  <div>确信要删除日志<span id="del_blog_name"></span>吗？</div>
+  <div style="padding-top:8px;">
+	<input type="button" value="确认" onclick="del_blog_real()"/>
+    <input type="button" value="取消" onclick="$('del_blog_confirm_box').hide();"/>
+  </div>	
+</div>
+{%endif%}
+{% endblock %}
