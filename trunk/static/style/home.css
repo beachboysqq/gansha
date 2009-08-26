@@ -22,6 +22,7 @@ a.a_raw:hover{
 #main_home{
 clear:both;
 width:82%;
+overflow:auto;
 background-color:#FFF;
 margin-right:auto;
 margin-left:auto;
@@ -52,8 +53,14 @@ margin-left:auto;
 		#action{
 		width:164px;
 		margin-top:10px;
+		}
+		#action_title{
 		background:url(../images/action_title.jpg) no-repeat;
-		padding-top:24px;
+		height:21px;
+		color:#FFF;
+		padding:2px 4px;
+		font-size:14px;
+		font-weight:bold;
 		}
 		#action_body{
 		width:142px;
@@ -210,6 +217,7 @@ font-weight:bold;
 		}
 		#submit_subevent td{
 		height:30px;}
+
 /*--------------------blogissue.html------------------------*/
 			.but_submit{
 			width:59px;
@@ -360,3 +368,16 @@ font-size:12px;
 margin-bottom:0px;
 }
 #mes_produce{margin-top:10px;}
+/*-------------------for event_list.htm------------------------*/
+.date_td{width:160px;}
+.progressbar{
+	border:1px #000 solid;
+	width:60px;
+	height:8px;
+	font-size:0px;
+}
+.progresskenerl{
+	height:100%;
+	background-color:#CC0;
+}
+.title_td{width:68%;}

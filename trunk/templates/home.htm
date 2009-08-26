@@ -8,26 +8,27 @@
   <table cellspacing="0">
 	<tr>
 	  <td width="26%" align="center" class="m1_title">事件</td>
-	  <td width="10%" class="m1_title">进度</td>
+	  <td width="12%" class="m1_title">进度</td>
 	  <td width="48%" class="m1_title">近期任务</td>
-	  <td width="16%" class="m1_title">期限</td>
+	  <td width="14%" class="m1_title">期限</td>
 	</tr>
 	{% for se in se_list %}
 	<tr>
 	  <td><a href="../event/?event={{se.event.key}}">{{se.event.title}}</a></td>
-	  <td>{{se.event.progress}}%</td>
+	  <td>
+	  	<div class="progressbar"><div style="width:{{se.event.progress}}%;"
+	  	class="progresskenerl"></div></div>
+	  </td>
 	  <td>{{se.content}}</td>
 	  <td>{{se.end_date}}</td>
 	</tr>
 	{% endfor %}
   </table>
-<!--
   {% if is_admin %}
   <input type="button"
 		 onclick="window.location.replace('../addevent')"
   id="but_addevent" />
   {% endif %}
--->
 </div>
 <div id="m2">
   <div id="switch_menu">
@@ -62,8 +63,9 @@
 	<div class="each_event">
 	  {%for hi in hi_list%}
 	  <p>
-		<span class="time">{{hi.date}}</span>
-		{{hi.content}}
+		<span class="time">{{hi.publish_time|date:"m-d H:i"}}</span>
+		{% autoescape off %}
+		{{hi.content}}	{% endautoescape %}
 		<a href="../event?event={{hi.event.key}}">({{hi.event.title}})</a>
 	  </p>
 	  {%endfor%}
@@ -78,7 +80,7 @@
 		  <tr>
 			<td><a href="../home/?user={{comment.sender.email}}">{{comment.sender.nickname}}</a>
 			  <span class="time">
-				({{comment.publish_time|date:"Y-m-d H:i:s"}}，评论《<a href=../blog/?blog={{comment.blog.key}}>{{comment.blog.title}}</a>》)
+				({{comment.publish_time|date:"Y-m-d H:i"}}，评论《<a href=../blog/?blog={{comment.blog.key}}>{{comment.blog.title}}</a>》)
 			</span></td>
 			{%if is_admin%}
 			<td width="7%"><a href="javascript:del_comment({{comment.key}})">删除</a></td>

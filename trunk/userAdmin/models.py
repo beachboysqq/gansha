@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from google.appengine.ext import db
 from google.appengine.api import users
+from django.contrib.auth.models import User
 from search.core import SearchIndexProperty, porter_stemmer
 
 class User_profile( db.Model ):

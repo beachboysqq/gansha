@@ -132,7 +132,7 @@ def event(request):
             se.isexpired = True
             se.put()
     # get host's history operation on this event
-    history_li = History.all().filter('event =',event).order('-date')
+    history_li = History.all().filter('event =',event).order('-publish_time')
     # get blogs about this event
     blog_li = Blog.all().filter('event =',event )
     # get concern update information on this event
@@ -295,6 +295,33 @@ def done_sub_event(request):
     se.put()   
     return HttpResponse( se.key() )
 
+def events_list(request):
+    user = users.get_current_user()
+    if not user:
+        return render_to_response('error.htm',{'error':'You have not login,and have no right of accessing!'})
+
+    # vistor is a guest,get the host
+    host = users.User(memcache.get('host_email'))
+    # m_user = User_profile.gql('where user = :1',host).get()
+
+    if user.email() != host.email():
+        is_admin = False
+    else:
+        is_admin = True
+    events = Event.all().filter('user =',host ).order('start_date')
+        
+    c = Context({"uname":memcache.get('uname'),
+                 "headshot":memcache.get('headshot'),
+                 "rank":memcache.get('rank'),
+                 "sign":memcache.get('sign'),
+                 'logouturl':memcache.get('logouturl'),
+                 "last_login":memcache.get('last_login'),
+                 'events':events,
+                 'kind':'all',
+                 'is_admin':is_admin,
+                 })
+    return render_to_response( 'event_list.htm',c)
+
 def events_doing(request):
     user = users.get_current_user()
     if not user:
@@ -360,7 +387,7 @@ def events_done(request):
         is_admin = False
     else:
         is_admin = True
-    events = Event.all().filter('user =',host ).filter('progress =',100 ).order('start_date')
+    events = Event.all().filter('user =',host ).filter('progress =',100 ).order('-start_date')
         
     c = Context({"uname":memcache.get('uname'),
                  "headshot":memcache.get('headshot'),

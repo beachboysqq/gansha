@@ -37,13 +37,31 @@ indexes:
 - kind: event_event
   properties:
   - name: user
+  - name: start_date
+
+- kind: event_event
+  properties:
+  - name: user
   - name: is_done
   - name: start_date
+
+- kind: event_event
+  properties:
+  - name: user
+  - name: progress
+  - name: start_date
+    direction: desc  
 
 - kind: event_history
   properties:
   - name: event
-  - name: date
+  - name: publish_time
+    direction: desc
+
+- kind: event_history
+  properties:
+  - name: user
+  - name: publish_time
     direction: desc
 
 - kind: event_subevent

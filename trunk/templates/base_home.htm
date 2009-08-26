@@ -11,8 +11,10 @@
 <div id="top_menu">
   <ul>
     <li><a href="../home" class="a_nounderline">个人主页</a></li>
-    <li><a href="../message" class="a_nounderline">留言板</a></li>
+    <li><a href="../events" class="a_nounderline">事件记录</a></li>
+    <li><a href="../blogview" class="a_nounderline">日志模式</a></li>
     <li><a href="../friends" class="a_nounderline">好友</a></li>
+    <li><a href="../message" class="a_nounderline">留言板</a></li>
   </ul>
 </div>
 <div id="top_search">
@@ -48,27 +50,28 @@
 		</p>
 	</div>
 		<div id="action">
-		<div id="action_body">
-		  {%if is_admin%}
-		  <p>
-			<img src="/static/images/dot_adde.gif" />&nbsp;&nbsp;
-			<a href="../addevent" class="a_nounderline">创建新事件</a>
-		  </p>
-		  {%endif%}
-		  <p>
+		  <div id="action_title">我的应用</div>
+		  <div id="action_body">
+			{%if is_admin%}
+			<p>
+			  <img src="/static/images/dot_adde.gif" />&nbsp;&nbsp;
+			  <a href="../fetion" class="a_nounderline">飞信</a>
+			</p>
+			{%endif%}
+			<p>
 			<img  src="/static/images/dot_doing.gif" />&nbsp;&nbsp;
-			<a href="../doing" class="a_nounderline">正在做事件</a>
-		  </p>
-		  <p>
-			<img src="/static/images/dot_todo.gif" />&nbsp;&nbsp;
-			<a href="../todo" class="a_nounderline">准备做事件</a>
-		  </p>	
-		  <p>
-			<img src="/static/images/dot_done.gif" />&nbsp;&nbsp;
-			<a href="../done" class="a_nounderline">已完成事件</a>
-		  </p>
+			<a href="../doing" class="a_nounderline">待开发...</a>
+			</p>
+			<p>
+			  <img src="/static/images/dot_todo.gif" />&nbsp;&nbsp;
+			  <a href="../todo" class="a_nounderline">待开发...</a>
+			</p>	
+			<p>
+			  <img src="/static/images/dot_done.gif" />&nbsp;&nbsp;
+			  <a href="../done" class="a_nounderline">待开发...</a>
+			</p>
+		  </div>
 		</div>
-	</div>
 	</div>
 	<div id="middle">
 		{% block middle %}{% endblock %}

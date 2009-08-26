@@ -29,7 +29,7 @@ def add_blog( request ):
         # record in history
         hi = History()
         hi.event = event
-        hi.content = "add blog:"+blog.title
+        hi.content = "add blog:<a href='../blog/?blog="+str(blog.key())+"'>"+blog.title+"</a>"
         hi.user = user
         hi.put()
         return HttpResponseRedirect( '../blog/?blog=%s' % blog.key() )

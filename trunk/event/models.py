@@ -30,7 +30,7 @@ class Subevent( db.Model ):
 class History( db.Model ):
     user = db.UserProperty()
     event = db.ReferenceProperty( Event )
-    date = db.DateProperty( auto_now_add=True )
+    publish_time = db.DateTimeProperty( auto_now_add=True )
     
     content = db.StringProperty() 
 

@@ -64,7 +64,7 @@ def home(request,whose):
         # get ongoing sub events
         se_list = Subevent.all().filter('user =',host).filter( 'is_done =',False ).filter( 'start_date <',datetime.date.today() )
         # get recent history operation
-        hi_list = History.all().filter( 'user =',host ).fetch(5)
+        hi_list = History.all().filter( 'user =',host ).order('-publish_time').fetch(5)
         # get my friends
         friends = Friends.all().filter( 'user =',host )
         # get friend requests
@@ -227,7 +227,7 @@ def friends(request):
     li = []
     for friend in friends:
         sub_li = [friend]
-        sub_li.append( History.all().filter( 'user =',friend.myfriend ).order('date').fetch(3) )
+        sub_li.append( History.all().filter( 'user =',friend.myfriend ).order('-publish_time').fetch(3) )
         li.append( sub_li )
     
     c = Context({"uname":memcache.get('uname'),
