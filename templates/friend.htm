@@ -1,0 +1,35 @@
+{% extends 'base_home.htm' %}
+
+{% block middle %}
+<div id="m1">
+  <div class="title1">我的好友</div>
+  <div class="tip">搜索对方用户名，快速添加其为好友。</div>
+  {% if friends %}
+  {% for user,hi_li in friends %}
+  <div class="each_friend" id="fr_{{user.myfriend.user_id}}">
+	<div class="who">
+	  <a href="../home/?user={{user.myfriend.key}}">
+		<img src="{{user.myfriend.headshot}}"/>
+	  </a>
+	  <div><a href="../home/?user={{user.myfriend.user_id}}">{{user.myfriend.nickname}}</a></div>
+	</div>
+	<div class="updateinfo">
+	  <ul>
+		{% for hi in hi_li %}
+		<li><span class="time">{{hi.date}}</span>{{hi.content}}</li>
+		{%endfor%}
+	  </ul>
+	</div>
+	{%if is_admin%}
+	<div class="operation">
+	  <a href="javascript:remove_friend( '{{user.myfriend.user_id}}' );">
+		解除好友</a>
+	</div>
+	{%endif%}
+  </div>
+  {% endfor %}
+  {%else %}
+  <li>暂时没加好友</li>
+  {%endif%}
+</div>
+{% endblock %}

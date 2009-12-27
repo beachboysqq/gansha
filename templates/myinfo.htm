@@ -1,0 +1,58 @@
+{% extends 'base_home.htm' %}
+
+{% block middle %}
+	<div id="navigation"><a href="../home">首页</a>->个人资料</div>
+    <div id="m1">
+			<div class="title1">
+				<table width="98%" border="0" cellspacing="0" cellpadding="0">
+				  <tr>
+					<td class="text_bold">{{ user.user.nickname }}</td>
+					{%if is_admin %}
+					<td width="16%"	class="font_12"><a href="../editmyinfo/">修改个人信息</a></td>
+					{%endif%}
+				  </tr>
+				</table>
+			</div>
+			<table width="98%" border="0" cellspacing="0" cellpadding="0" id="tb_myinfo">
+			  <tr>
+				<td align="right">姓名：</td>
+				<td>{{user.name|default:"未知"}}</td>
+			  </tr>
+			  <tr>
+				<td width="15%" align="right">性别：</td>
+				<td width="85%">
+				  {% ifequal user.gender "male" %} 男
+				  {% else %}
+                      {% ifequal user.gender "female" %}女
+				      {% else %} 未知
+				      {% endifequal %}
+                  {% endifequal %}
+				</td>
+			  </tr>
+			  <tr>
+				<td align="right"><pre>年龄：</pre></td>
+				<td>{{user.age|default:"未知"}}</td>
+			  </tr>
+			  <tr>
+				<td align="right">地址：</td>
+				<td>{{user.addr|default:"未知"}}</td>
+			  </tr>
+			  <tr>
+				<td align="right">Email：</td>
+				<td>{{user.user.email|default:"未知"}}</td>
+			  </tr>
+			  <tr>
+				<td align="right">职业：</td>
+				<td>{{user.job|default:"未知"}}</td>
+			  </tr>
+			  <tr>
+				<td align="right">blog：</td>
+				<td>{{user.blog|default:"无"}}</td>
+			  </tr>
+			  <tr>
+				<td align="right">备注：</td>
+				<td>{{user.other|default:"无"}}</td>
+			  </tr>
+			</table>	
+      </div>
+{% endblock %}
