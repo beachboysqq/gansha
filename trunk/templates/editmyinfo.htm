@@ -1,0 +1,77 @@
+{% extends 'base_home.htm' %}
+
+{% block middle %}
+	<div id="navigation"><a href="../home/">首页</a>-><a href="../myinfo/">个人资料</a></div>
+    <div id="m1">
+			<div class="title1">{{uname}}</div>
+			<p style="color:red">{{error}}</p>
+			<form method="post" enctype="multipart/form-data" id="myinfo" action=".">
+			<div id="myinfo_error" class="error_tip"></div>
+			<table width="98%" border="0" cellspacing="0" cellpadding="0" id="tb_myinfo">
+			  <tr>
+				<td width="25%" align="right">头像：</td>
+				<td width="75%">
+				  <input type="text" name="headshot" value="{{headshot|default:""}}" class="box_long"/>
+				  (大小:120px*108px)
+				</td>
+			  </tr>
+			  <tr>
+				<td align="right">签名档：</td>
+				<td><input type="text" name="sign" value="{{sign|default:""}}" class="box_long"/></td>
+			  </tr>
+			  <tr>
+			   <td align="right">姓名：</td>
+			   <td><input type="text" name="uname" value="{{uname|default:""}}"  class="box_tiny" /></td>
+			  </tr>
+			  <tr>
+				<td width="15%" align="right">性别：</td>
+				<td width="85%">
+				  <select id="myinfo_gender" name="gender">
+					<option value="unkown" {% ifequal gender "unkown" %}selected="selected"{% endifequal%}>
+					  未知
+					</option>
+					<option value="male" {% ifequal gender "male" %}selected="selected"{% endifequal%}>男
+					</option>
+					<option value="female" {% ifequal gender "female" %}selected="selected"{% endifequal%}>女</option>
+				  </select>
+				</td>
+			  </tr>
+			 <tr>
+			   <td align="right"><pre>年龄：</pre></td>
+			   <td><input type="text" name="age" value="{{age|default:""}}"  class="box_tiny" /></td>
+			 </tr>
+			 <tr>
+			   <td align="right">地址：</td>
+			   <td><input type="text" name="addr" value="{{addr|default:""}}" class="box_long"/></td>
+			 </tr>
+			  <tr>
+				<td align="right">职业：</td>
+				<td><input type="text" name="job" value="{{job|default:""}}" class="box_long"/></td>
+			  </tr>
+			  <tr>
+				<td align="right">blog：</td>
+				<td><input type="text" name="blog" value="{{blog|default:""}}" class="box_long"/></td>
+			  </tr>
+			  <tr>
+				<td align="right">备注：</td>
+				<td>
+				  <textarea name="other" rows="6" cols="40">{{other|default:""}}</textarea>
+				</td>
+			  </tr>
+			  <tr>
+				<td align="right" style="color:red;" >是否公开个人主页：</td>
+				<td>
+				  <select id="myinfo_is_public" name="is_public">
+					<option value="1" {% if not is_public %}selected="selected"{% endif%}>是</option>
+					<option value="0" {% if not is_public %}selected="selected"{% endif%}>否</option>
+				  </select>
+				</td>
+			  </tr>
+			  <tr>
+			  	<td></td>
+				<td><input name="" type="submit" class="but_submit"  value=""/></td>
+			  </tr>
+			</table>
+			</form>
+      </div>
+{% endblock %}

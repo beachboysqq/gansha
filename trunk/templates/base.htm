@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//Dli XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/Dli/xhtml1-transitional.dli">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+<meta name="keywords" content="dreams,todo,SNS,干啥,实现理想">
+<title>干啥网--记录、分享我们的生活足迹!</title>
+<link rel="stylesheet" href="/static/style/index.css">
+{% block head %}{% endblock %}
+</head>
+<body>
+<div id="top">
+  <div id="top_content"> 
+	<a href="/"><img src="/static/images/logo_index.jpg" style="float:left;padding-top:10px;" /></a>
+	{% block top %}{% endblock %}
+  </div>
+</div>
+<div id="content">
+{% block content %}{% endblock content %}
+	<div class="cleaner"></div>
+</div>
+<div id="footer">
+      <ul>
+        <li style="padding-left:146px;">开发日志</li>&nbsp;&nbsp;|
+        <li>关于</li>&nbsp;&nbsp;|
+		<li>联系方式</li>&nbsp;&nbsp;|
+        <li>帮助</li>&nbsp;&nbsp;|
+        <li>隐私声明</li>
+        <li style="padding-left:236px;">l0he1g&copy;2009</li>
+      </ul>
+</div>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-2054534-5");
+pageTracker._trackPageview();
+} catch(err) {}
+</script>
+</body>
+</html>

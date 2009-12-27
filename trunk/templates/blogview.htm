@@ -1,0 +1,55 @@
+{% extends 'blog_base.htm' %}
+{%block middle%}
+{%for blog in blogs%}
+<div class="blog_each">
+  <div class="blog_title"><a href="../blog?blog={{blog.key}}">{{blog.title}}</a></div>
+  <div class="blog_tip">
+	{{blog.time|date:"Y m-d H:i"}},
+	by {{blog.author}},
+	Tags:
+	{% if blog.tags %}
+	{%for tag in blog.tags%}<a href="../blogview?tag={{tag.word}}">{{tag.word}}</a>{%endfor%}
+	{%else%}无
+	{%endif%},
+	Event:{%if blog.event%}
+	<a href="../event?event={{blog.event.key}}">{{blog.event.title}}</a>
+	{%else%}无
+	{%endif%},
+	{{blog.com_num}} comments|
+	{% if is_admin %}
+	<a href="../editblog/?blog={{blog.key}}"><img src="/static/images/edit.jpg"
+	border="0" title="编辑该blog"/></a>
+	&nbsp;&nbsp;
+	<a href="javascript:del_blog('{{blog.key}}')"><img src="/static/images/del.jpg"
+	border="0" title="删除该blog"/></a>
+	{%endif%}
+  </div>
+  <div class="blog_brief">
+	{{blog.brief|removetags:"b span p"|escape|safe}}
+  </div>
+</div>
+{%endfor%}
+<!--分页-->
+{%if pages_nums%}
+<div id="pages_num">
+  换页：
+  {%for num in pages_nums%}
+  <a href="../blogview?{%if view_type and view_type%}{{view_type}}={{view_value}}&{%endif%}pageid={{num}}"
+	 {%ifequal num pageid%}
+	 class="a_noline">
+	<strong>{{num}}</strong>
+	{%else%}
+	>
+	{{num}}
+	{%endifequal%}
+  </a>
+  {%if not forloop.last%}&nbsp;|&nbsp;{%endif%}
+  {%endfor%}
+</div>
+{%endif%}
+{% endblock %}
+{%block right%}
+{%if is_admin%}
+<input onclick="window.location.replace('../addblog')" type="button" id="but_addblog" />
+{%endif%}
+{% endblock %}
