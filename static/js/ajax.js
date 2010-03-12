@@ -78,7 +78,7 @@ function done_se_to_html( transport )
 {
     var id=transport.responseText;
     if( $('checkbox_'+id).checked ){
-        $('tr_'+id).style.color = "#666";
+        $('tr_'+id).style.color = "#999";
         // $('tr_'+id).style.cssText = "color:grey;";
     }
     else{
@@ -100,6 +100,39 @@ function add_sub_event()
             }
             })
 }
+
+function add_tip(){
+	$('tip_content').innerHTML = '<textarea id="tip_content_input" class="textarea"></textarea><input type="button" value="保存" onclick="submit_tip()"/>';
+}
+
+function submit_tip()
+{   
+      var myAjax = new Ajax.Request('../addtip/',{
+          method:'POST',
+		  parameters:{content:$F('tip_content_input')}
+		  ,
+		  onSuccess:add_tip_to_html,
+		  onFailure:function( transport ){alert( transport.status );}
+	  })
+}
+
+function add_tip_to_html( transport ){
+	$('tip_content').innerHTML = transport.responseText;
+}
+
+function del_tip( mkey )
+{
+    var myAjax = new Ajax.Request('../deltip/',{
+            method:'POST',
+			parameters:{mkey:mkey},
+            onSuccess:function(){
+				$('tr1_tip_'+mkey,'tr2_tip_'+mkey).invoke('remove');
+			},
+            onFailure:function( transport ){alert( transport.status )
+            }
+        })
+}
+
 function edit_se_to_html( transport )
 {
 		var isexpired=transport.responseText;
@@ -416,7 +449,23 @@ function del_blog_real()
             }
         })	
 }
+//在blogview中删除blog
+function del_blog_real3()
+{
+	bkey = $F('recorder_bkey');
+	$('del_blog_confirm_box').hide();
+    var myAjax = new Ajax.Request('../delblog/',{
+            method:'POST',
+			parameters:{blog:bkey},
+            onSuccess:function(){
+				$('div_blog_'+bkey).remove();
+			},
+            onFailure:function( transport ){alert( transport.status )
+            }
+        })	
+}
 
+//在blog页面，删除blog
 function del_blog_real2()
 {
 	bkey = $F('recorder_bkey');

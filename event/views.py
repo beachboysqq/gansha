@@ -5,81 +5,64 @@ from google.appengine.ext.db import Key
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponse,HttpResponseRedirect
 from django.template import Context
-from django.contrib.auth.decorators import login_required
-from userAdmin.models import User_profile
-from event.models import Event,Subevent,History,Concern
-from blog.models import Blog
+from event.models import Event,Subevent,History
+from blog.models import Blog,Comment,Mes
+from tip.models import Tip
 from util.util import now,today
+from my_settings import *
 import datetime
-@login_required
+
 def add_event(request):
-    user = users.get_current_user()
+    if not users.is_current_user_admin():
+        return HttpResponseRedirect('/')
         
     if request.method == 'POST':
-        #try:
-        if request.POST['is_public'] =='1':
-            is_public = True
-        else:
-            is_public = False
-        event = Event(user=user,
+        is_public = request.POST['is_public'] =='1'
+        event = Event(
                       title=request.POST['title'],
                       desc=request.POST['desc'],
+                      publish_date=today(),
                       is_public=is_public)
         event.put()
         return HttpResponseRedirect( '../event/?event=%s' % str(event.key()) )
         #except:
         #    return...error
     else:
-        c = Context({"uname":memcache.get('uname'),
-                     "headshot":memcache.get('headshot'),
-                     "rank":memcache.get('rank'),
-                     "sign":memcache.get('sign'),
-                     'logouturl':memcache.get('logouturl'),
-                     "last_login":memcache.get('last_login'),
-                     'is_admin':True,
-                     'event':Event(),
-                     })
-        return render_to_response( 'newevent.htm',c )
+        c = Context({
+                'logouturl':LOGOUT,
+                'loginurl':LOGIN,
+                'cur_user':CURUSER,
+                'is_admin':users.is_current_user_admin(),
+                'is_admin':True,
+                'event':Event(),
+                })
+    return render_to_response( 'newevent.htm',c )
         
-@login_required
 def edit_event(request):
-    user = users.get_current_user()
+    if not users.is_current_user_admin():
+        return HttpResponseRedirect('/')
 
     ekey = memcache.get('event')
     event = Event.get(ekey)
     
     if request.method == 'POST':
-        #try:
-        if request.POST['is_public'] =='1':
-            event.is_public = True
-        else:
-            event.is_public = False
-        event.title=request.POST['title']
-        event.desc=request.POST['desc']
+        event.is_public = request.POST['is_public'] =='1'
+        event.title=request.POST['title'].strip()
+        event.desc=request.POST['desc'].strip()
         event.put()
         return HttpResponseRedirect( '../event/?event=%s' % str(event.key()) )
-        #except:
-        #    return...error
     else:
-        c = Context({"uname":memcache.get('uname'),
-                     "headshot":memcache.get('headshot'),
-                     "rank":memcache.get('rank'),
-                     "sign":memcache.get('sign'),
-                     'logouturl':memcache.get('logouturl'),
-                     "last_login":memcache.get('last_login'),
-                     'is_admin':True,
-                     'event':event,
-                     })
+        c = Context({
+                  'logouturl':users.create_logout_url('/login'),
+                  'is_admin':True,
+                  'event':event,
+                  })
         return render_to_response( 'newevent.htm',c )
     
-@login_required
 def del_event(request):
-    user = users.get_current_user()
+    if not users.is_current_user_admin():
+        return HttpResponseRedirect('/')
 
-    m_user = User_profile.gql('where user = :1',user).get()
-    m_user.rank -=10
-    if m_user.rank < 0:
-        m_user.rank = 0
     ekey = memcache.get('event')
     memcache.delete('event')
     event = Event.get(ekey)
@@ -90,9 +73,41 @@ def del_event(request):
     event.delete()
     return HttpResponse("deleted")
 
-@login_required
+def home( request ):
+    # get ongoing sub events
+    subs = Subevent.all().filter( 'is_done =',False ).filter( 'start_date <=',today() )
+    se_list = []
+    for se in subs:
+        item = {'se':se,
+                'days':( se.end_date - today() ).days}
+        se_list.append( item )
+        
+    se_list = sorted(se_list,key=lambda x:x['days'])
+    # get recent history operation
+    hi_list = History.all().order('-publish_time').fetch(5)
+    comments = Comment.all().order('-publish_time').fetch(5)
+    # get recent messages
+    mes_li = Mes.all().order('-publish_time').fetch(5)
+
+    tip = Tip.all().order('-publish_time').get()
+    if tip:
+        tip_content = tip.content
+    else:
+        tip_content = None
+    c = Context({
+                  'logouturl':users.create_logout_url('/login'),
+                  'loginurl':LOGIN,
+                  'cur_user':CURUSER,
+                  'is_admin':users.is_current_user_admin(),
+                 'se_list':se_list,
+                 'hi_list':hi_list,
+                 'comments':comments,
+                 'mes_li':mes_li,
+                  'tip':tip_content,
+                 })
+    return render_to_response('home.htm',c)
+
 def event(request):
-    user = users.get_current_user()
     try:
         ekey = request.GET['event']
         # record the current event for further useage
@@ -103,16 +118,6 @@ def event(request):
     
     event = Event.get(Key(ekey))
     memcache.set('event',event.key())
-
-    # update host user's info in memcache 
-    if event.user.user_id() != memcache.get('hostid'):
-        host = User_profile.gql('where user = :1',event.user).get()
-        memcache.set('hostid',event.user.user_id())
-        memcache.set('uname',event.user.nickname())
-        memcache.set('rank',host.rank)
-        memcache.set('sign',host.sign)
-        memcache.set('last_login',host.last_login)
-        memcache.set('headshot',host.headshot)
 
     # get sub event of this event
     se_list = Subevent.gql("where event = :1 order by start_date,end_date",event) 
@@ -126,44 +131,27 @@ def event(request):
     # get blogs about this event
     blog_li = Blog.all().filter('event =',event )
     # get myevents
-    myevents = Event.all().filter('user =',user)
+    myevents = Event.all()
     
-    # get concern events related this event
-    cons = Concern.all().filter('event =',event )
-    concerns = []
-    # TODO:get concern update information on this event
-    for con in cons:
-        con_his = History.all().filter('event =',con.c_event).fetch(3)
-        concern = {'event':con.c_event,'hi_li':con_his}
-        concerns.append( concern )
-    # get users who concern me on this event
-    concerneds = Concern.all().filter('c_event =',event )
-    
-    c = Context({"uname":memcache.get('uname'),
-                 "headshot":memcache.get('headshot'),
-                 "rank":memcache.get('rank'),
-                 "sign":memcache.get('sign'),
-                 'logouturl':memcache.get('logouturl'),
-                 "last_login":memcache.get('last_login'),
-                 'is_admin':user==event.user,
-                 'event':event,
-                 'concerns':concerns,
-                 'concerneds':concerneds,
-                 'myevents':myevents,
-                 'se_list':se_list,
-                 'num_se':se_list.count(20),
-                 'history_li':history_li,
-                 'num_history_records':history_li.count(10),
-                 'blog_li':blog_li,
-                 'num_blogs':blog_li.count(100),
-                 })
+    c = Context({
+            'logouturl':LOGOUT,
+            'loginurl':LOGIN,
+            'cur_user':CURUSER,
+            'is_admin':users.is_current_user_admin(),
+            'event':event,
+            'myevents':myevents,
+            'se_list':se_list,
+            'num_se':se_list.count(20),
+            'history_li':history_li,
+            'num_history_records':history_li.count(10),
+            'blog_li':blog_li,
+            'num_blogs':blog_li.count(100),
+            })
     return render_to_response('event.htm',c)
 
-@login_required
 def add_sub_event(request):
-    user = users.get_current_user()
-    if not user:
-        return HttpResponse('error')
+    if not users.is_current_user_admin():
+        return HttpResponseRedirect('/')
 
     pekey = memcache.get('event')
     if not pekey:
@@ -171,7 +159,7 @@ def add_sub_event(request):
     pe = Event.get(pekey)
     
     if request.method == 'POST':
-        se = Subevent(user=user,event=pe,content=request.POST['content'])
+        se = Subevent( event=pe,content=request.POST['content'].strip() )
         # treat date from str to datetime type
         start_date = request.POST['start_date']
         li = start_date.split('-')
@@ -199,9 +187,9 @@ def add_sub_event(request):
     else:
         return HttpResponse("error")
 
-@login_required
 def edit_sub_event( request ):
-    user = users.get_current_user()
+    if not users.is_current_user_admin():
+        return HttpResponseRedirect('/')
 
     try:
         sekey = Key(request.POST['key'])
@@ -233,9 +221,9 @@ def edit_sub_event( request ):
     se.put()
     return HttpResponse( se.isexpired )
 
-@login_required
 def del_sub_event(request):
-    user = users.get_current_user()
+    if not users.is_current_user_admin():
+        return HttpResponseRedirect('/')
     try:
         sekey = Key(request.POST['key'])
         pekey = memcache.get('event')
@@ -258,9 +246,9 @@ def del_sub_event(request):
     se.delete()
     return HttpResponse( str(sekey) )
 
-@login_required
 def done_sub_event(request):
-    user = users.get_current_user()
+    if not users.is_current_user_admin():
+        return HttpResponseRedirect('/')
     
     try:
         sekey = Key(request.POST['key'])
@@ -277,7 +265,6 @@ def done_sub_event(request):
         hi = History()
         hi.event = pe
         hi.content = "acomplished:"+se.content
-        hi.user = user
         hi.put()
         #adjust parent event's progress
         pe.progress = pe.progress+100/pe.num_se
@@ -292,102 +279,55 @@ def done_sub_event(request):
     se.put()   
     return HttpResponse( se.key() )
 
-@login_required
 def events_list(request):
-    user = users.get_current_user()
-    host = User_profile.all().filter('uid =',memcache.get('hostid')).get()
-    
-    events = Event.all().filter('user =',host.user ).order('start_date')
+    events = Event.all().order('start_date')
         
-    c = Context({"uname":memcache.get('uname'),
-                 "headshot":memcache.get('headshot'),
-                 "rank":memcache.get('rank'),
-                 "sign":memcache.get('sign'),
-                 'logouturl':memcache.get('logouturl'),
-                 "last_login":memcache.get('last_login'),
-                 'events':events,
-                 'kind':'all',
-                 'is_admin':user.user_id()==memcache.get('hostid'),
-                 })
+    c = Context({
+            'logouturl':LOGOUT,
+            'loginurl':LOGIN,
+            'cur_user':CURUSER,
+            'is_admin':users.is_current_user_admin(),
+            'events':events,
+            'kind':'all',
+            })
     return render_to_response( 'event_list.htm',c)
 
-@login_required
 def events_doing(request):
-    user = users.get_current_user()
-    host = User_profile.all().filter('uid =',memcache.get('hostid')).get()
-
-    events = Event.all().filter('user =',host.user ).filter( 
+    events = Event.all().filter( 
         'start_date <=',today() ).filter('is_done =',False ).order('start_date')
         
-    c = Context({"uname":memcache.get('uname'),
-                 "headshot":memcache.get('headshot'),
-                 "rank":memcache.get('rank'),
-                 "sign":memcache.get('sign'),
-                 'logouturl':memcache.get('logouturl'),
-                 "last_login":memcache.get('last_login'),
+    c = Context({
                  'events':events,
                  'kind':'doing',
-                 'is_admin':user.user_id()==memcache.get('hostid'),
+                 'loginurl':LOGIN,
+                 'cur_user':CURUSER,
+                 'logouturl':LOGOUT,
+                 'is_admin':users.is_current_user_admin(),
                  })
     return render_to_response( 'event_list.htm',c)
 
-@login_required
 def events_todo(request):
-    user = users.get_current_user()
-    host = User_profile.all().filter('uid =',memcache.get('hostid')).get()
-
-    events = Event.all().filter('user =',host.user ).filter( 
+    events = Event.all().filter( 
         'start_date >',today() ).filter('is_done =',False ).order('start_date')
         
-    c = Context({"uname":memcache.get('uname'),
-                 "headshot":memcache.get('headshot'),
-                 "rank":memcache.get('rank'),
-                 "sign":memcache.get('sign'),
-                 'logouturl':memcache.get('logouturl'),
-                 "last_login":memcache.get('last_login'),
+    c = Context({
                  'events':events,
                  'kind':'todo',
-                 'is_admin':user.user_id()==memcache.get('hostid'),
+                 'loginurl':LOGIN,
+                 'cur_user':CURUSER,
+                 'logouturl':LOGOUT,
+                 'is_admin':users.is_current_user_admin(),
                  })
     return render_to_response( 'event_list.htm',c)
 
-@login_required
 def events_done(request):
-    user = users.get_current_user()
-    host = User_profile.all().filter('uid =',memcache.get('hostid')).get()
-
-    events = Event.all().filter('user =',host.user ).filter('progress =',100 ).order('-start_date')
+    events = Event.all().filter('progress =',100 ).order('-start_date')
         
-    c = Context({"uname":memcache.get('uname'),
-                 "headshot":memcache.get('headshot'),
-                 "rank":memcache.get('rank'),
-                 "sign":memcache.get('sign'),
-                 'logouturl':memcache.get('logouturl'),
-                 "last_login":memcache.get('last_login'),
-                 'events':events,
+    c = Context({'events':events,
                  'kind':'done',
-                 'is_admin':user.user_id()==memcache.get('hostid'),
+                 'loginurl':LOGIN,
+                 'cur_user':CURUSER,
+                 'logouturl':LOGOUT,
+                 'is_admin':users.is_current_user_admin(),
                  })
     return render_to_response( 'event_list.htm',c)
-
-@login_required
-def add_to_concern( request ):
-    event = Event.get( Key(request.POST['eid']) )
-    c_event = Event.get( Key(request.POST['ce_id']) )
-    concern = Concern.all().filter( 'event =',event).filter('c_event=',c_event)
-    if concern:
-        return HttpResponse("N:added")
-    else:
-        concern = Concern( event=event,c_event=c_event)
-        concern.put()
-        return HttpResponse("added")
-
-@login_required
-def remove_concern( request ):
-    event = Event.get( request.POST['eid'] )
-    c_event = Event.get( request.POST['ce_id'] )
-    
-    concern = Concern.all().filter( 'user =',event.user,'event=',event,'c_event=',ce_event)
-    concern.delete()
-    return HttpResponse("removed")
-

@@ -27,7 +27,12 @@ a.a_noline:hover{
 	color:#666;
 	text-decoration:underline;
 }
-
+code,blockquote{
+	background-color:#EEE;
+}
+h3{
+	border-bottom:1px solid #999;
+}
 /*----------------for myhome.html---------------*/
 #main_home{
 clear:both;
@@ -38,7 +43,7 @@ margin-left:auto;
 }	
 	#main_home #left{
 	float:left;
-	width:164px;
+	width:170px;
 	margin-right:20px;
 	}
 #left ul{list-style:none;margin:0;padding:0;}
@@ -50,11 +55,11 @@ margin-left:auto;
 }
 
 		#me{
-		width:122px;
 		font-size:12px;
 		border:1px solid #CCC;
-		padding:12px 20px 10px 20px;
+		padding:12px 10px 10px 10px;
 		background:url(../images/bg_me.gif) repeat;
+		text-align:center;
 		}
 			#img_headshot{
 			border:1px solid #FFF;
@@ -63,16 +68,15 @@ margin-left:auto;
 			}
 			#me p{
 				overflow:hidden;
-				width:120px;
 				word-wrap:break-word;
 				word-break:break-all;
-				padding-top:4px;}
+				text-align:left;
+				padding-top:2px;}
 		#action{
-		width:164px;
 		margin-top:10px;
 		}
 		#action_title{
-		background:url(../images/action_title.jpg) no-repeat;
+		background:url(../images/action_title.jpg) repeat-x;
 		height:21px;
 		color:#FFF;
 		padding:2px 4px;
@@ -80,7 +84,6 @@ margin-left:auto;
 		font-weight:bold;
 		}
 		#action_body{
-		width:142px;
 		padding:4px 10px 8px 10px;
 		border-left:1px solid #CCC;
 		border-right:1px solid #CCC;
@@ -108,9 +111,9 @@ margin-left:auto;
 			#but_addevent{
 			width:100px;
 			height:24px;
-			margin-top:6px;
+			margin-top:10px;
+			margin-bottom:10px;
 			border:0px;
-			float:right;
 			background:url(../images/but_addevent.jpg) no-repeat;
 			cursor:pointer;
 			}
@@ -123,7 +126,7 @@ margin-left:auto;
 		border-bottom:1px solid #D9001D;
 		}
 		#m2 .td_slot{width:6px;}
-			#new_event_title,#new_concern_title,#new_comment_title,#new_message_title,#new_friend_title{
+			#new_event_title,#new_concern_title,#new_comment_title,#new_message_title{
 			border:1px solid #D9001D;
 			}
 			#new_event_title{
@@ -131,7 +134,6 @@ margin-left:auto;
 			}
 			#new_comment_title{width:56px;}
 			#new_message_title{width:56px;}
-			#new_friend_title{width:92px;}
 			#new_event{padding-top:10px;}
 				.each_event{
 				padding-left:20px;
@@ -141,7 +143,7 @@ margin-left:auto;
 				.time{
 				padding-right:24px;
 				}
-			#new_comment,#new_message,#new_friend{
+			#new_comment,#new_message{
 			font-size:12px;
 			}
 				.tip{
@@ -164,16 +166,16 @@ margin-left:auto;
 				}
 	#main_home #main_right{
 	text-align:left;
-	width:150px;
+	width:154px;
 	float:right;
 	}
-	#main_home #friends{
+	#main_home #tips{
 	width:134px;
 	font-size:12px;
 	padding:0 10px 10px 10px;
 	border:1px solid #CCC;
 	}
-	#friends li{display:block;}
+	#tips li{display:block;}
 /*----------------event.html---------------------------*/
 #event_title{
 padding-left:24px;
@@ -252,9 +254,9 @@ color:#666;
 text-align:right;
 font-size:12px;
 }
-#blog_content{font-size:12px;margin:10px;}
+#blog_content{font-size:12px;margin:10px;line-height:180%;
+}
 #blog_content p{
-line-height:180%;
 text-indent:2em;
 }
 #comment{
@@ -295,55 +297,6 @@ font-weight:bold;
 	#relate_blog li{
 	display:block;
 	}
-/*---------------------for friend.html-----------------------*/
-.each_friend{
-border-bottom:1px solid #CCC;
-padding-top:2px;
-font-size:12px;
-height:60px;
-}
-
-.each_friend2{
-border-bottom:1px solid #CCC;
-padding-top:8px;
-padding-bottom:0px;
-font-size:12px;
-}
-	.each_friend2 span{padding-right:8px;}
-	.who{
-	float:left;
-	width:80px;
-	}
-		.who img{width:48px;height:48px;}
-	.updateinfo{
-	float:left;
-	width:370px;
-	}
-	.operation{
-	float:right;
-	}
-	#m1 ul{
-	clear:both;
-	list-style:none;
-	}
-/*----------------------------for myinfo.html------------------------------*/
-.right_op{
-width:80px;
-font-weight:normal;
-text-align:right;
-font-size:12px;
-}
-	#tb_myinfo{
-	margin-top:10px;
-	}
-	#tb_myinfo td{
-	height:32px;
-	}
-	#myinfo_error img{
-	width:120px;
-	height:108px;
-	padding:10px 0 0 52px;
-	}
 /*-------------------------for doing.html---------------------------*/
 .img_lock{
 width:10px;
@@ -377,9 +330,12 @@ padding-bottom:4px;
 }
 	#mes_box div{padding-top:8px;}
 .textarea{
-width:200px;
+width:130px;
 font-size:12px;
-height:40px;
+margin-top:8px;
+margin-bottom:4px;
+height:50px;
+border:1px solid #999;
 }
 /*----------------for message.htm----------------------------*/
 .each_mes{
@@ -388,6 +344,15 @@ font-size:12px;
 margin-bottom:0px;
 }
 #mes_produce{margin-top:10px;}
+/*----------------for tip.htm----------------------------*/
+.each_tip{
+font-size:12px;
+margin-bottom:0px;
+}
+.tip_info{
+text-align:right;
+border-bottom:1px solid #CCC;
+}
 /*-------------------for event_list.htm------------------------*/
 .date_td{width:160px;}
 .progressbar{
@@ -404,7 +369,6 @@ margin-bottom:0px;
 
 /*for blog view*/
 .lbox{
-	width:164px;
 	margin-top:10px;
 }
 .lbox_title{
@@ -413,10 +377,8 @@ margin-bottom:0px;
 	border-top:1px solid #CCC;
 	border-bottom:1px solid #CCC;
 	font-size:14px;
-	font-weight:bold;
 }
 .lbox_body{
-	width:142px;
 	font-size:12px;
 	padding:4px 10px 0px 0px;
 }
@@ -427,8 +389,7 @@ margin-bottom:0px;
 
 .blog_title{
 	font-size:14px;
-	font-weight:bold;
-	border-bottom:1px dashed #CCC;
+	border-bottom:1px solid #CCC;
 }
 .blog_tip{
 	font-size:10px;
@@ -443,5 +404,9 @@ margin-bottom:0px;
 #pages_num{
 	text-align:center;
 	font-size:12px;
-	border-top:1px dashed #ccc;
+	border-top:1px solid #ccc;
+}
+/*---------flatpage--------------*/
+.flatpage{
+line-height:200%;
 }

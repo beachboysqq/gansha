@@ -83,7 +83,7 @@ GLOBALTAGS = ('ragendja.templatetags.googletags' )
 
 LOGIN_URL = '/login'
 LOGOUT_URL = '/logout/'
-LOGIN_REDIRECT_URL = '/myhome'
+LOGIN_REDIRECT_URL = '/'
 
 INSTALLED_APPS = (
     # Add jquery support (app is in "common" folder). This automatically
@@ -94,7 +94,6 @@ INSTALLED_APPS = (
     #'jquery',
     # Add blueprint CSS (http://blueprintcss.org/)
     #'blueprintcss',
-    'search',
     'django.contrib.auth',
     'django.contrib.sessions',
     'django.contrib.admin',
@@ -105,7 +104,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'appenginepatcher',
     'ragendja',
-    'userAdmin',
+    'login',
     'event',
     'blog',
     #'mediautils',
@@ -139,6 +138,6 @@ DATABASE_OPTIONS = {
     #'remote_host': 'bla.com',
 }
 
-
+DEBUG = True
 from ragendja.settings_post import *
 

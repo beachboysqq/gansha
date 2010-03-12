@@ -2,17 +2,14 @@
 from google.appengine.ext import db
 from google.appengine.api import users
 from event.models import Event
-from search.core import SearchIndexProperty,porter_stemmer
 import datetime
 
 class Blog( db.Model ):
-    author = db.UserProperty()
     event = db.ReferenceProperty( Event,required=False )
     title = db.StringProperty()
     content = db.TextProperty()
+    is_public = db.BooleanProperty( default=True )
     publish_time = db.DateTimeProperty()
-    
-    search_index = SearchIndexProperty( ('title'),indexer=porter_stemmer,relation_index=False ) 
 
 class Tag( db.Model ):
     word = db.StringProperty( default='' )
@@ -27,7 +24,6 @@ class UserTag( db.Model ):
     tag = db.ReferenceProperty( Tag )
 
 class Comment( db.Model ):
-    receiver = db.UserProperty()
     sender = db.UserProperty()
     blog = db.ReferenceProperty( Blog )
     content = db.TextProperty()
@@ -35,7 +31,7 @@ class Comment( db.Model ):
     
 class Mes( db.Model ):
     sender = db.UserProperty( required=True )
-    receiver = db.UserProperty( required=True )
     content = db.StringProperty( required=True ) 
     publish_time = db.DateTimeProperty()
+    
     

@@ -5,45 +5,22 @@ from ragendja.auth.urls import urlpatterns as auth_patterns
 from django.contrib import admin
 from django.conf.urls.defaults import *
 from django.conf import settings
-
 admin.autodiscover()
 
 handler500 = 'ragendja.views.server_error'
 
 urlpatterns = auth_patterns + patterns('',
-    ('^admin/(.*)', admin.site.root),
+                                       ('^admin/(.*)', admin.site.root),
 ) + urlpatterns
 
-urlpatterns += patterns('userAdmin.views',
-                       (r'^$','index'),
-                       (r'^myhome/$','myhome'),
-                       (r'^home/$','home'),
-                       (r'^myinfo/$', 'myinfo'),
-                       (r'^editmyinfo/$', 'editmyinfo'),
-                       (r'^search/$','search'),
-                       (r'^friends/$', 'friends'),
-                       (r'^addfriend/$', 'addfriend'),
-                       (r'^removefriend/$','removefriend'),
-                       (r'^acceptfriend/$','acceptfriend'),
-                       (r'^deny/$','deny'),
+urlpatterns += patterns('django.views.generic.simple',
+                        (r'^about/$',             'direct_to_template', {'template': 'about.htm'}),
+                        (r'^contact/$', 'direct_to_template', {'template': 'contact.htm'}),
+                        (r'^log/$', 'direct_to_template', {'template': 'dev_log.htm'}),
 )
 
-urlpatterns += patterns('event.views',
-                        (r'^event/$','event'),
-                        (r'^addevent/$','add_event'),
-                        (r'^del_event/$','del_event'), 
-                        (r'^editevent/$','edit_event'),
-                        (r'^add_sub_event/$','add_sub_event'),
-                        (r'^edit_sub_event/$','edit_sub_event'),
-                        (r'^del_sub_event/$','del_sub_event'),
-                        (r'^done_sub_event/$','done_sub_event'),
-                        (r'^add_to_concern/$','add_to_concern'),
-                        (r'^remove_concern/$','remove_concern'),
-                        (r'^events/$','events_list'),
-                        (r'^doing/$','events_doing'),
-                        (r'^todo/$','events_todo'),
-                        (r'^done/$','events_done'),
-                        # (r'^admin/', include('django.contrib.admin.urls')),
+urlpatterns += patterns('login.views',
+                        (r'^$','index'),
 )
 
 urlpatterns += patterns('blog.views',
@@ -58,3 +35,26 @@ urlpatterns += patterns('blog.views',
                         (r'^add_mes/$','add_mes'),                
                         (r'^del_mes/$','del_mes'),                
                         )
+
+urlpatterns += patterns('event.views',
+                        (r'^home/$','home'),
+                        (r'^event/$','event'),
+                        (r'^addevent/$','add_event'),
+                        (r'^del_event/$','del_event'), 
+                        (r'^editevent/$','edit_event'),
+                        (r'^add_sub_event/$','add_sub_event'),
+                        (r'^edit_sub_event/$','edit_sub_event'),
+                        (r'^del_sub_event/$','del_sub_event'),
+                        (r'^done_sub_event/$','done_sub_event'),
+                        (r'^events/$','events_list'),
+                        (r'^doing/$','events_doing'),
+                        (r'^todo/$','events_todo'),
+                        (r'^done/$','events_done'),
+                        # (r'^admin/', include('django.contrib.admin.urls')),
+)
+
+urlpatterns += patterns('tip.views',
+                        (r'^addtip/$','add_tip'),
+                        (r'^deltip/$','del_tip'),
+                        (r'^tips/$','tips'),
+)

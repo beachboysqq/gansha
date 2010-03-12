@@ -13,7 +13,10 @@
 		<span class="time">{{mes.publish_time|date:"Y-m-d H:i:s"}}</span>
 	  </td>
 	  {%if is_admin%}
-	  <td width="7%"><a href="javascript:del_mes('{{mes.key}}');">删除</a></td>
+	  <td width="7%">
+		<a href="javascript:del_mes('{{mes.key}}')">
+		  <img src="/static/images/del.jpg" title="删除"/>
+		</a>
 	  {%endif%} 
 	</tr>
 	<tr id="tr2_mes_{{mes.key}}">
@@ -42,9 +45,6 @@
 {%endif%}
 
 <div id="mes_produce">
-    <input type="hidden" id="visitor_id" value="{{visitor.user_id}}"/>
-    <input type="hidden" id="visitor_name" value="{{visitor.nickname}}"/>
-	
     <form action="." method="post">
       <textarea id="write_mes" name="content" class="box_comment"></textarea>
       <p>

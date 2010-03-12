@@ -1,11 +1,14 @@
 {% extends 'blog_base.htm' %}
 {%block middle%}
 {%for blog in blogs%}
-<div class="blog_each">
-  <div class="blog_title"><a href="../blog?blog={{blog.key}}">{{blog.title}}</a></div>
+<div class="blog_each" id="div_blog_{{blog.key}}">
+  <div class="blog_title font_bold">
+	{%if not blog.is_public%}
+	<img src="/static/images/dot_lock.gif"	style="padding-left:4px;"/>
+	{%endif%}
+	<a href="../blog?blog={{blog.key}}" class="a_noline"><span id="name_{{blog.key}}">{{blog.title}}</span></a></div>
   <div class="blog_tip">
 	{{blog.time|date:"Y m-d H:i"}},
-	by {{blog.author}},
 	Tags:
 	{% if blog.tags %}
 	{%for tag in blog.tags%}<a href="../blogview?tag={{tag.word}}">{{tag.word}}</a>{%endfor%}
@@ -45,6 +48,16 @@
   </a>
   {%if not forloop.last%}&nbsp;|&nbsp;{%endif%}
   {%endfor%}
+</div>
+{%endif%}
+{%if is_admin%}
+<div id="del_blog_confirm_box" style="display:none;">
+  <input type="hidden" id="recorder_bkey"/><!--记录要删除日志的key-->
+  <div>您确信要删除日志<span id="del_blog_name"></span>吗？</div>
+  <div style="padding-top:8px;">
+	<input type="button" value="确认" onclick="del_blog_real3()"/>
+    <input type="button" value="取消" onclick="$('del_blog_confirm_box').hide();"/>
+  </div>	
 </div>
 {%endif%}
 {% endblock %}
