@@ -1,0 +1,26 @@
+{% extends 'base_home.htm' %}
+{%block lbox%}
+	<div id="action">
+	  <div id="action_title">我的事件</div>
+	  <div id="action_body">
+		{%if is_admin%}
+		<p>
+		  <img src="/static/images/dot_adde.gif" />&nbsp;&nbsp;
+		  <a href="../addevent" class="a_nounderline">新建事件</a>
+		</p>
+		{%endif%}
+		<p>
+		  <img  src="/static/images/dot_doing.gif" />&nbsp;&nbsp;
+		  <a href="../doing" class="a_nounderline">进行中事件</a>
+		</p>
+		<p>
+		  <img src="/static/images/dot_todo.gif" />&nbsp;&nbsp;
+		  <a href="../todo" class="a_nounderline">准备做事件</a>
+		</p>	
+		<p>
+		  <img src="/static/images/dot_done.gif" />&nbsp;&nbsp;
+		  <a href="../done" class="a_nounderline">已完成事件</a>
+		</p>
+	  </div>
+	</div>
+{%endblock%}

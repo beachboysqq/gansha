@@ -1,0 +1,44 @@
+{% extends 'base_home.htm' %}
+
+{% block middle %}
+<div id="m1">
+  <div class="title1">Tips(个人微博)
+<!--<span class="tip">(共<span id="num_mes">{{count}}</span>个)</span>-->
+  </div>
+<table>
+  <tbody id="tbody_mes">
+	{%for tip in tips%}
+	<tr id="tr2_tip_{{tip.key}}">
+	  <td class="each_tip">{{tip.content}}</td>
+	</tr>
+	<tr id="tr1_tip_{{tip.key}}">
+	  <td class="tip_info">
+		<span class="time">{{tip.publish_time|date:"Y-m-d  H:i:s"}}</span>
+		{%if is_admin%}
+		  <a href="javascript:del_tip('{{tip.key}}')">
+			<img src="/static/images/del.jpg" title="删除" />
+		  </a>
+	  {%endif%} 
+	</tr>
+	{%endfor%}
+  </tbody>
+</table>
+<!--分页-->
+{%if pages_nums%}
+<div id="pages_num">
+  换页：
+  {%for num in pages_nums%}
+  <a href="../tips?pageid={{num}}"
+	 {%ifequal num pageid%}
+	 class="a_noline">
+	<strong>{{num}}</strong>
+	{%else%}
+	>
+	{{num}}
+	{%endifequal%}
+  </a>
+  {%if not forloop.last%}&nbsp;|&nbsp;{%endif%}
+  {%endfor%}
+</div>
+{%endif%}
+{% endblock %} 
