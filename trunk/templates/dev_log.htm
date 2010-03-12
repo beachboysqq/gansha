@@ -1,0 +1,16 @@
+{% extends 'base.htm' %}
+{% block middle %}
+<h3>开发日志</h3>
+<p class="flatpage">
+源码：http://code.google.com/p/gansha/<br />
+原始讨论组：https://groups.google.com/group/gansha<br />
+
+本项目源于2008年下期罗铁坚教授之《软件设计与程序开发方法学》的小组课程
+项目。项目最初目标是实现一个基于事件的SNS系统。<br />
+
+2008.10-2008.12 用Django开发出1.0版本<br />
+2009.03-2009.04 移植到app engine上，最初采用app-helper<br />
+2009.08-2009.10 改用<a href="http://code.google.com/p/app-engine-patch/">app-engine-patch</a><br />
+2010.02-2010.03 重构，去除不实用的SNS相关功能。改成基于事件的个人blog系统<br />
+</p>
+{% endblock %}
