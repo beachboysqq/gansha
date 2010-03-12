@@ -8,7 +8,7 @@ margin:0px;
 padding:0px;
 line-height:150%;
 font-size:14px;
-font-family:Arial, Helvetica, sans-serif,verdana;
+font-family:verdana;
 }
 img{border:0px;}
 table{
@@ -62,7 +62,13 @@ li{
 	display:inline;
 	padding:0 5px 0 5px;
 }	
+
 .font_12{font-size:12px;font-weight:normal;}
+.font_bold{	
+	font-weight:bold;
+	font-family:arial,sans-serif;
+}
+.font_grey{color:#ccc;}
 .text_blod{font-size:14px;font-weight:bold;}
 .box_date{height:20px;width:80px;border:1px #999 solid;}
 .box_name{height:20px;width:120px;border:1px #999 solid;}
@@ -91,7 +97,7 @@ width:100%;
 margin-bottom:10px;
 background:url(../images/top_underline.jpg) bottom repeat-x;
 }
-#top_content,#main_1,#main_2,#footer{	
+#top_content,#main_1,#footer{	
 width:80%;
 clear:both;
 background-color:#FFF;
@@ -130,77 +136,6 @@ margin-left:auto;
 			cursor:pointer;
 			background:url(../images/but_search.jpg) no-repeat;
 			}
-/*--------------------main_2-------------------*/
-#main_2{margin-top:10px;}
-#info{
-float:left;
-width:70%;
-padding:0px 12px 0 12px;
-margin-right:12px;
-line-height:200%;
-/*border:1px #CCC solid;*/
-}
-	#info p{
-	text-indent:2em;
-	padding-top:10px;
-	}
-	#ui_content{
-	width:100%;
-	margin-top:12px;
-	line-height:200%
-	}
-		#ui_content .title{}
-		.author_time{
-		width:22%;
-		color:#666;
-		font-size:12px;
-		}
-#index_right{
-float:right;
-width:26%;
-}
-#login{
-border:1px solid #CCC;
-}
-	#login_title{
-	height:25px;
-	padding-left:10px;
-	background-color:#DDD;
-	border-bottom:1px solid #CCC;
-	}
-	#login_body{
-	padding-top:10px;
-	line-height:200%;
-	width:248px;
-	}
-	.login_tb{
-	width:190px;
-	margin-left:auto;
-	margin-right:auto;
-	}
-		#but_login{
-		height:24px;
-		width:60px;
-		border:0;
-		cursor:pointer;
-		background:url(../images/but_login.jpg) no-repeat;
-		}
-		#but_reg{
-		height:24px;
-		width:122px;
-		border:0;
-		cursor:pointer;
-		background:url(../images/but_reg_google.jpg) no-repeat;
-		}
-	#sloan{
-	padding-top:8px;
-	line-height:200%;
-	}
-	#login_google{
-	padding-top:8px;
-	text-align:center;
-	line-height:200%;
-	}
 /*----------------------footer----------------------*/
 .cleaner {
 clear: both;

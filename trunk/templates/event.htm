@@ -1,4 +1,4 @@
-{% extends 'base_home.htm' %}
+{% extends 'base_event.htm' %}
 
 {%block js%}
 <script language="JavaScript" src="/static/js/switch.js"></script>
@@ -10,9 +10,9 @@
 <div id="m1">
   <table cellpadding="0" cellspacing="0" style="margin-top:10px;">
     <tr>
-      <td id="event_title" class="underline_grey">
+      <td id="event_title" class="underline_grey  font_bold">
 		{{event.title}}
-		{% if event.isprivacy %}
+		{% if not event.is_public %}
 		<img src="/static/images/dot_lock.gif" style="padding-left:4px;"/>
 		{% endif %}
 	  </td>
@@ -20,8 +20,6 @@
 		{%if is_admin%}
 		<input onclick="window.location.replace('../addblog')"
 		type="button" id="but_addblog" />
-		{%else%}
-		<span id="span_{{event.key}}">[<a href="javascript:add_to_concern('{{event.key}}')">加为关注</a>]</span>
 		{%endif%}
 	  </td>
     </tr>
@@ -60,10 +58,6 @@
 		  <a href="javascript:sw2('event_blog');" class="a_nounderline">事件日志({{num_blogs}})</a>
 		</td>
         <td class="td_slot">&nbsp;</td>
-        <td id="event_concern_title">
-		  <a href="javascript:sw2('event_concern');"
-			 class="a_nounderline">关注({{li|length}})</a>
-		</td>
         <td>&nbsp;</td>
       </tr>
     </table>
@@ -104,7 +98,7 @@
 		</td>
         <td class="underline_grey text_center">
 		  <a href="javascript:del_se('{{se.key}}')">
-			<img src="/static/images/del.jpg" />
+			<img src="/static/images/del.jpg" title="删除"/>
 		  </a>
 		</td>
 		{%endif%}
@@ -197,66 +191,6 @@
 	</div>
 	{%endif%}
   </div>
-  <div id="event_concern" style="display:none;">
-    <div class="tip">您共有{{concerns|length}}个关注对象,以下是他们最近一周的更新。</div>
-	{%for concern in concerns%}
-    <div class="each_comment" id="ce_{{concern.c_event.key}}">
-      <table width="98%" border="0" cellspacing="0" cellpadding="0">
-        <tr>
-          <td>
-			<span class="time"><a href="../?event={{concern.event.key}}">{{concern.event.title}}</a></span>
-			(by:<a href="../home/?user={{concern.event.user.user_id}}">{{concern.event.user.nickname}}</a>)
-		  </td>
-		  {%if is_admin%}
-          <td width="13%">
-			<a href="javascript:remove_concern( '{{conern.event.key}}','{{concern.event.key}}' )">取消关注</a>
-		  </td>
-		  {%endif%}
-        </tr>
-      </table>
-	  {% if concern.hi_li %}
-	  {% for hi in concern.hi_li %}
-      <p><span class="time">{{hi.date}}</span>
-		{% autoescape off %}
-		{{hi.content}}
-		{% endautoescape %}
-	  </p>
-	  {%endfor%}
-	  {%else%}
-      <p><span class="time">暂无更新...</span></p>
-	  {%endif%}
-    </div>
-	{%endfor%}
-  </div>
-</div>
-{% endblock %}
-{% block right %}
-<div id="friends">
-  <p class="text_title" style="font-size:14px;">谁在关注我？</p>
-	{%if concerneds%}
-  <ul>
-	{%for concerned in concerneds %}
-    <li><a href="../?event={{concerned.event.key}}">{{concerned.event.user_id}}</a></li>
-	{%endfor%}
-  </ul>
-	{%else%}
-	尚无人关注
-	{%endif%}
-</div>
-<div id="mes_box" style="display:none;">
-	<div>请选择您的相关事件：</div>
-    <div>
-		{%if myevents%}
-		<select id="eid"><!--eid为要添加到的属于自己的事件-->
-		{%for event in myevents %}
-		  <option value="{{event.key}}">{{event.title}}</option>
-		{% endfor %}
-		</select>
-	 	<input	type="hidden" id="recorder"/><!--记录被关注事件-->
-	 	<input type="button" value="确认" onclick="send_concern()"/>
-		{%else%}您没有发布过任何事件!{%endif%}
-      	<input type="button" value="取消" onclick="$('mes_box').hide();"/>
-	</div>	
 </div>
 {%if is_admin%}
 <div id="del_confirm_box" style="display:none;">

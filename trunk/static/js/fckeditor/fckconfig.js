@@ -116,13 +116,13 @@ FCKConfig.ToolbarSets["Default"] = [
 ] ;
 
 FCKConfig.ToolbarSets["Basic"] = [
-								  ['Bold','Italic','Underline','FontName','FontSize','TextColor','BGColor',
-								   '-','OrderedList','UnorderedList','-',
-								   'Link','Unlink','Image','Flash','Source']
+	['Bold','Italic','Underline','FontName','FontSize','TextColor','BGColor','-','OrderedList','UnorderedList','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
+	'/',
+	['Link','Unlink','Table','Rule','Smiley','SpecialChar','Image','Flash','Source']
 ] ;
 
-FCKConfig.EnterMode = 'p' ;			// p | div | br
-FCKConfig.ShiftEnterMode = 'br' ;	// p | div | br
+FCKConfig.EnterMode = 'br' ;			// p | div | br
+FCKConfig.ShiftEnterMode = 'p' ;	// p | div | br
 
 FCKConfig.Keystrokes = [
 	[ CTRL + 65 /*A*/, true ],

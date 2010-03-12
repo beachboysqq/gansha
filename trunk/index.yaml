@@ -14,13 +14,7 @@ indexes:
 
 - kind: blog_blog
   properties:
-  - name: author
-  - name: publish_time
-    direction: desc
-
-- kind: blog_comment
-  properties:
-  - name: receiver
+  - name: is_public
   - name: publish_time
     direction: desc
 
@@ -29,31 +23,14 @@ indexes:
   - name: blog
   - name: publish_time
 
-- kind: blog_mes
-  properties:
-  - name: receiver
-  - name: publish_time
-    direction: desc
-
-- kind: blog_mes
-  properties:
-  - name: receiver
-  - name: publish_time
 
 - kind: event_event
   properties:
-  - name: user
-  - name: start_date
-
-- kind: event_event
-  properties:
-  - name: user
   - name: is_done
   - name: start_date
 
 - kind: event_event
   properties:
-  - name: user
   - name: progress
   - name: start_date
     direction: desc  
@@ -64,15 +41,8 @@ indexes:
   - name: publish_time
     direction: desc
 
-- kind: event_history
-  properties:
-  - name: user
-  - name: publish_time
-    direction: desc
-
 - kind: event_subevent
   properties:
-  - name: user
   - name: is_done
   - name: start_date
 
