@@ -43,6 +43,9 @@ handlers:
   secure: optional
   login: admin
 
+- url: /gaebar/static
+  static_dir: gaebar/static
+
 - url: /.*
   script: common/appenginepatch/main.py
   secure: optional
