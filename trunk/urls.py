@@ -2,16 +2,16 @@
 from django.conf.urls.defaults import *
 from ragendja.urlsauto import urlpatterns
 from ragendja.auth.urls import urlpatterns as auth_patterns
-from django.contrib import admin
+#from django.contrib import admin
 from django.conf.urls.defaults import *
 from django.conf import settings
-admin.autodiscover()
+#admin.autodiscover()
 
 handler500 = 'ragendja.views.server_error'
 
-urlpatterns = auth_patterns + patterns('',
-                                       ('^admin/(.*)', admin.site.root),
-) + urlpatterns
+#urlpatterns = auth_patterns + patterns('',
+#                                       ('^admin/(.*)', admin.site.root),
+#) + urlpatterns
 
 urlpatterns += patterns('django.views.generic.simple',
                         (r'^about/$',             'direct_to_template', {'template': 'about.htm'}),
@@ -21,6 +21,9 @@ urlpatterns += patterns('django.views.generic.simple',
 
 urlpatterns += patterns('login.views',
                         (r'^$','index'),
+                        (r'^login/$','login'),
+                        (r'^export/$','export_data'),
+                        (r'^import/$','import_data'),
 )
 
 urlpatterns += patterns('blog.views',

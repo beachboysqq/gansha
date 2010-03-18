@@ -137,6 +137,28 @@ DATABASE_OPTIONS = {
     # Change domain (default: <remoteid>.appspot.com)
     #'remote_host': 'bla.com',
 }
+### for gaebar
+GAEBAR_LOCAL_URL = 'http://localhost:8000'
+
+GAEBAR_SECRET_KEY = 'change_this_to_something_random'
+
+GAEBAR_SERVERS = {
+  u'Deployment': u'http://gan-sha.appspot.com', 
+  u'Staging': u'http://gan-sha.appspot.com', 
+  u'Local Test': u'http://localhost:8080',
+}
+
+GAEBAR_MODELS = (
+     (
+          'app1.models', 
+          (u'Profile', u'GoogleAccount', u'AllOtherTypes', u'PlasticMan'),
+     ),
+     (
+          'app2.models', 
+          (u'Simple',),
+     ),
+)
+
 
 DEBUG = True
 from ragendja.settings_post import *

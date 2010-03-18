@@ -19,10 +19,6 @@ class BlogTag( db.Model ):
     blog = db.ReferenceProperty( Blog )
     tag = db.ReferenceProperty( Tag )
 
-class UserTag( db.Model ):
-    uid = db.StringProperty()
-    tag = db.ReferenceProperty( Tag )
-
 class Comment( db.Model ):
     sender = db.UserProperty()
     blog = db.ReferenceProperty( Blog )
