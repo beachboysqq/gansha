@@ -103,10 +103,10 @@ def home( request ):
                   'loginurl':LOGIN,
                   'cur_user':CURUSER,
                   'is_admin':users.is_current_user_admin(),
-                 'se_list':se_list,
-                 'hi_list':hi_list,
-                 'comments':comments,
-                 'mes_li':mes_li,
+                  'se_list':se_list,
+                  'hi_list':hi_list,
+                  'comments':comments,
+                  'mes_li':mes_li,
                   'tip':tip_content,
                  })
     return render_to_response('home.htm',c)

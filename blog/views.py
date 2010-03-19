@@ -17,14 +17,24 @@ def blogview( request ):
     # get recent blogs by tag,event,archive or month
     if request.GET.has_key('tag'):
         word = request.GET['tag']
+        tip = "Tag:%s" % word
         all_blogs = get_blogs_by_tag( word,is_admin )
     elif request.GET.has_key('event'):
         ekey = request.GET['event']
+        if ekey!='None':
+            event = Event.get(Key(ekey))
+            tip = "Event:%s" % event.title        
+        else:
+            event = None
+            tip = "Event:None"      
+
         all_blogs = get_blogs_by_event( ekey,is_admin )
     elif request.GET.has_key('month'):
         month = request.GET['month'].strip()
+        tip = "Month:%s" % month
         all_blogs = get_blogs_by_month( month,is_admin )
     else:
+        tip = "All"
         all_blogs = get_blogs(is_admin)
         
     #分页,并获取指定分页的blog
@@ -67,6 +77,8 @@ def blogview( request ):
     
     c = Context({
                  "blogs":ret_blogs,
+                 'tip':tip,
+                 'num':all_num,
                  "tags":get_tags(), 
                  "events":get_events(),
                  'months':get_months(),
@@ -159,7 +171,7 @@ def edit_blog( request ):
         tags = get_blog_tags( blog )
         tags_str = ''
         for tag in tags:
-            tags_str += tag.word
+            tags_str += (" "+ tag.word)
         if blog.event:
             def_event = blog.event.key()
         else:
