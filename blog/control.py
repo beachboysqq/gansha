@@ -31,7 +31,7 @@ def get_blog_tags( blog ):
     bts = BlogTag().all().filter('blog =',blog)
     tags = []
     for bt in bts:
-        if bt.tag.word:
+        if bt.tag and bt.tag.word:
             tags.append( bt.tag )
     return tags
 
@@ -46,10 +46,10 @@ def get_blogs_by_event( ekey,is_admin ):
     else:
         event = None
         temp_blogs = list(Blog.all().order('-publish_time'))
-        if is_admin:
-            all_blogs = [ blog for blog in temp_blogs if blog.event==event]
-        else:
-            all_blogs = [ blog for blog in temp_blogs if blog.event==event and blog.is_public ]
+    if is_admin:
+        all_blogs = [ blog for blog in temp_blogs if blog.event==event]
+    else:
+        all_blogs = [ blog for blog in temp_blogs if blog.event==event and blog.is_public ]
     return all_blogs
 
 # 4.month查询
@@ -139,6 +139,7 @@ def update_tags( blog,tags_str ):
         r_tags.append('')
     bts = BlogTag().all().filter('blog =',blog)
     for bt in bts:
+        # 没有执行？？？
         if bt.tag.word not in r_tags:
             # old tag not in r_tags,delete bt,if necessary delete tag
             bt.tag.num -=1

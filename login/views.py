@@ -58,9 +58,12 @@ def export_data(request):
     return response
 
 def import_data(request):
-    f = open( IMPORT_FILE )
-    data = simplejson.loads( f.read() )
-    f.close()
+    try:
+        f = open( IMPORT_FILE )
+        data = simplejson.loads( f.read() )
+        f.close()
+    except IOError:
+        return HttpResponse("Data file dosn't exsit:import/data.json!")
     #import event
     events = data['event']
     for event in events:

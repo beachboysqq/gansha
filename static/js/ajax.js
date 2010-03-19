@@ -340,10 +340,10 @@ function add_comment_to_html( transport )
 	comment_body.insert(div);
 	var div_top = new Element('div',{'class':'com_info'});
 	div.insert(div_top);
-	var a=new Element('a',{'href':'../home/?user='+$F('visitor_key') });
-    a.update( $F('visitor_name') );
+	//var a=new Element('a',{'href':'../home/?user='+$F('visitor_key') });
+    //a.update( $F('visitor_name') );
 	div_top.insert("#"+num+" &nbsp;");
-	div_top.insert(a);
+	div_top.insert($F('visitor_name'));
 	var span=new Element('span',{'class':'time'}).update(time);
 	div_top.insert(span);
 	var p=new Element('p').update($F('write_comment'));

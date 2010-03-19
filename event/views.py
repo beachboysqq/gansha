@@ -71,6 +71,10 @@ def del_event(request):
     db.delete( se_list )
     
     event.delete()
+    # delete relate history
+    history_li = History.all().filter('event =',event)
+    db.delete( history_li )
+    
     return HttpResponse("deleted")
 
 def home( request ):
