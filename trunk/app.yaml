@@ -32,9 +32,6 @@ handlers:
   script: $PYTHON_LIB/google/appengine/ext/admin
   login: admin
 
-- url: /test.*
-  script: gaeunit.py
-
 - url: /media
   static_dir: _generated_media
 
@@ -43,8 +40,9 @@ handlers:
   secure: optional
   login: admin
 
-- url: /gaebar/static
-  static_dir: gaebar/static
+- url: /robots.txt
+  static_files: static/robots.txt
+  upload: static/robots.txt   
 
 - url: /.*
   script: common/appenginepatch/main.py

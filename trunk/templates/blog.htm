@@ -38,13 +38,14 @@
   </table>
   <div id="tbody_com" style="display:block;">
   <!--两个记录员，主要是为了Dom方式增加评论时，显示用户名和其url-->
+    <input type="hidden" id="visitor_name" value="{{cur_user.nickname}}"/>
 	{% for comment in comments%}
     <div class="each_com" id="com_{{comment.key}}">
       <div class="com_info">
         <table>
           <tr>
             <td>#{{forloop.counter}}&nbsp;
-			  <a href="../home/?user={{comment.sender.key}}">{{comment.sender.nickname}}</a>
+			  {{comment.sender.nickname}}
 			  <span class="time">{{comment.publish_time|date:"Y-m-d H:i:s"}}</span>
 			</td>
             {%if is_admin%}
