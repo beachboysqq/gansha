@@ -1,5 +1,6 @@
 {% extends 'blog_base.htm' %}
 {%block middle%}
+<div class="tip">{{tip}}，num：{{num}}</div>
 {%for blog in blogs%}
 <div class="blog_each" id="div_blog_{{blog.key}}">
   <div class="blog_title font_bold">
@@ -11,7 +12,7 @@
 	{{blog.time|date:"Y m-d H:i"}},
 	Tags:
 	{% if blog.tags %}
-	{%for tag in blog.tags%}<a href="../blogview?tag={{tag.word}}">{{tag.word}}</a>{%endfor%}
+	{%for tag in blog.tags%}<a href="../blogview?tag={{tag.word}}">{{tag.word}}</a>&nbsp;{%endfor%}
 	{%else%}无
 	{%endif%},
 	Event:{%if blog.event%}

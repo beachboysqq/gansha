@@ -28,3 +28,4 @@ class History( db.Model ):
     publish_time = db.DateTimeProperty( auto_now_add=True )
     
     content = db.StringProperty()    
+    

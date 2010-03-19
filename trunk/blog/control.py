@@ -40,12 +40,8 @@ def get_events():
     events = Event.all().order('-start_date')
     return events
 
-def get_blogs_by_event( ekey,is_admin ):
-    if ekey!='None':
-        event = Event.get(Key(ekey))
-    else:
-        event = None
-        temp_blogs = list(Blog.all().order('-publish_time'))
+def get_blogs_by_event( event,is_admin ):    
+    temp_blogs = list(Blog.all().order('-publish_time'))
     if is_admin:
         all_blogs = [ blog for blog in temp_blogs if blog.event==event]
     else:
@@ -94,11 +90,12 @@ def new_blog(ekey,title,content,tags_str,is_public):
     add_tags( tags_str,blog )
     return blog
 
+#没有tag，算tag为'default'
 def add_tags(tags_str,blog):
     # add tags
     r_tags = tags_str.split() # tags received from author
-    if not r_tags:
-        r_tags.append('')
+    if not r_tags or len(r_tags)==0:
+        r_tags.append('default')
     # update r_tags to database
     for r_tag in r_tags:
         # update Tag table
@@ -112,10 +109,10 @@ def add_tags(tags_str,blog):
         tag.num += 1
         tag.put()
      # update BlogTag table
-    blog_tag = BlogTag()
-    blog_tag.blog = blog
-    blog_tag.tag = tag
-    blog_tag.put()
+        blog_tag = BlogTag()
+        blog_tag.blog = blog
+        blog_tag.tag = tag
+        blog_tag.put()
 
 def update_blog( bkey,ekey,title,is_public,content,tags_str ):
     blog = Blog.get(Key(bkey))
@@ -134,23 +131,28 @@ def update_blog( bkey,ekey,title,is_public,content,tags_str ):
 #     r_tags: received tags from blog author
 #     blog: conjucate blog object
 def update_tags( blog,tags_str ):
-    r_tags = tags_str.split() # tags received from author
-    if not r_tags:
-        r_tags.append('')
+    r_tags = tags_str.split() # tags received from author,不应该有default
     bts = BlogTag().all().filter('blog =',blog)
+    
+    str_tag = ''
+
     for bt in bts:
-        # 没有执行？？？
-        if bt.tag.word not in r_tags:
-            # old tag not in r_tags,delete bt,if necessary delete tag
+        # 如果原来为default，现在有新的，去除default标志
+        # old tag not in r_tags,delete bt,if necessary delete tag                
+        if bt.tag.word in r_tags:
+            # old tag in r_tags,remain
+            r_tags.remove(bt.tag.word)
+        else:
             bt.tag.num -=1
             if bt.tag.num == 0:
                 bt.tag.delete()
+                    
             bt.delete()
-        else:
-            # old tag in r_tags,remain
-            r_tags.remove(bt.tag.word)
+               
+    if len(r_tags)!=0:
+        str_tag = ' '.join(r_tags)
     # new tags for blog
-    add_tags( ' '.join(r_tags),blog )
+    add_tags( str_tag,blog )
 
     
 def remove_blog( bkey ):

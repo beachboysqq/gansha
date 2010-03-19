@@ -24,6 +24,7 @@ urlpatterns += patterns('login.views',
                         (r'^login/$','login'),
                         (r'^export/$','export_data'),
                         (r'^import/$','import_data'),
+                        (r'^repair/$','repair_tags'),
 )
 
 urlpatterns += patterns('blog.views',

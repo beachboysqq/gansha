@@ -57,6 +57,7 @@ def export_data(request):
     response['Content-Type'] ='application/octet-stream'
     return response
 
+# tag需要修改：判断避免重复
 def import_data(request):
     try:
         f = open( IMPORT_FILE )
@@ -143,3 +144,40 @@ def import_data(request):
     #import tips
         
     return HttpResponse( 'ok' )
+
+def repair_tags( request ):
+    #消灭blog_tag中的空头
+    blog_tags = BlogTag.all()
+    for blog_tag in blog_tags:
+        try:
+            if not blog_tag.blog or not blog_tag.tag:
+                blog_tag.delete()
+            if not bog_tag.tag.word:
+                blog.tag.word = 'notag'
+        except:
+            blog_tag.delete()
+    #修正tag计数
+    tags = Tag.all()
+    for tag in tags:
+        num = 0
+        for blog_tag in blog_tags:
+            if tag == blog_tag.tag:
+                num +=1
+                
+        tag.num = num
+        if tag.num == 0:
+            tag.delete()
+            
+    # 修正一个blog有一个非default的同时，还保留了default tag
+    blog_tags = BlogTag.all()
+    for bt in blog_tags:
+        if bt.tag.word == 'default':
+            for bto in blog_tags:
+                if bt != bto and bt.blog==bto.blog:
+                    bt.tag.num -=1
+                    if bt.tag.num == 0:
+                        bt.tag.delete()
+                        
+                    bt.delete()
+                    
+    return HttpResponse( 'Repair completed:)' )

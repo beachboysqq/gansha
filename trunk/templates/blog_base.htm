@@ -4,10 +4,9 @@
 	  <div class="lbox_title font_bold">Tags</div>
 	  <div class="lbox_body">
 		{%for tag in tags%}
-		<a href="../blogview?tag={{tag.word|default:'notag'}}" class="a_noline">
+		<a href="../blogview?tag={{tag.word|default:'???'}}" class="a_noline">
 		  {{tag.word}}</a>&nbsp;
 		{%endfor%}
-		<a href="../blogview?tag=notag" class="a_noline">无tag</a>
 	  </div>
 	</div>
 	<div class="lbox">
