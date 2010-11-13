@@ -52,12 +52,12 @@ function add_se_to_html( transport )
     td_isdone.insert( hidden );
     td_isdone.insert( checkbox );
 
-    a_edit = new Element( 'a',{'href':'#','onclick':'edit_se('+sekey+')'});
+    a_edit = new Element( 'a',{'onclick':'edit_se('+sekey+')'});
     td_edit.insert( a_edit );
     img_edit =new Element( 'img',{'src':'/static/images/edit.jpg'});
     a_edit.insert( img_edit );
     
-    a_del = new Element( 'a',{'href':'#','onclick':'del_se('+sekey+')'});
+    a_del = new Element( 'a',{'onclick':'del_se('+sekey+')'});
     td_del.insert( a_del );
     img_del =new Element( 'img',{'src':'/static/images/del.jpg'});
     a_del.insert( img_del );
@@ -343,7 +343,8 @@ function add_comment_to_html( transport )
 	//var a=new Element('a',{'href':'../home/?user='+$F('visitor_key') });
     //a.update( $F('visitor_name') );
 	div_top.insert("#"+num+" &nbsp;");
-	div_top.insert($F('visitor_name'));
+//	div_top.insert($F('visitor_name'));
+	div_top.insert($F('sender'));
 	var span=new Element('span',{'class':'time'}).update(time);
 	div_top.insert(span);
 	var p=new Element('p').update($F('write_comment'));
@@ -358,6 +359,7 @@ function submit_comment(bkey)
       var myAjax = new Ajax.Request('../add_comment/',{
             method:'POST',
 			parameters:{bkey:bkey,
+						sender:$F('sender'),
                         content:$F('write_comment')},
             onSuccess:add_comment_to_html,
             onFailure:function( transport ){alert( transport.status )
@@ -428,6 +430,54 @@ function del_mes( mkey )
         })
 }
 
+function add_note_to_html( transport )
+{
+    var time=transport.responseText;
+	var tr1 = new Element('tr');
+	var tr2 = new Element('tr');
+	var td1 = new Element('td');
+
+	var span=new Element('span',{'class':'time'}).update(time);
+	var td2=new Element('td',{'class':'each_mes'}).update($F('write_mes'));
+ 
+    mes_body=$('tbody_mes');
+	mes_body.insert(tr1);
+
+	mes_body.insert(tr2);
+    tr1.insert(td1);
+    tr2.insert(td2);    
+	num=Number($('num_mes').innerHTML) + 1
+	td1.insert("#"+num+" &nbsp;");
+	td1.insert(span);
+	$('write_mes').value='';
+	//update count
+	$('num_mes').update( num );
+}
+
+function submit_note()
+{   
+      var myAjax = new Ajax.Request('../add_note/',{
+            method:'POST',
+			parameters:{content:$F('write_mes')},
+            onSuccess:add_note_to_html,
+            onFailure:function( transport ){alert( transport.status )
+            }
+            })
+}
+function del_note( mkey )
+{
+    var myAjax = new Ajax.Request('../del_note/',{
+            method:'POST',
+			parameters:{mkey:mkey},
+            onSuccess:function(){
+				$('tr1_mes_'+mkey,'tr2_mes_'+mkey).invoke('remove');
+				$('num_mes').update( Number($('num_mes').innerHTML) - 1 );
+			},
+            onFailure:function( transport ){alert( transport.status )
+            }
+        })
+}
+
 function del_blog(bkey)
 {
 	$('del_blog_name').update( $('name_'+bkey ).innerHTML );
@@ -474,7 +524,7 @@ function del_blog_real2()
         method:'GET',
 		parameters:{blog:bkey},
         onSuccess:function(){
-			window.location.replace('../event/');
+			window.location.replace('../blogview/');
 		},
         onFailure:function( transport ){alert( transport.status )
 									   }

@@ -3,11 +3,13 @@ padding-left:8px;
 }
 .title1,.title2{
 font-weight:bold;
-border-bottom:1px solid #CCC;
+border-bottom:1px solid #999;
 margin-bottom:1px;
 padding-top:10px;
+padding-bottom:4px;
 }
 .title2{
+font-size:16px;
 text-align:center;
 }
 a.a_raw:link,a.a_raw:visited{
@@ -27,19 +29,25 @@ a.a_noline:hover{
 	color:#666;
 	text-decoration:underline;
 }
-code,blockquote{
+blockquote{
+	border:1px dashed #999;
+	background-color:#F9F9F9;
+	padding:10px;
+}
+code{
 	background-color:#EEE;
 }
-h3{
-	border-bottom:1px solid #999;
-}
 /*----------------for myhome.html---------------*/
-#main_home{
-clear:both;
-width:1024px;
+#content{
 background-color:#FFF;
+clear:both;
+width:990px;
+padding:16px;
 margin-right:auto;
 margin-left:auto;
+overflow:auto;height:100%;
+}
+#main_home{
 }	
 	#main_home #left{
 	float:left;
@@ -48,18 +56,18 @@ margin-left:auto;
 	}
 #left ul{list-style:none;margin:0;padding:0;}
 #left ul li{
-	background:url(../images/dot_square.gif) left  no-repeat;
-	height:20px;
+	display:block;
+	background:url(../images/dot_square.gif) left 10px no-repeat;
 	padding-left:10px;
-	vertical-align:bottom;
 }
 
 		#me{
-		font-size:12px;
+		font-size:13px;
 		border:1px solid #CCC;
 		padding:12px 10px 10px 10px;
 		background:url(../images/bg_me.gif) repeat;
 		text-align:center;
+		line-height:180%;
 		}
 			#img_headshot{
 			border:1px solid #FFF;
@@ -72,6 +80,12 @@ margin-left:auto;
 				word-break:break-all;
 				text-align:left;
 				padding-top:2px;}
+		#main_home #tips{
+			padding:0px 10px 10px 10px;
+			margin-top:10px;
+			border:1px solid #CCC;
+		}
+		#tips li{display:block;}
 		#action{
 		margin-top:10px;
 		}
@@ -92,14 +106,13 @@ margin-left:auto;
 			#action_body p{padding-top:6px;}
 	#main_home #middle{
 	float:left;
-	width:65%;
-	margin-right:14px;
+	width:80%;
+	margin-right:10x;
 	}
 		#navigation{font-size:12px;}
 		#main_home #m1{}
 		#main_home table{
 		width:100%;
-		font-size:12px;
 		}
 
 		.m1_title{
@@ -137,14 +150,12 @@ margin-left:auto;
 			#new_event{padding-top:10px;}
 				.each_event{
 				padding-left:20px;
-				font-size:12px;
 				background: url(../images/dot_square.gif) no-repeat 10px 8px;
 				}
 				.time{
 				padding-right:24px;
 				}
 			#new_comment,#new_message{
-			font-size:12px;
 			}
 				.tip{
 				height:22px;
@@ -161,7 +172,6 @@ margin-left:auto;
 				}
 				.each_comment,.each_message{
 				border-bottom:1px solid #CCC;
-				font-size:12px;
 				margin-bottom:6px;
 				}
 	#main_home #main_right{
@@ -169,13 +179,6 @@ margin-left:auto;
 	width:154px;
 	float:right;
 	}
-	#main_home #tips{
-	width:134px;
-	font-size:12px;
-	padding:0 10px 10px 10px;
-	border:1px solid #CCC;
-	}
-	#tips li{display:block;}
 /*----------------event.html---------------------------*/
 #event_title{
 padding-left:24px;
@@ -194,7 +197,6 @@ font-weight:bold;
 			cursor:pointer;
 			}
 		#event_content{
-		font-size:12px;
 		width:94%;
 		padding-left:3%;
 		padding-top:4px;
@@ -212,7 +214,7 @@ font-weight:bold;
 			#event_blog_title{width:86px;}
 			#event_concern_title{width:58px;}
 			.td_12px_title{
-			font-size:12px;
+			font-size:13px;
 			font-weight:bold;
 			background-color:#E8E8E8;
 			}
@@ -223,10 +225,8 @@ font-weight:bold;
 			.add_but{
 			padding-top:6px;
 			text-align:right;
-			font-size:12px;
 			}
 		#event_log{
-		font-size:12px;
 		padding-top:10px;
 		}
 		#submit_subevent{
@@ -254,10 +254,24 @@ color:#666;
 text-align:right;
 font-size:12px;
 }
-#blog_content{font-size:12px;margin:10px;line-height:180%;
+#blog_content{margin:10px;line-height:200%;}
+
+#blog_content ul{
+	list-style:none;
+	margin:0;padding:0;
 }
+#blog_content ul li{
+	background:url(../images/dot_square.gif) left  10px no-repeat;
+	line-height:150%;
+	display:block;
+	padding-left:10px;
+	vertical-align:bottom;
+}
+
+
 #blog_content p{
 text-indent:2em;
+margin-bottom:8px;
 }
 #comment{
 font-size:12px;
@@ -281,7 +295,7 @@ font-weight:bold;
 	}
 	.com_info{
 	height:24px;
-	border-top:1px solid #CCC;
+//	border-top:1px solid #CCC;
 	margin-bottom:4px;
 	}
 	#main_home #relate_blog{
@@ -340,13 +354,11 @@ border:1px solid #999;
 /*----------------for message.htm----------------------------*/
 .each_mes{
 border-bottom:1px solid #CCC;
-font-size:12px;
 margin-bottom:0px;
 }
 #mes_produce{margin-top:10px;}
 /*----------------for tip.htm----------------------------*/
 .each_tip{
-font-size:12px;
 margin-bottom:0px;
 }
 .tip_info{
@@ -379,16 +391,16 @@ border-bottom:1px solid #CCC;
 	font-size:14px;
 }
 .lbox_body{
-	font-size:12px;
 	padding:4px 10px 0px 0px;
 }
 
 .blog_each{
-	padding-bottom:16px;
+	padding-bottom:22px;
 }
 
 .blog_title{
-	font-size:14px;
+	font-size:16px;
+	color:#000;
 	border-bottom:1px solid #CCC;
 }
 .blog_tip{
@@ -396,14 +408,12 @@ border-bottom:1px solid #CCC;
 	color:#999;
 }
 .blog_brief{
-	font-size:12px;
 	padding-top:6px;
 	text-indent:2em;
 }
 
 #pages_num{
 	text-align:center;
-	font-size:12px;
 	border-top:1px solid #ccc;
 }
 /*---------flatpage--------------*/

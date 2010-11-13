@@ -1,7 +1,7 @@
 #coding=utf-8
 from google.appengine.api import users
 #一个分页的最多项数
-PAGE_COUNT=6
+PAGE_COUNT=10
 
 LOGOUT = users.create_logout_url('/login')
 LOGIN = users.create_login_url('/login')

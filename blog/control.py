@@ -50,13 +50,13 @@ def get_blogs_by_event( event,is_admin ):
 
 # 4.month查询
 def get_months():
-    blogs = Blog.all()
+    blogs = Blog.all().order('-publish_time')
     months = []
     for blog in blogs:
         m = blog.publish_time.strftime("%Y-%m") 
         if m not in months:
             months.append(m)
-    return reversed(months)
+    return months
 
 def get_blogs_by_month( month_str,is_admin ):
     items = month_str.split('-')
@@ -138,7 +138,7 @@ def update_tags( blog,tags_str ):
 
     for bt in bts:
         # 如果原来为default，现在有新的，去除default标志
-        # old tag not in r_tags,delete bt,if necessary delete tag                
+        # old tag not in r_tags,delete bt,if necessary delete tag               
         if bt.tag.word in r_tags:
             # old tag in r_tags,remain
             r_tags.remove(bt.tag.word)
@@ -146,14 +146,14 @@ def update_tags( blog,tags_str ):
             bt.tag.num -=1
             if bt.tag.num == 0:
                 bt.tag.delete()
-                    
+                pass
             bt.delete()
                
     if len(r_tags)!=0:
         str_tag = ' '.join(r_tags)
-    # new tags for blog
-    add_tags( str_tag,blog )
-
+        # new tags for blog
+        add_tags( str_tag,blog )
+        pass
     
 def remove_blog( bkey ):
     blog = Blog.get(Key(bkey))
