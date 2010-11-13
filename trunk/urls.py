@@ -38,6 +38,9 @@ urlpatterns += patterns('blog.views',
                         (r'^message/$','message'),                
                         (r'^add_mes/$','add_mes'),                
                         (r'^del_mes/$','del_mes'),                
+                        (r'^note/$','note'),                
+                        (r'^add_note/$','add_note'),                
+                        (r'^del_note/$','del_note'),                
                         )
 
 urlpatterns += patterns('event.views',

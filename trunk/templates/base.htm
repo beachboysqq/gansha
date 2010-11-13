@@ -17,12 +17,12 @@
 	  <script language="JavaScript" src="/static/js/ajax.js"></script>
 	  {% block js %}{% endblock %}
 	  <div id="top_menu">
-		<ul>
-		  <li><a href="../" class="a_nounderline">主页</a></li>
-		  <li><a href="../events" class="a_nounderline">事件记录</a></li>
-		  <li><a href="../blogview" class="a_nounderline">博客模式</a></li>
-		  <li><a href="../tips" class="a_nounderline">Tips</a></li>
-		  <li><a href="../message" class="a_nounderline">留言板</a></li>
+		<ul class="inline_ul">
+		  <li class="inline_li"><a href="../" class="a_nounderline">主页</a></li>
+		  <li class="inline_li"><a href="../events" class="a_nounderline">事件记录</a></li>
+		  <li class="inline_li"><a href="../blogview" class="a_nounderline">博客模式</a></li>
+		  <li class="inline_li"><a href="../tips" class="a_nounderline">Tips</a></li>
+		  <li class="inline_li"><a href="../message" class="a_nounderline">留言板</a></li>
 		</ul>
 	  </div>
 	  <div id="top_search">
@@ -33,46 +33,65 @@
 		  {%else%}<a href="{{loginurl}}">登录</a>
 		  {%endif%}
 		</div>
-		<form method="get" action="../search/">
-		  <input id="search_value" name="search_value" type="text"/>
-		  <select id="search_kind" name="search_kind">
-			<option value="event">事件</option>
-			<option value="blog">日志</option>
-		  </select>
-		  <input type="submit" id="but_search" value=""/>
+		<!-- SiteSearch Google -->
+		<form method="get" action="http://www.google.com/custom" target="_top">
+		  <table border="0">
+			<tr><td nowrap="nowrap" valign="top" align="left" height="32">
+			  </td>
+			  <td nowrap="nowrap">
+				<input type="hidden" name="domains" value="yxh.me"></input>
+				<label for="sbi" style="display: none">输入您的搜索字词</label>
+				<input type="text" name="q" size="18" maxlength="255" value="" id="sbi"></input>
+				<label for="sbb" style="display: none">提交搜索表单</label>
+				<input type="submit" name="sa" value="Google 搜索" id="sbb"></input>
+				<input type="hidden" name="sitesearch" value="yxh.me" checked id="ss1"></input>
+				<input type="hidden" name="client" value="pub-7994758006635802"></input>
+				<input type="hidden" name="forid" value="1"></input>
+				<input type="hidden" name="ie" value="UTF-8"></input>
+				<input type="hidden" name="oe" value="UTF-8"></input>
+				<input type="hidden" name="safe" value="active"></input>
+				<input type="hidden" name="flav" value="0000"></input>
+				<input type="hidden" name="sig" value="xS53m-dRp4poirSj"></input>
+				<input type="hidden" name="cof" value="GALT:#008000;GL:1;DIV:#336699;VLC:663399;AH:center;BGC:FFFFFF;LBGC:336699;ALC:0000FF;LC:0000FF;T:000000;GFNT:0000FF;GIMP:0000FF;FORID:1"></input>
+				<input type="hidden" name="hl" value="zh-CN"></input>
+			  </td>
+			  </tr>
+			</table>
 		</form>
+		<!-- SiteSearch Google -->
 	  </div>
+	</div>
   </div>
-</div>
-<div id="content">
-  <div id="main_home">
-	<div id="left">	{% block left %}{% endblock %} </div>
-	<div id="middle">	{% block middle %}{% endblock %} </div>
-	<div id="main_right">{% block right %}{% endblock %}</div>
-  </div>
-  <div class="cleaner"></div>
-</div>
-<div id="footer">
-      <ul>
-        <li style="padding-left:146px;"><a href="/log" class="a_noline">开发日志</a></li>&nbsp;&nbsp;|
-        <li><a href="/about" class="a_noline">关于</a></li>&nbsp;&nbsp;|
-		<li><a href="/contact" class="a_noline">联系方式</a></li>&nbsp;&nbsp;|
-		<li>转载本站文章请注明出处</li>
-        <li style="padding-left:236px;">
+  <div id="content">
+	<div id="main_home">
+	  <div id="left">	{% block left %}{% endblock %} </div>
+	  <div id="middle">	{% block middle %}{% endblock %} </div>
+	</div>
+	<div class="cleaner"></div>
+	<div id="footer">
+      <ul class="inline_ul">
+		<li class="inline_li"><a href="http://l0he1g.appspot.com" class="a_noline">My homepage</a></li>&nbsp;&nbsp;|
+		<li  class="inline_li"><a href="/log" class="a_noline">开发日志</a></li>&nbsp;&nbsp;|
+		<li class="inline_li"><a href="/about" class="a_noline">关于</a></li>&nbsp;&nbsp;|
+		<li class="inline_li"><a href="/contact" class="a_noline">联系方式</a></li>&nbsp;&nbsp;|
+		<li class="inline_li">转载本站文章请注明出处</li>
+		<li style="padding-left:136px;" class="inline_li">
 		  <a href="http://code.google.com/p/gansha/">Gansha
-		  blog</a>&copy;2009
+			blog</a>&copy;2009
 		</li>
       </ul>
-</div>
-<script type="text/javascript">
- var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-</script>
-<script type="text/javascript">
-try {
-var pageTracker = _gat._getTracker("UA-2054534-5");
-pageTracker._trackPageview();
-} catch(err) {}
-</script>
+	</div>
+  </div>
+
+  <script type="text/javascript">
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+  </script>
+  <script type="text/javascript">
+	try {
+	var pageTracker = _gat._getTracker("UA-2054534-6");
+	pageTracker._trackPageview();
+	} catch(err) {}</script>
+
 </body>
 </html>

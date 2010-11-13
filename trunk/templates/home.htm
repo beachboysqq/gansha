@@ -4,6 +4,16 @@
 <script language="JavaScript" src="/static/js/ajax.js"></script>
 {%endblock%}
 
+{% block lbox%}
+<div id="tips">  
+  <p class="text_title" style="font-size:14px;">Tips
+  {% if is_admin %}
+	<a href="javascript:add_tip()" title="write"><img src="/static/images/edit.jpg" border="0" /></a>
+  {% endif %}
+  </p>
+  <p id="tip_content">{{tip|default:"暂无tip"}}</p>
+</div>
+{%endblock%}
 {% block middle %}
 <div id="m1">
   <table cellspacing="0">
@@ -97,24 +107,5 @@
 	{%endfor%}
   </div>
 </div>
-{% endblock %}
-{% block right %}
-<div id="tips">  
-  <p class="text_title" style="font-size:14px;">Tips
-  {% if is_admin %}
-	<a href="javascript:add_tip()" title="write"><img src="/static/images/edit.jpg" border="0" /></a>
-  {% endif %}
-  </p>
-  <p id="tip_content">{{tip|default:"暂无tip"}}</p>
-</div>
-  {% if is_admin %}
-  <div> 
-	<input type="button"
-	onclick="window.location.replace('../addevent')" id="but_addevent"
-	/>
-	<input onclick="window.location.replace('../addblog')" type="button" id="but_addblog" />
-</div>
-  {% endif %}
-
 {% endblock %}
 

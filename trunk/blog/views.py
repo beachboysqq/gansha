@@ -28,7 +28,7 @@ def blogview( request ):
             event = None
             tip = "Event:None"      
 
-        all_blogs = get_blogs_by_event( ekey,is_admin )
+        all_blogs = get_blogs_by_event( event,is_admin )
     elif request.GET.has_key('month'):
         month = request.GET['month'].strip()
         tip = "Month:%s" % month
@@ -137,6 +137,7 @@ def blog( request ):
     c = Context({
             'is_admin':users.is_current_user_admin(),
             'logouturl':LOGOUT,
+            'cur_user':CURUSER,
             "blog":blog,
             'count':comments.count(),
             "comments":comments,
@@ -202,11 +203,13 @@ def del_blog( request ):
 def add_comment( request ):
     bkey = request.POST['bkey']
     blog = Blog.get(Key(bkey))
-    
-    comment = Comment( sender=CURUSER,
-                       blog=blog,
-                       content=request.POST['content'].strip(),
-                       publish_time=now())
+    sender = request.POST['sender'].strip()
+
+    comment = Comment( #sender=CURUSER,
+        sender=sender,
+        blog=blog,
+        content=request.POST['content'].strip(),
+        publish_time=now())
     comment.put()
     return HttpResponse( now().strftime("%Y-%m-%d %H:%M") )
     
@@ -246,6 +249,8 @@ def message( request ):
                  'pageid':int(pageid),
                  'cur_user':CURUSER,
                  'offset':all_num-offset-limit, # the number of 1st
+                 'loginurl':LOGIN,
+                 'cur_user':CURUSER,
                  })
     return render_to_response( 'message.htm',c)
 
@@ -253,7 +258,7 @@ def add_mes( request ):
     if not users.is_current_user_admin():
         return HttpResponseRedirect('/')
     sender = users.get_current_user()
-    
+#    sender = request.POST['sender'].strip()
     mes = Mes( sender=sender,
                content=request.POST['content'].strip(),
                publish_time=now())
@@ -265,5 +270,57 @@ def del_mes( request ):
         return HttpResponseRedirect('/')
     mkey = Key(request.POST['mkey'])
     mes = Mes.get(mkey)
+    mes.delete()
+    return HttpResponse( 'deleted' )
+
+
+def note( request ):
+    #new message is posted
+    if request.method == 'POST' and request.POST['content'].strip():
+        note = Note( content=request.POST['content'].strip(),
+                   publish_time=now())
+        note.put()
+
+    note_li = Note.all().order('-publish_time')
+    
+    all_num = note_li.count()
+    pnum = pages_num( all_num )
+    pageid = http_get(request,'pageid',0)
+    (limit,offset) = page_count( int(pageid),all_num )
+    notes = note_li.fetch(limit,offset)
+    if pnum>1:
+        pages_nums = range(pnum)
+    else:
+        pages_nums = None
+
+    c = Context({
+                 'logouturl':LOGOUT,
+                 'is_admin':users.is_current_user_admin(),
+                 'note_li':reversed(notes),
+                 'count':all_num,
+                 'pages_nums':pages_nums,
+                 'pageid':int(pageid),
+                 'cur_user':CURUSER,
+                 'offset':all_num-offset-limit, # the number of 1st
+                 'loginurl':LOGIN,
+                 'cur_user':CURUSER,
+                 })
+    return render_to_response( 'note.htm',c)
+
+def add_note( request ):
+    if not users.is_current_user_admin():
+        return HttpResponseRedirect('/')
+    
+    mes = Note( 
+               content=request.POST['content'].strip(),
+               publish_time=now())
+    mes.put()
+    return HttpResponse( now().strftime("%Y-%m-%d %H:%M") )
+    
+def del_note( request ):
+    if not users.is_current_user_admin():
+        return HttpResponseRedirect('/')
+    mkey = Key(request.POST['mkey'])
+    mes = Note.get(mkey)
     mes.delete()
     return HttpResponse( 'deleted' )

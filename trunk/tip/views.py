@@ -35,7 +35,7 @@ def tips( request ):
     c = {
                  'logouturl':LOGOUT,
                  'is_admin':users.is_current_user_admin(),
-                 'tips':reversed(mess),
+                 'tips':mess,
                  'count':all_num,
                  'pages_nums':pages_nums,
                  'pageid':int(pageid),

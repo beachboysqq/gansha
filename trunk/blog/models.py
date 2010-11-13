@@ -20,13 +20,19 @@ class BlogTag( db.Model ):
     tag = db.ReferenceProperty( Tag )
 
 class Comment( db.Model ):
-    sender = db.UserProperty()
+#    sender = db.UserProperty()
+    sender = db.StringProperty( default='anonymous' ) 
     blog = db.ReferenceProperty( Blog )
     content = db.TextProperty()
     publish_time = db.DateTimeProperty()
     
 class Mes( db.Model ):
     sender = db.UserProperty( required=True )
+#    sender = db.StringProperty( required=True ) 
+    content = db.StringProperty( required=True ) 
+    publish_time = db.DateTimeProperty()
+
+class Note( db.Model ):
     content = db.StringProperty( required=True ) 
     publish_time = db.DateTimeProperty()
     

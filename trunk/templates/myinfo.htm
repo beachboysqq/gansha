@@ -1,15 +1,18 @@
 <div id="me">
-  <img src="../static/images/headshot.jpg" id="img_headshot"/>
+  <img src="http://commondatastorage.googleapis.com/static.panoramio.com/photos/original/34539427.jpg" id="img_headshot"/>
   <p>xiaohui yan </p>
-  <p>Large scale data mining</p>
-  <p>sign：三个月,定成与败！</p>
+  <p>Machine Learning and IR</p>
+<!--  <p><img style="padding: 0pt 2px 0pt 0pt; margin: 0pt; border: medium none;" src="http://www.google.com/talk/service/resources/chaticon.gif" alt="" height="14" width="16"><img style="padding: 0pt 2px 0pt 0pt; margin: 0pt; border: medium none;" src="http://www.google.com/talk/service/badge/Show?tk=z01q6amlq62jq1e2pl1hqdmnquqdhj9f8m19md4dnj5nse41b57fjq8p0aif1l1j2ed74pev65906h8e909btlntdokl1r1qb6ikmihcpleiei1s4jqip77ldd22pso250fpkc4o1dt9k5psfoc8svsvpff6qss6trcn0k6fr&amp;w=9&amp;h=9" alt="" height="9" width="9"><a href="http://www.google.com/talk/service/badge/Start?tk=z01q6amlq62jq1e2pl1hqdmnquqdhj9f8m19md4dnj5nse41b57fjq8p0aif1l1j2ed74pev65906h8e909btlntdokl1r1qb6ikmihcpleiei1s4jqip77ldd22pso250fpkc4o1dt9k5psfoc8svsvpff6qss6trcn0k6fr" target="_blank" title="Click here to chat with xiaohui yan">Chat with me</a></p>-->
   {%if is_admin %}
-  <p>
-	<a href="/_ah/admin/">控制台</a>
-	<a href="/export">export</a>&nbsp;&nbsp;&nbsp;
-	<!--
-	<a href="#">导入</a>&nbsp;&nbsp;&nbsp;&nbsp;
-	-->
-  </p>
+  <table style="text-align:left;">
+	<tr>
+	  <td><a href="/addevent">创建新事件</a></td>
+	  <td><a href="/addblog">写blog</a></td>
+	</tr>
+	<tr>
+	  <td> <a href="/_ah/admin/">控制台</a></td>
+	  <td><a href="/export">export</a></td>
+	</tr>
+	</table>
   {%endif%}
 </div>

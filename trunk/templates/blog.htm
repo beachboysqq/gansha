@@ -1,4 +1,9 @@
 {% extends 'blog_base.htm' %}
+{% block js %}
+<script type="text/javascript" src="/static/js/switch.js"></script>
+<script type="text/javascript" src="/static/js/MathJax/MathJax.js"></script>
+{% endblock %}
+
 {% block middle %}
 <div id="navigation"> 
   <a href="../home">首页</a>->
@@ -12,9 +17,9 @@
   <p id="timenote"> 
 	{{blog.publish_time|date:"Y-m-d H:i"}}|Tags:
 	{% if tags %}
-	    {%for tag in blog_tags%}
-	    <a href="../blogview?tag={{tag.word}}">{{tag.word}}</a>&nbsp;
-    	{%endfor%}
+	{%for tag in blog_tags%}
+	<a href="../blogview?tag={{tag.word}}">{{tag.word}}</a>&nbsp;
+    {%endfor%}
 	{%else%}无
 	{%endif%}
 	{%if is_admin%}|
@@ -37,15 +42,16 @@
     </tr>
   </table>
   <div id="tbody_com" style="display:block;">
-  <!--两个记录员，主要是为了Dom方式增加评论时，显示用户名和其url-->
+	<!--两个记录员，主要是为了Dom方式增加评论时，显示用户名和其url-->
     <input type="hidden" id="visitor_name" value="{{cur_user.nickname}}"/>
 	{% for comment in comments%}
-    <div class="each_com" id="com_{{comment.key}}">
+    <div class="each_comment" id="com_{{comment.key}}">
       <div class="com_info">
         <table>
           <tr>
             <td>#{{forloop.counter}}&nbsp;
-			  {{comment.sender.nickname}}
+			  <!--			  {{comment.sender.nickname}} -->
+			  {{comment.sender}}
 			  <span class="time">{{comment.publish_time|date:"Y-m-d H:i:s"}}</span>
 			</td>
             {%if is_admin%}
@@ -58,15 +64,29 @@
     </div>
 	{%endfor%}
   </div>
-  <div>
-    <form action="." method="post">
-      <textarea class="box_comment" id="write_comment" ></textarea>
-      <p>
-        <input type="button" value=" 提交评论 " onclick="submit_comment('{{blog.key}}')"/>
-      </p>
-    </form>
-  </div>
+  <form action="." method="post">
+	<table>
+	  <tr>
+		<td class="font" style="width:50px;height:42px;">Name：</td>
+		<td>
+		  <input type="text" name="sender" id="sender"
+				 class="box_name" value="无名氏"/>  *
+		</td>
+	  </tr>
+	  <tr>
+		<td class="font_12">Comment：</td>
+		<td><textarea class="box_comment" id="write_comment" ></textarea>
+		</td>
+      <tr>
+		<td></td>
+		<td>
+		  <input type="button" value=" 提交评论 " onclick="submit_comment('{{blog.key}}')"/>
+		</td>
+	  </tr>
+	</table>
+  </form>
 </div>
+
 {%if is_admin%}
 <div id="del_blog_confirm_box" style="display:none;">
   <input type="hidden" id="recorder_bkey"/><!--记录要删除日志的key-->
@@ -78,8 +98,3 @@
 </div>
 {%endif%}
 {% endblock %} 
-{%block right%}
-{%if is_admin%}
-<input onclick="window.location.replace('../addblog')" type="button" id="but_addblog" />
-{%endif%}
-{% endblock %}

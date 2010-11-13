@@ -2,22 +2,23 @@
 padding:0px;
 margin:0px;
 }
-html{min-width:1024px;}
+html{min-width:760px;}
 body{
 margin:0px;
 padding:0px;
-line-height:150%;
+line-height:180%;
 font-size:14px;
-font-family:verdana;
+background-color:#666;
+font-family:"宋体",verdana;
 }
 img{border:0px;}
 table{
-border:0px;
 padding:0px;
+border-collapse:collapse;/*设置单元格的边合并在一起*/
+empty-cells:show;/*设置单元格无内容时，显示该单元格的边框*/
 margin:0px;
 }
 td,tr{
-border:0px;
 padding:0px;
 }
 a.a_nounderline:link,a.a_nounderline:visited {
@@ -54,11 +55,11 @@ a.a_white:hover {
 	color: #FC0;
 	text-decoration: none;
 }
-ul{
+ul.inline_ul{
 	clear:both;
 	list-style:none;
 }
-li{
+li.inline_li{
 	display:inline;
 	padding:0 5px 0 5px;
 }	
@@ -90,17 +91,23 @@ border-bottom:1px solid #CCC;
 .underline_grey{border-bottom:1px solid #CCC;}
 .underline_red{border-bottom:1px solid #D9001D;}
 .sink{margin-top:4px;}
+h3{
+font-size:14px;
+font-weight:bold;
+border-top:1px solid #CCC;
+background-color:#F6F6F6;
+margin-top:16px;
+margin-bottom:10px;
+}
 /*+++++++++++++They are the main frame of this page++++++++++*/
 #top{
 height:74px;
 width:100%;
-margin-bottom:10px;
-background:url(../images/top_underline.jpg) bottom repeat-x;
+background:#FFF url(../images/top_underline_2.jpg) bottom repeat-x;
 }
 #top_content,#main_1,#footer{	
 width:80%;
 clear:both;
-background-color:#FFF;
 margin-right:auto;
 margin-left:auto;
 }	
@@ -110,7 +117,7 @@ margin-left:auto;
 		float:left;
 		padding-top:30px;
 		padding-left:30px;
-		width:360px;
+		font-size:14px;
 		}
 		#top_search{
 		float:right;
@@ -129,7 +136,7 @@ margin-left:auto;
 			border:1px solid #999;
 			}			
 			#but_search{
-			width:58px;
+			width:48px;
 			height:22px;
 			border:0px;
 			vertical-align:bottom;
@@ -146,7 +153,8 @@ visibility: hidden;
 content: ' ';
 }
 #footer{
-width:1024px;
+width:100%;
+text-align:center;
 margin-top:10px;
 font-size:12px;
 color:#666;

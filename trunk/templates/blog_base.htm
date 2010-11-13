@@ -14,7 +14,7 @@
 	  <div class="lbox_body">
 		<ul>
 		  {%for event in events%}
-		  <li><a href="../blogview?event={{event.key}}"	class="a_noline">{{event.title}}</a>&nbsp;<br/></li>
+		  <li><a href="../blogview?event={{event.key}}"	class="a_noline">{{event.title}}</a></li>
 		  {%endfor%}
 		  <li><a href="../blogview/?event=None" class="a_noline">无事件相关</a>&nbsp;</li>
 		</ul>
@@ -33,12 +33,12 @@
 	<div class="lbox">
 	  <div class="lbox_title font_bold">Comments</div>
 	  <div class="lbox_body">
-		<ul class="ul_dot">
+		<ul >
 		  {%for comment in comments%}
-		  <li class="li_dot">
-			<a href="../home/?user={{comment.sender.user_id}}">{{comment.sender.nickname}}</a><br/>
-			<a href="../blog?blog={{comment.blog.key}}" class="a_noline">{{comment.content|slice:":20"}}...</a>
-		  </li><br/>
+		  <li >
+<!--			<a href="../home/?user={{comment.sender.user_id}}">{{comment.sender.nickname}}</a><br/>-->
+			<a href="../blog?blog={{comment.blog.key}}" class="a_noline">{{comment.content|slice:":32"}}...</a>
+		  </li>
 		  {%endfor%}
 		</ul>
 	  </div>
